@@ -1,0 +1,6 @@
+@RedeSocialBack.API_HostAddress = http://localhost:5032
+
+GET {{RedeSocialBack.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
