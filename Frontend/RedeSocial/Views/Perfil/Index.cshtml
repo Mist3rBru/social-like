@@ -1,0 +1,43 @@
+﻿@{
+    ViewData["Title"] = "Perfil";
+}
+
+<head>
+    <style>
+        .user-feed {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-auto-rows: auto;
+            gap: 1rem;
+            margin: 2rem auto;
+        }
+
+            .user-feed img {
+                height: auto;
+                border: 0.25rem solid white;
+            }
+
+    </style>
+</head>
+
+<div class="main">
+    <div style="background-color: #fff; padding: 1.5rem">
+        <a href="/perfil" class="avatar">
+            <img src="~/img/avatar.png" alt="" />
+            <span>Robert Bern</span>
+        </a>
+        <p style="margin-top: 1rem">
+            Lorem Ipsum is simply dummy text of the printing and typesetting
+            industry. Lorem iso iIpsum has been the industry's standard dummy text
+            ever since the 1500s.
+        </p>
+    </div>
+
+    <div class="user-feed">
+        <a href="/post"><img src="~/img/gato.jpg" alt="" /></a>
+        <a href="/post"><img src="~/img/gato.jpg" alt="" /></a>
+        <a href="/post"><img src="~/img/gato.jpg" alt="" /></a>
+        <a href="/post"><img src="~/img/gato.jpg" alt="" /></a>
+        <a href="/post"><img src="~/img/gato.jpg" alt="" /></a>
+    </div>
+</div>

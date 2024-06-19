@@ -1,0 +1,28 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - RedeSocial</title>
+    <link rel="stylesheet" href="~/css/reset.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/global.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/RedeSocial.styles.css" asp-append-version="true" />
+    
+</head>
+<body>
+    <header class="header">
+        <h2 class="header-title">RedeSocial</h2>
+        <input class="header-search" type="text" />
+        <div class="header-avatar avatar">
+            <p class="header-avatar-name">Olivia Wilson</p>
+            <img class="header-avatar-img" src="~/img/avatar.png" alt="" />
+        </div>
+    </header>
+    @RenderBody()
+
+   
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

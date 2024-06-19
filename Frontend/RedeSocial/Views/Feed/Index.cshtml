@@ -1,0 +1,88 @@
+﻿@{
+    ViewData["Title"] = "Feed";
+}
+<head>
+    <style>
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            padding: 1rem;
+            width: 12rem;
+            min-width: 20vw;
+        }
+
+        .feed {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    </style>
+</head>
+
+<div style="display: flex">
+    <div class="sidebar">
+        <div style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          ">
+            <a href="/perfil" class="avatar">
+                <div class="avatar-border">
+                    <img src="~/img/avatar.png" alt="" />
+                </div>
+                <span>Nome</span>
+            </a>
+            <a href="#"> ADD </a>
+        </div>
+        <a href="/perfil" class="avatar">
+            <div class="avatar-border">
+                <img src="~/img/avatar.png" alt="" />
+            </div>
+            <span>Nome</span>
+        </a>
+    </div>
+
+    <div class="feed main">
+        <div class="post">
+            <a href="/perfil" class="avatar">
+                <img src="~/img/avatar.png" alt="" />
+                <p>Nome</p>
+
+            </a>
+            <a href="/post">
+            <img src="~/img/gato.jpg" alt="" />
+          
+            <p class="post-description">
+                Lorem Ipsum is simply dummy text of the printing and typesetting
+                industry. Lorem Ipsum has been the industry's standard dummy text.
+                Lorem Ipsum has been the industry's standard dummy text.
+            </p>
+            </a>
+            <div style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+            ">
+                <div style="display: flex; gap: 3px">
+                    <button type="button" class="post-button">
+                        <img src="~/img/foguete.png" alt="" />
+                    </button>
+                    <button type="button" class="post-button">
+                        <img src="~/img/comentário.png" alt="" />
+                    </button>
+                </div>
+                <span style="
+                font-size: small;
+                border-radius: 1rem;
+                background: #1c1c39;
+                color: #fff;
+                height: fit-content;
+                padding: 0.3rem;
+              ">
+                    1895 curtidas e 2 comentários
+                </span>
+            </div>
+        </div>
+    </div>
+</div>

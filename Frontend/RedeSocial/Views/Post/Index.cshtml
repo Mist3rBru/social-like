@@ -1,0 +1,258 @@
+﻿@{
+    ViewData["Title"] = "Post";
+}
+
+
+
+
+<head>
+    <style>
+        .main {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .comments-box {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            width: 40vw;
+        }
+
+        .comment {
+            background-color: white;
+            width: 100%;
+            padding: 1rem;
+            border-radius: 0.5rem;
+        }
+
+            .comment > p {
+                margin: 0.5rem 0;
+            }
+
+        .comment-input {
+            background: #1c1c39;
+            color: white;
+            padding: 0.5rem;
+            border-radius: 1rem;
+            margin-top: auto;
+            width: 100%;
+        }
+
+            .comment-input > input {
+                all: unset;
+                width: 100%;
+        }
+
+    </style>
+</head>
+
+<div class="main">
+
+    <!-- POST -->
+    <div class="post">
+        <a href="/perfil" class="avatar">
+            <img src="~/img/avatar.png" alt="" />
+            <p>Nome</p>
+        </a>
+        <img src="~/img/gato.jpg" alt="" />
+        <p class="post-description">
+            LLorem Ipsum is simply dummy text of the printing and typesetting
+            industry. Lorem Ipsum has been the industry's standard dummy text.
+            Lorem Ipsum has been the industry's standard dummy text.
+        </p>
+        <div style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          ">
+            <button type="button" class="post-button" onclick="toggleCurtirPost(1)">
+                <img src="~/img/foguete.png" alt="" />
+            </button>
+            <span style="
+              font-size: small;
+              border-radius: 1rem;
+              background: #1c1c39;
+              color: #fff;
+              height: fit-content;
+              padding: 0.3rem;
+            " id="info-post">
+               0 curtidas e 1 comentário
+            </span>
+        </div>
+    </div>
+
+    <!-- COMENTÁRIOS -->
+    <div class="comments-box">
+
+        <!-- Mary Old -->
+        <div class="comment">
+            <div class="avatar">
+                <img src="~/img/avatar.png" alt="" /><span>Mary Old</span>
+            </div>
+            <p>
+                Lorem Ipsum is simply dummy text of the printing and typesetting
+                industry. Lorem Ipsum has been the industry's standard dummy text
+                ever since the 1500s.
+            </p>
+            <div style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+            ">
+                <div style="display: flex; gap: 3px">
+                    <button type="button" class="post-button" onclick="toggleCurtirComentario(1)">
+                        <img src="~/img/foguete.png" alt="" />
+                    </button>
+                    <button type="button" class="post-button" >
+                        <img src="~/img/comentário.png" alt="" />
+                    </button>
+                </div>
+                <span id="info-comment-1" style="
+                font-size: small;
+                border-radius: 1rem;
+                background: #1c1c39;
+                color: #fff;
+                height: fit-content;
+                padding: 0.3rem;
+              " >
+                    0 curtida e 0 comentários
+                </span>
+            </div>
+        </div>
+
+        <!-- Usuário logado -->
+        @if (ViewBag.ThisUserComment != null)
+        {
+            var comment = (RedeSocial.Models.ComentarioModel)ViewBag.ThisUserComment;
+
+
+            <div class="comment">
+                <div class="avatar">
+                    <img src="~/img/avatar.png" alt="" /><span>Mary Old</span>
+                </div>
+                <p>
+                    @comment.Conteudo
+                </p>
+                <div style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+                  ">
+                    <div style="display: flex; gap: 3px">
+                        <button type="button" class="post-button" onclick="toggleCurtirComentario(2)">
+                            <img src="~/img/foguete.png" alt="" />
+                        </button>
+                        <button type="button" class="post-button">
+                            <img src="~/img/comentário.png" alt="" />
+                        </button>
+                    </div>
+                    <span id="info-comment-2"  style="
+              font-size: small;
+              border-radius: 1rem;
+              background: #1c1c39;
+              color: #fff;
+              height: fit-content;
+              padding: 0.3rem;
+                        ">
+                        @comment.QuantidadeLikes curtidas e 0 comentários
+                    </span>
+                </div>
+            </div>
+        }
+
+        <form id="comment-form" action="/Post/InserirPostComentario" method="post" class="comment-input">
+            <input id="comment-input" type="text"  name="conteudo" />
+            <button type="submit" style="display: none;"/>
+        </form>
+    </div>
+
+  
+</div>
+
+
+
+<script>
+    document.getElementById("comment-input").addEventListener("keypress", e => {d
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            document.getElementById("comment-form").submit();
+        }
+    })
+
+    var postCurtido = false;
+
+    function toggleCurtirPost(postId) {
+        if (!postCurtido) {
+            InserirLikePost(postId);
+        } else {
+            RemoverLikePost(postId);
+        }
+    }
+
+    function InserirLikePost(postId) {
+        $.ajax({
+            type: "PUT",
+            url: "/Post/InserirLikePost",
+            data: { id: postId },
+            success: function (response) {
+                if (response.sucesso) {
+                    $("#info-post").text(response.likePost + " curtidas e 1 comentário");
+                }
+                postCurtido = true;
+            }
+        });
+    }
+
+    function RemoverLikePost(postId) {
+        $.ajax({
+            type: "PUT",
+            url: "/Post/RemoverLikePost",
+            data: { id: postId },
+            success: function (response) {
+                if (response.sucesso) {
+                    $("#info-post").text(response.likePost + " curtidas e 1 comentário");
+                }
+                postCurtido = false;
+            }
+        });
+    }
+
+    var comentarioCurtido = false;
+
+    function toggleCurtirComentario(comentarioId) {
+        if (!comentarioCurtido) {
+            InserirLikeComentario(comentarioId);
+        } else {
+            RemoverLikeComentario(comentarioId);
+        }
+    }
+
+    function InserirLikeComentario(comentarioId) {
+        $.ajax({
+            type: "PUT",
+            url: "/Post/InserirLikeComentario",
+            data: { id: comentarioId },
+            success: function (response) {
+                if (response.sucesso) {
+                    $("#info-comment-"+comentarioId).text(response.likeComment + " curtidas e 0 comentário");
+                }
+                comentarioCurtido = true;
+            }
+        });
+    }
+
+    function RemoverLikeComentario(comentarioId) {
+        $.ajax({
+            type: "PUT",
+            url: "/Post/RemoverLikeComentario",
+            data: { id: comentarioId },
+            success: function (response) {
+                if (response.sucesso) {
+                    $("#info-comment-"+comentarioId).text(response.likeComment + " curtidas e 0 comentário");
+                }
+                comentarioCurtido = false;
+            }
+        });
+    }
+</script>
