@@ -19,9 +19,16 @@
             width: 40vw;
         }
 
+        .comment-box-box {
+            display: flex;
+            flex-direction: column;
+            align-items: end;
+            gap: 5px;
+        }
+
         .comment {
             background-color: white;
-            width: 100%;
+            width: auto;
             padding: 1rem;
             border-radius: 0.5rem;
         }
@@ -29,6 +36,8 @@
             .comment > p {
                 margin: 0.5rem 0;
             }
+
+           
 
         .comment-input {
             background: #1c1c39;
@@ -86,79 +95,82 @@
     <div class="comments-box">
 
         <!-- Mary Old -->
-        <div class="comment">
-            <div class="avatar">
-                <img src="~/img/avatar.png" alt="" /><span>Mary Old</span>
-            </div>
-            <p>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum has been the industry's standard dummy text
-                ever since the 1500s.
-            </p>
-            <div style="
-              display: flex;
-              justify-content: space-between;
-              align-items: center;
-            ">
-                <div style="display: flex; gap: 3px">
-                    <button type="button" class="post-button" onclick="toggleCurtirComentario(1)">
-                        <img src="~/img/foguete.png" alt="" />
-                    </button>
-                    <button type="button" class="post-button" >
-                        <img src="~/img/comentário.png" alt="" />
-                    </button>
-                </div>
-                <span id="info-comment-1" style="
-                font-size: small;
-                border-radius: 1rem;
-                background: #1c1c39;
-                color: #fff;
-                height: fit-content;
-                padding: 0.3rem;
-              " >
-                    0 curtida e 0 comentários
-                </span>
-            </div>
-        </div>
-
-        <!-- Usuário logado -->
-        @if (ViewBag.ThisUserComment != null)
-        {
-            var comment = (RedeSocial.Models.ComentarioModel)ViewBag.ThisUserComment;
-
-
             <div class="comment">
                 <div class="avatar">
                     <img src="~/img/avatar.png" alt="" /><span>Mary Old</span>
                 </div>
                 <p>
-                    @comment.Conteudo
+                    Lorem Ipsum is simply dummy text of the printing and typesetting
+                    industry. Lorem Ipsum has been the industry's standard dummy text
+                    ever since the 1500s.
                 </p>
                 <div style="
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-                  ">
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                ">
                     <div style="display: flex; gap: 3px">
-                        <button type="button" class="post-button" onclick="toggleCurtirComentario(2)">
+                        <button type="button" class="post-button" onclick="toggleCurtirComentario(1)">
                             <img src="~/img/foguete.png" alt="" />
                         </button>
-                        <button type="button" class="post-button">
+                        <button type="button" class="post-button" >
                             <img src="~/img/comentário.png" alt="" />
                         </button>
                     </div>
-                    <span id="info-comment-2"  style="
+                    <span id="info-comment-1" style="
+                    font-size: small;
+                    border-radius: 1rem;
+                    background: #1c1c39;
+                    color: #fff;
+                    height: fit-content;
+                    padding: 0.3rem;
+                  " >
+                        0 curtida e 0 comentários
+                    </span>
+                </div>
+            </div>
+            
+        <!-- Usuário logado -->
+        @if (ViewBag.Comentarios != null)
+        {
+            @foreach (var item in ViewBag.Comentarios)
+            {
+                var comment = (RedeSocial.Models.ComentarioModel)item;
+
+                <div class="comment">
+                    <div class="avatar">
+                        <img src="~/img/avatar.png" alt="" /><span>Mary Old</span>
+                    </div>
+                    <p>
+                        @comment.Conteudo
+                    </p>
+                    <div style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+                          ">
+                        <div style="display: flex; gap: 3px">
+                            <button type="button" class="post-button" onclick="toggleCurtirComentario(2)">
+                                <img src="~/img/foguete.png" alt="" />
+                            </button>
+                            <button type="button" class="post-button">
+                                <img src="~/img/comentário.png" alt="" />
+                            </button>
+                        </div>
+                        <span id="info-comment-2" style="
               font-size: small;
               border-radius: 1rem;
               background: #1c1c39;
               color: #fff;
               height: fit-content;
               padding: 0.3rem;
-                        ">
-                        @comment.QuantidadeLikes curtidas e 0 comentários
-                    </span>
+                                ">
+                            @comment.QuantidadeLikes curtidas e 0 comentários
+                        </span>
+                    </div>
                 </div>
-            </div>
+            }
+
         }
 
         <form id="comment-form" action="/Post/InserirPostComentario" method="post" class="comment-input">

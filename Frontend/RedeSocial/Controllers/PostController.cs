@@ -6,6 +6,8 @@ namespace RedeSocial.Controllers
 {
     public class PostController : Controller
     {
+        List<ComentarioModel> comentarios = [];
+
         public IActionResult Index()
         {
             return View();
@@ -21,7 +23,9 @@ namespace RedeSocial.Controllers
                QuantidadeLikes = 0
            };
 
-            ViewBag.ThisUserComment = comentario;
+            comentarios.Add(comentario);
+
+            ViewBag.Comentarios= comentarios;
 
             return View("Index");
 
@@ -98,7 +102,6 @@ namespace RedeSocial.Controllers
 
         public IActionResult ListarPostComentarios(ComentarioModel comentario) //Precisa incluir chamada no front
         {
-
             ViewBag.Comment = comentario;
 
             return View("Index");
