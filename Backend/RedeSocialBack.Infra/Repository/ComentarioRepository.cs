@@ -27,7 +27,7 @@ namespace RedeSocialBack.Infra.Repository
                     cmd.CommandText = "UPDATE public.comentario SET conteudo=@conteudo, atualizadoem=@atualizadoem WHERE id=@id";
                     cmd.Parameters.AddWithValue("conteudo", Comentario.Conteudo);
                     cmd.Parameters.AddWithValue("atualizadoem", Comentario.DataEdicao);
-                    cmd.Parameters.AddWithValue("id", Comentario.Id);
+                    cmd.Parameters.AddWithValue("id", Comentario.Id.ToString());
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -126,7 +126,7 @@ namespace RedeSocialBack.Infra.Repository
                 {
                     cmd.Connection = conexao;
                     cmd.CommandText = "DELETE FROM public.comentario WHERE id=@id";
-                    cmd.Parameters.AddWithValue("id", id);
+                    cmd.Parameters.AddWithValue("id", id.ToString());
                     cmd.ExecuteNonQuery();
                 }
             }
