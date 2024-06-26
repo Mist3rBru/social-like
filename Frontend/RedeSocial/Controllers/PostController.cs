@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RedeSocial.Backend.HTTPClient;
+using RedeSocial.Backend.Models;
 using RedeSocial.Models;
 
 namespace RedeSocial.Controllers
 {
     public class PostController : Controller
     {
-        List<ComentarioModel> comentarios = [];
+        List<Backend.Models.ComentarioModel> comentarios = [];
 
         public IActionResult Index()
         {
@@ -15,7 +16,13 @@ namespace RedeSocial.Controllers
         [HttpPost]
         public IActionResult InserirPostComentario(string conteudo) // Chamando no front
         {
-           ComentarioModel comentario = new ComentarioModel{
+
+            //MOCK. Ver como passar na view:
+           Guid postId = 1;
+
+
+            Backend.Models.ComentarioModel comentario = new Backend.Models.ComentarioModel
+            {
                Conteudo = conteudo,
                DataEdicao = DateTime.Now,
                DataCriacao = DateTime.Now,
@@ -25,100 +32,102 @@ namespace RedeSocial.Controllers
 
             comentarios.Add(comentario);
 
-            ViewBag.Comentarios= comentarios;
+            APIHttpClient client;
+            client = new APIHttpClient("http://grupo4.neurosky.com.br/api/");
+            client.Post("comentarios/post/"+postId);
+
+            comentarios.Add(comentario);
+
+            ViewBag.Comentarios = comentarios;
 
             return View("Index");
-
-            /* Exemplo de como chamar back
-            List<Backend.Models.Cliente> clientes;
-
-            APIHttpClient client;
-            client = new APIHttpClient("http://localhost:5265/api/");
-            clientes = client.Get<List<Cliente>>("cliente");
-            return View(ClienteMapping.ToClienteConsulta(clientes));
-            */
         }
 
-        [HttpPut]
+        [HttpPost]
         public IActionResult InserirLikePost(int postId) // Chamando no front
         {
-            return Json(new { sucesso = true, likePost = 1 });
 
-            /* Exemplo de como chamar back
-           List<Backend.Models.Cliente> clientes;
+            //MOCK:
+            Guid usuarioId = 0;
+            int quantidadeLikes = 0;
 
-           APIHttpClient client;
-           client = new APIHttpClient("http://localhost:5265/api/");
-           clientes = client.Get<List<Cliente>>("cliente");
-           return View(ClienteMapping.ToClienteConsulta(clientes));
-           */
+            APIHttpClient client;
+            client = new APIHttpClient("http://grupo4.neurosky.com.br/api/");
+            client.Post("likes/post/" + postId + "/" usuarioId);
+
+            return Json(new { sucesso = true, likePost = quantidadeLikes++ });
+
         }
 
-        [HttpPut]
+        [HttpDelete]
         public IActionResult RemoverLikePost(int postId) // Chamando no front
         {
-            return Json(new { sucesso = true, likePost = 0 });
+            //MOCK:
+            Guid usuarioId = 0;
+            int quantidadeLikes = 1;
 
-            /* Exemplo de como chamar back
-           List<Backend.Models.Cliente> clientes;
+            APIHttpClient client;
+            client = new APIHttpClient("http://grupo4.neurosky.com.br/api/");
+            client.Delete("likes/post/" + postId + "/" usuarioId);
 
-           APIHttpClient client;
-           client = new APIHttpClient("http://localhost:5265/api/");
-           clientes = client.Get<List<Cliente>>("cliente");
-           return View(ClienteMapping.ToClienteConsulta(clientes));
-           */
+            return Json(new { sucesso = true, likePost = quantidadeLikes-- });
+
         }
 
         [HttpPut]
         public IActionResult InserirLikeComentario(int comentarioId) // Chamando no front
         {
 
-            return Json(new { sucesso = true, likeComment = 1 });
+            //MOCK:
+            Guid usuarioId = 0;
+            int quantidadeLikes = 0;
 
-            /* Exemplo de como chamar back
-           List<Backend.Models.Cliente> clientes;
+            APIHttpClient client;
+            client = new APIHttpClient("http://grupo4.neurosky.com.br/api/");
+            client.Post("likes/comentario/" + comentarioId + "/" usuarioId);
 
-           APIHttpClient client;
-           client = new APIHttpClient("http://localhost:5265/api/");
-           clientes = client.Get<List<Cliente>>("cliente");
-           return View(ClienteMapping.ToClienteConsulta(clientes));
-           */
+            return Json(new { sucesso = true, likeComment = quantidadeLikes++ });
         }
 
-        [HttpPut]
+        [HttpDelete]
         public IActionResult RemoverLikeComentario(int comentarioId) // Chamando no front
         {
-            return Json(new { sucesso = true, likeComment = 0 });
 
-            /* Exemplo de como chamar back
-           List<Backend.Models.Cliente> clientes;
+            //MOCK:
+            Guid usuarioId = 0;
+            int quantidadeLikes = 1;
 
-           APIHttpClient client;
-           client = new APIHttpClient("http://localhost:5265/api/");
-           clientes = client.Get<List<Cliente>>("cliente");
-           return View(ClienteMapping.ToClienteConsulta(clientes));
-           */
+            APIHttpClient client;
+            client = new APIHttpClient("http://grupo4.neurosky.com.br/api/");
+            client.Delete("likes/comentario/" + comentarioId + "/" usuarioId);
+
+            return Json(new { sucesso = true, likeComment = quantidadeLikes-- });
         }
 
-        public IActionResult ListarPostComentarios(ComentarioModel comentario) //Precisa incluir chamada no front
+        [HttpGet]
+        public IActionResult ListarPostComentarios(Models.ComentarioModel comentario) //Precisa incluir chamada no front
         {
-            ViewBag.Comment = comentario;
+
+
+            //MOCK:
+            Guid postId = 0;
+
+            List<Backend.Models.ComentarioModel> comentariosResponse;
+            APIHttpClient client;
+            client = new APIHttpClient("http://grupo4.neurosky.com.br/api/");
+            comentariosResponse = client.Get("comentarios/post/" + postId);
+
+            comentarios.Add(comentariosResponse);
+
+            ViewBag.Comentarios = comentarios;
 
             return View("Index");
 
-            /*
-            List<Backend.Models.Comentario> comentarios;
-
-            APIHttpClient client;
-            client = new APIHttpClient("http://localhost:5265/api/");
-            comentarios = client.Get<List<Comentario>>("comentario");
-            return View(ComentarioMapping.ToComentario(comentarios));
-            */
         }
 
 
         //Precisa incluir opção para editar comentário nas views
-        public IActionResult EditarComentario(ComentarioModel comentario) 
+        public IActionResult EditarComentario(Models.ComentarioModel comentario) 
         {
 
             ViewBag.Comment = comentario;
@@ -127,7 +136,7 @@ namespace RedeSocial.Controllers
         }
 
         //Precisa incluir opção para excluir comentário nas views
-        public IActionResult ExcluirComentario(ComentarioModel comentario) 
+        public IActionResult ExcluirComentario(Models.ComentarioModel comentario) 
         {
 
             ViewBag.Comment = comentario;
@@ -136,7 +145,7 @@ namespace RedeSocial.Controllers
         }
 
         //Precisa incluir opção de responder comentário nas views
-        public IActionResult ListarRespostaComentarios(ComentarioModel comentario) 
+        public IActionResult ListarRespostaComentarios(Models.ComentarioModel comentario) 
         {
 
             ViewBag.Comment = comentario;
@@ -145,7 +154,7 @@ namespace RedeSocial.Controllers
         }
 
         //Precisa incluir opção de responder comentário nas views
-        public IActionResult InserirRespostaComentario(ComentarioModel comentario)
+        public IActionResult InserirRespostaComentario(Models.ComentarioModel comentario)
         {
 
             ViewBag.Comment = comentario;
