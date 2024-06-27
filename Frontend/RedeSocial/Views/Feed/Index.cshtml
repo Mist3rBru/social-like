@@ -42,6 +42,12 @@
             <span>Nome</span>
         </a>
     </div>
+    @if (ViewBag.Usuario != null)
+    {
+        var user = (RedeSocial.Models.UsuarioModel)ViewBag.Usuario;
+        <p>@user.Nome</p>
+    }
+
 
     <div class="feed main">
         <div class="post">

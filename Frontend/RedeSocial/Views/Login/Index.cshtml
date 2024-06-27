@@ -82,18 +82,18 @@
                     LOREM IPSUM IS SIMPLY DUMMY TEXT OF THE PRINTING LOREM AND TYPESETTING INDUSTRY. LOREM IPSUM HAS BEEN THE INDUSTRY'S STANDARD DUMMY TEXT EVER SINCE THE 1500S
                 </p>
             </div>
-            <form id="login-form" class="form-box" >
+            <form id="login-form" action="/Login/Autenticar" method="post" class="form-box">
                 <div class="form-box-header">
                     <h2>Já possui conta?</h2>
                     <p>FAÇA SEU LOGIN:</p>
                 </div>
                 <div class="input-box">
                     <label for="">Email</label>
-                    <input type="text" />
+                    <input name="email" type="text" />
                 </div>
                 <div class="input-box">
                     <label for="">Senha</label>
-                    <input type="text" />
+                    <input name="senha" type="text" />
                 </div>
                 <button type="submit" >ENTRAR</button>
             </form>
@@ -121,10 +121,6 @@
 </div>
 
 <script>
-    document.getElementById("login-form").addEventListener("submit", e => {
-        e.preventDefault()
-        window.location.href = "/feed"
-    })
     document.getElementById("register-form").addEventListener("submit", e => {
         e.preventDefault()
         window.location.href = "/feed"

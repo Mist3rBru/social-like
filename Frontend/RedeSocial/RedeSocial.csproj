@@ -58,6 +58,8 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="6.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
+    <PackageReference Include="RestSharp" Version="111.3.0" />
   </ItemGroup>
 
 </Project>

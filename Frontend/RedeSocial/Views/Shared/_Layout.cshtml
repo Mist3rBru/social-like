@@ -14,7 +14,11 @@
         <h2 class="header-title">RedeSocial</h2>
         <input class="header-search" type="text" />
         <div class="header-avatar avatar">
-            <p class="header-avatar-name">Olivia Wilson</p>
+            @if (ViewBag.Usuario != null)
+            {
+                var user = (RedeSocial.Models.UsuarioModel)ViewBag.Usuario;
+                <p class="header-avatar-name">@user.Nome</p>
+            }
             <img class="header-avatar-img" src="~/img/avatar.png" alt="" />
         </div>
     </header>

@@ -18,7 +18,7 @@ namespace RedeSocial.Controllers
         {
 
             //MOCK. Ver como passar na view:
-           Guid postId = 1;
+            Guid postId = Guid.NewGuid();
 
 
             Backend.Models.ComentarioModel comentario = new Backend.Models.ComentarioModel
@@ -34,7 +34,7 @@ namespace RedeSocial.Controllers
 
             APIHttpClient client;
             client = new APIHttpClient("http://grupo4.neurosky.com.br/api/");
-            client.Post("comentarios/post/"+postId);
+            client.Post("comentarios/post/"+postId, comentario);
 
             comentarios.Add(comentario);
 
@@ -48,12 +48,12 @@ namespace RedeSocial.Controllers
         {
 
             //MOCK:
-            Guid usuarioId = 0;
+            Guid usuarioId = Guid.NewGuid();
             int quantidadeLikes = 0;
 
             APIHttpClient client;
             client = new APIHttpClient("http://grupo4.neurosky.com.br/api/");
-            client.Post("likes/post/" + postId + "/" usuarioId);
+            client.Post("likes/post/" + postId + "/",usuarioId);
 
             return Json(new { sucesso = true, likePost = quantidadeLikes++ });
 
@@ -63,12 +63,12 @@ namespace RedeSocial.Controllers
         public IActionResult RemoverLikePost(int postId) // Chamando no front
         {
             //MOCK:
-            Guid usuarioId = 0;
+            Guid usuarioId = Guid.NewGuid();
             int quantidadeLikes = 1;
 
             APIHttpClient client;
             client = new APIHttpClient("http://grupo4.neurosky.com.br/api/");
-            client.Delete("likes/post/" + postId + "/" usuarioId);
+           // client.Delete("likes/post/" + postId + "/" + usuarioId);
 
             return Json(new { sucesso = true, likePost = quantidadeLikes-- });
 
@@ -79,12 +79,12 @@ namespace RedeSocial.Controllers
         {
 
             //MOCK:
-            Guid usuarioId = 0;
+            Guid usuarioId = Guid.NewGuid();
             int quantidadeLikes = 0;
 
             APIHttpClient client;
             client = new APIHttpClient("http://grupo4.neurosky.com.br/api/");
-            client.Post("likes/comentario/" + comentarioId + "/" usuarioId);
+           // client.Post("likes/comentario/" + comentarioId + "/" + usuarioId);
 
             return Json(new { sucesso = true, likeComment = quantidadeLikes++ });
         }
@@ -94,12 +94,12 @@ namespace RedeSocial.Controllers
         {
 
             //MOCK:
-            Guid usuarioId = 0;
+            Guid usuarioId = Guid.NewGuid();
             int quantidadeLikes = 1;
 
             APIHttpClient client;
             client = new APIHttpClient("http://grupo4.neurosky.com.br/api/");
-            client.Delete("likes/comentario/" + comentarioId + "/" usuarioId);
+         //   client.Delete("likes/comentario/" + comentarioId + "/" + usuarioId);
 
             return Json(new { sucesso = true, likeComment = quantidadeLikes-- });
         }
@@ -110,14 +110,14 @@ namespace RedeSocial.Controllers
 
 
             //MOCK:
-            Guid postId = 0;
+            Guid postId = Guid.NewGuid();
 
             List<Backend.Models.ComentarioModel> comentariosResponse;
             APIHttpClient client;
             client = new APIHttpClient("http://grupo4.neurosky.com.br/api/");
-            comentariosResponse = client.Get("comentarios/post/" + postId);
+           // comentariosResponse = client.Get("comentarios/post/");
 
-            comentarios.Add(comentariosResponse);
+           // comentarios.Add(comentariosResponse);
 
             ViewBag.Comentarios = comentarios;
 
