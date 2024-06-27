@@ -17,6 +17,60 @@
             flex-direction: column;
             align-items: center;
         }
+
+      
+        .story-wrapper {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            position: absolute;
+            background: #3333338c;
+            flex-direction: row;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .story {
+            width: 50%;
+            gap: 1rem;
+            display: flex;
+            padding: 1rem;
+            background: #fff;
+            flex-direction: column;
+            height: fit-content;
+        }
+
+
+        .story-header {
+            display: flex;
+            justify-content: space-between;
+        }
+
+
+        .story-comment-like{
+            display: flex;
+            gap: 1rem;
+        }
+
+        .story-comment {
+            background: #1c1c39;
+            color: white;
+            padding: 0.5rem;
+            border-radius: 1rem;
+            margin-top: auto;
+            width: 100%;
+        }
+
+        .story-before {
+            width: 50%;
+        }
+
+        .story-after {
+            width: 50%; 
+            transform: scaleX(-1);
+        }
+
+            
     </style>
 </head>
 
@@ -91,4 +145,36 @@
             </div>
         </div>
     </div>
+    <!-- STORY 
+    <div class="story-wrapper">
+        <div >
+            <a href="">
+                <img class="story-before" src="~/img/arrow.png" alt="" />
+            </a>
+        </div>
+
+        <div class="story">
+            <div class="story-header"> 
+                <a href="/perfil" class="avatar">
+                    <img src="~/img/avatar.png" alt="" />
+                    <p>Nome</p>
+                </a>
+                <button class="story-header-close">X</button>
+            </div>
+            <img class="story-img"  src="~/img/gato.jpg" alt="" />
+            <div class="story-comment-like">
+                <input class="story-comment" type="text" name="conteudo" />
+                <button type="button" class="post-button" onclick="toggleCurtirPost(1)">
+                    <img class="story-like" src="~/img/foguete.png" alt="" />
+                </button>
+            </div>
+        </div>
+
+        <div>
+            <a href="">
+                <img class="story-after"  src="~/img/arrow.png" alt="" />
+            </a>
+        </div>
+    </div>
+    -->
 </div>
