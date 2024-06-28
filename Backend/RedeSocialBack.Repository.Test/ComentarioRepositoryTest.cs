@@ -13,7 +13,8 @@ namespace RedeSocialBack.Repository.Test
         [TestMethod]
         public void InserirPostComentarioTest()
         {
-            string strConexao = "Server=localhost;Port=5432;Database=postgres;User Id=postgres;Password=1234;";
+            string strConexao = "User ID=jmenzen3;Password='8N9;FLC?;@?I';Host=pgsql.jmenzen.com.br;Port=5432;Database=jmenzen3;";
+
             var comentarioRepository = new ComentarioRepository(strConexao);
             try
             {

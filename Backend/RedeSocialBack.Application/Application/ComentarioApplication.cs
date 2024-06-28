@@ -17,7 +17,7 @@ namespace RedeSocialBack.Application.Application
 
         public ComentarioApplication()
         {
-            string strConexao = "Server=localhost;Port=5432;Database=postgres;User Id=postgres;Password=1234;";
+            string strConexao = "Server=pgsql.jmenzen.com.br;Port=5432;Database=jmenzen3;User Id=jmenzen3;Password='8N9;FLC?;@?I';";
             this.comentarioRepository = new ComentarioRepository(strConexao);
         }
         public Guid InserirPostComentario(ComentarioDto Comentario, Guid IdPost)
