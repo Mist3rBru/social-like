@@ -176,22 +176,36 @@ namespace RedeSocialBack.Infra.Repository
             using (NpgsqlConnection conexao = new NpgsqlConnection(strConexao))
             {
                 conexao.Open();
-                using (NpgsqlCommand cmd = new NpgsqlCommand(@"SELECT c.id, c.idusuario, c.conteudo, c.criadoem, c.atualizadoem, cp.idresposta, COUNT(cc.idcomentario) AS quantidadelikes
-                                                       FROM public.comentario c
-                                                       JOIN public.resposta cp ON c.id = cp.idcomentario
-                                                       LEFT JOIN public.curtidacomentario cc ON c.id = cc.idcomentario
-                                                       WHERE cp.idcomentario = @id
-                                                       GROUP BY c.id, c.idusuario, c.conteudo, c.criadoem, c.atualizadoem, cp.idresposta;", conexao))
 
+                using (NpgsqlCommand cmd = new NpgsqlCommand(@"
+                                                              SELECT 
+                                                                  r.idresposta, 
+                                                                  c.id, 
+                                                                  c.idusuario, 
+                                                                  c.conteudo, 
+                                                                  c.criadoem, 
+                                                                  c.atualizadoem, 
+                                                                  COUNT(cc.idcomentario) AS quantidadelikes
+                                                              FROM 
+                                                                  public.resposta r
+                                                              JOIN 
+                                                                  public.comentario c ON r.idresposta = c.id
+                                                              LEFT JOIN 
+                                                                  public.curtidacomentario cc ON c.id = cc.idcomentario
+                                                              WHERE 
+                                                                  r.idcomentario = @id
+                                                              GROUP BY 
+                                                                  r.idresposta, c.id, c.idusuario, c.conteudo, c.criadoem, c.atualizadoem;", conexao))
                 {
                     cmd.Parameters.Add(new NpgsqlParameter("id", IdComentario.ToString()));
+
                     using (NpgsqlDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
                             comentarioPostagens.Add(new Comentario
                             (
-                                Guid.Parse(reader["id"].ToString()),
+                                Guid.Parse(reader["idresposta"].ToString()),
                                 Guid.Parse(reader["idusuario"].ToString()),
                                 reader["conteudo"].ToString(),
                                 DateTime.Parse(reader["criadoem"].ToString()),
@@ -205,7 +219,6 @@ namespace RedeSocialBack.Infra.Repository
 
             return comentarioPostagens;
         }
-
 
         public List<Comentario> ListarStoryComentarios(Guid IdStory)
         {
