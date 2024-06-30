@@ -371,7 +371,105 @@ namespace RedeSocialBack.Infra.Repository
                 }
             }
         }
+
+        public List<string> ListarLikesPost(Guid IdPost)
+        {
+            List<string> usuarios = new List<string>();
+
+            using (NpgsqlConnection conexao = new NpgsqlConnection(strConexao))
+            {
+                conexao.Open();
+                using (NpgsqlCommand cmd = new NpgsqlCommand(@"SELECT idusuario 
+                                                               FROM public.curtidapostagem 
+                                                               WHERE idpostagem = @idPostagem;", conexao))
+                {
+                    cmd.Parameters.AddWithValue("idPostagem", IdPost.ToString());
+
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            usuarios.Add(reader["idusuario"].ToString());
+                        }
+                    }
+                }
+            }
+            return usuarios;
+        }
+
+        public List<string> ListarLikesAnuncio(Guid IdAnuncio)
+        {
+            List<string> usuarios = new List<string>();
+
+            using (NpgsqlConnection conexao = new NpgsqlConnection(strConexao))
+            {
+                conexao.Open();
+                using (NpgsqlCommand cmd = new NpgsqlCommand(@"SELECT idusuario 
+                                                               FROM public.curtidaanuncio 
+                                                               WHERE idanuncio = @idAnuncio;", conexao))
+                {
+                    cmd.Parameters.AddWithValue("idAnuncio", IdAnuncio.ToString());
+
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            usuarios.Add(reader["idusuario"].ToString());
+                        }
+                    }
+                }
+            }
+            return usuarios;
+        }
+
+        public List<string> ListarLikesStory(Guid IdStory)
+        {
+            List<string> usuarios = new List<string>();
+
+            using (NpgsqlConnection conexao = new NpgsqlConnection(strConexao))
+            {
+                conexao.Open();
+                using (NpgsqlCommand cmd = new NpgsqlCommand(@"SELECT idusuario 
+                                                               FROM public.curtidahistoria 
+                                                               WHERE idhistoria = @idStory;", conexao))
+                {
+                    cmd.Parameters.AddWithValue("idStory", IdStory.ToString());
+
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            usuarios.Add(reader["idusuario"].ToString());
+                        }
+                    }
+                }
+            }
+            return usuarios;
+        }
+
+        public List<string> ListarLikesComentario(Guid IdComentario)
+        {
+            List<string> usuarios = new List<string>();
+
+            using (NpgsqlConnection conexao = new NpgsqlConnection(strConexao))
+            {
+                conexao.Open();
+                using (NpgsqlCommand cmd = new NpgsqlCommand(@"SELECT idusuario 
+                                                               FROM public.curtidacomentario 
+                                                               WHERE idcomentario = @IdComentario;", conexao))
+                {
+                    cmd.Parameters.AddWithValue("IdComentario", IdComentario.ToString());
+
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            usuarios.Add(reader["idusuario"].ToString());
+                        }
+                    }
+                }
+            }
+            return usuarios;
+        }
     }
 }
-
-

@@ -116,5 +116,30 @@ namespace RedeSocialBack.Application.Application
         {
             comentarioRepository.RemoverLikeAnuncio(IdAnuncio, IdUsuario);
         }
+
+
+        public List<string> ListarLikesPost(Guid IdPost)
+        {
+            List<string> usuarios = comentarioRepository.ListarLikesPost(IdPost);
+            return usuarios;
+        }
+
+        public List<string> ListarLikesAnuncio(Guid IdPost)
+        {
+            List<string> usuarios = comentarioRepository.ListarLikesAnuncio(IdPost);
+            return usuarios;
+        }
+
+        public List<string> ListarLikesComentario(Guid IdPost)
+        {
+            List<string> usuarios = comentarioRepository.ListarLikesComentario(IdPost);
+            return usuarios;
+        }
+
+        public List<string> ListarLikesStory(Guid IdPost)
+        {
+            List<string> usuarios = comentarioRepository.ListarLikesStory(IdPost);
+            return usuarios;
+        }
     }
 }

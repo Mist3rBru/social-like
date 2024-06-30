@@ -25,6 +25,11 @@ namespace RedeSocialBack.Domain.Repository
         void RemoverLikeComentario(Guid IdComentario, Guid IdUsuario);
         void RemoverLikeStory(Guid IdStory, Guid IdUsuario);
         void RemoverLikeAnuncio(Guid IdStory, Guid IdUsuario);
+        List<string> ListarLikesPost(Guid IdPost);
+        List<string> ListarLikesAnuncio(Guid IdAnuncio);
+        List<string> ListarLikesStory(Guid IdHistoria);
+        List<string> ListarLikesComentario(Guid IdComentario);
 
     }
 }
+

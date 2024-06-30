@@ -139,5 +139,57 @@ namespace RedeSocialBack.API.Controllers
             ComentarioApplication app = new ComentarioApplication();
             return app.EditarComentario(ComentarioMapping.ToDto(comentario));
         }
+
+        [HttpGet("likes/post/{idPost:Guid}")]
+        public IEnumerable<string> GetPostLikes(Guid idPost)
+        {
+            List<string> likes = new List<string>();
+            ComentarioApplication app = new ComentarioApplication();
+            var postLikes = app.ListarLikesPost(idPost);
+            foreach (var like in postLikes)
+            {
+                likes.Add(like);
+            }
+            return likes.ToArray();
+        }
+
+        [HttpGet("likes/comentario/{idComentario:Guid}")]
+        public IEnumerable<string> GetComentariosLikes(Guid idComentario)
+        {
+            List<string> likes = new List<string>();
+            ComentarioApplication app = new ComentarioApplication();
+            var comentarioLikes = app.ListarLikesComentario(idComentario);
+            foreach (var like in comentarioLikes)
+            {
+                likes.Add(like);
+            }
+            return likes.ToArray();
+        }
+
+        [HttpGet("likes/story/{idStory:Guid}")]
+        public IEnumerable<string> GetStoryLikes(Guid idStory)
+        {
+            List<string> likes = new List<string>();
+            ComentarioApplication app = new ComentarioApplication();
+            var storyLikes = app.ListarLikesStory(idStory);
+            foreach (var like in storyLikes)
+            {
+                likes.Add(like);
+            }
+            return likes.ToArray();
+        }
+
+        [HttpGet("likes/anuncio/{idAnuncio:Guid}")]
+        public IEnumerable<string> GetAnuncioLikes(Guid idAnuncio)
+        {
+            List<string> likes = new List<string>();
+            ComentarioApplication app = new ComentarioApplication();
+            var anuncioLikes = app.ListarLikesStory(idAnuncio);
+            foreach (var like in anuncioLikes)
+            {
+                likes.Add(like);
+            }
+            return likes.ToArray();
+        }
     }
 }
