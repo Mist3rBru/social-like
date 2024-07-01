@@ -6,7 +6,6 @@
 
 <head>
     <style>
-
         .form-container {
             width: 100%;
             height: 100%;
@@ -14,6 +13,7 @@
             justify-content: center;
             align-items: center;
         }
+
         .form-box {
             border-radius: 2rem;
             background-color: var(--bg-main);
@@ -79,18 +79,49 @@
                 color: #fff;
             }
 
+        .customselect {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="4" height="5"><path fill="none" stroke="%23333" stroke-width="1.1" d="M0 0l2 2 2-2"/></svg>') no-repeat right 10px center;
+            background-color: #fff;
+            background-size: 10px 10px;
+            background-origin: content-box;
+            color: #333;
+        }
+
+            .customselect option {
+                color: #333;
+                background-color: #fff;
+            }
+
+        select::-ms-expand {
+            display: none;
+        }
+
+        .customselect:focus {
+            border-color: #66afe9;
+            outline: none;
+            box-shadow: 0 0 5px rgba(102, 175, 233, 0.6);
+        }
     </style>
 </head>
 
 <div class="form-container">
-<form id="register-form" action="/EditarPerfil/Atualizar" method="post" class="form-box">
+    <form id="register-form" action="/EditarPerfil/Atualizar" method="post" class="form-box" enctype="multipart/form-data">
         @Html.ValidationSummary()
-    <div class="form-box-header">
-        <h2>Quer editar sua conta?</h2>
-        <p>BORA LÁ!</p>
-    </div>
+        <div class="form-box-header">
+            <h2>Quer editar sua conta?</h2>
+            <p>BORA LÁ!</p>
+        </div>
 
-     @if (ViewBag.Usuario != null)
+        @if (ViewBag.Usuario != null)
         {
             var user = (RedeSocial.Models.UsuarioModel)ViewBag.Usuario;
             <div class="input-box">
@@ -117,24 +148,35 @@
                 <label id="usuariocadastra.email" name="usuariocadastra.email">Email</label>
                 <input name="email" type="email" value="@user.Email" />
             </div>
-
             <div class="input-box">
                 <label id="usuariocadastra.documento" name="usuariocadastra.documento">Documento</label>
                 <input name="documento" type="number" value="@user.Documento" />
             </div>
-
             <div class="input-box">
                 <label id="usuariocadastra.cidade" name="usuariocadastra.cidade">Cidade</label>
                 <input type="text" class="form-control" name="cidade" value="@user.Cidade">
             </div>
-
             <div class="input-box">
-                <label id="usuariocadastra.fotoperfil" name="usuariocadastra.fotoperfil">Cidade</label>
+                <label id="usuariocadastra.Uf" name="usuariocadastra.Uf">Estado</label>
+                <select class="customselect"
+                        id="uf"
+                        name="uf"
+                        asp-for="Uf"
+                        asp-items="@Html.GetEnumSelectList<RedeSocial.Backend.Models.EstadosBrasilModel>()">
+                </select>
+            </div>
+            <div class="input-box">
+                <label id="usuariocadastra.tipoPessoa" name="usuariocadastra.tipoPessoa">Estado</label>
+                <select class="customselect" id="tipoPessoa" name="tipoPessoa">
+                    <option value="0" selected="0">Física</option>
+                    <option value="1" selected="1">Jurídica</option>
+                </select>
+            </div>
+            <div class="input-box">
+                <label id="usuariocadastra.fotoperfil" name="usuariocadastra.fotoperfil">Foto de Perfil</label>
                 <input type="file" name="fotoperfil" asp-for="FotoPerfil" class="form-control" id="fotoperfil" accept="image/*">
             </div>
-
-         
         }
         <button type="submit">ATUALIZAR</button>
-</form>
+    </form>
 </div>

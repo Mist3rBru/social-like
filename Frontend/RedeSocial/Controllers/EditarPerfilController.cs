@@ -43,13 +43,6 @@ namespace RedeSocial.Controllers
                 var usuarioAlterado = new APIHttpClient(URLBase).Get<RedeSocial.Backend.Models.UsuarioModelBack>($"Usuario/{model.Id}");
 
                 return RedirectToAction("Index", "Perfil");
-            
-
-    
-
-
-
-
         }
     }
 }

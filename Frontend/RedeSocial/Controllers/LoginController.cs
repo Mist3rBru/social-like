@@ -49,8 +49,6 @@ namespace RedeSocial.Controllers
                     Expires = DateTimeOffset.Now.AddDays(7) // Set cookie to expire in 7 days
                 };
                 Response.Cookies.Append("UserId", retornoCadastroModel.Id.ToString(), cookieOptions);
-                Response.Cookies.Append("UserEmail", retornoCadastroModel.Id.ToString(), cookieOptions);
-                Response.Cookies.Append("UserPassword", login.Senha, cookieOptions);
                 return RedirectToAction("Index", "Feed");
             }
             else
