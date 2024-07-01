@@ -2,14 +2,31 @@ namespace RedeSocial.Models
 {
     public class PublicacaoModel
     {
-        public int UsuarioId { get; set; }
+        public Guid Id { get; }
+        public UsuarioModel Usuario { get; set; }
         public string Descricao { get; set; }
         public DateTime DataPublicacao { get; set; }
-        public PublicacaoModel(int usuarioId, string descricao, DateTime dataPublicacao)
+        public List<string> Midias { get; set; }
+        public int QuantidadeLikes { get; set; }
+        public int QuantidadeComentarios { get; set; }
+
+        public PublicacaoModel() { }
+        
+        public PublicacaoModel(Guid id, string descricao, DateTime dataPublicacao, List<string> midias)
         {
-            UsuarioId = usuarioId;
-            Descricao = descricao;
-            DataPublicacao = dataPublicacao;
+          Id = id;
+          Descricao = descricao;
+          DataPublicacao = dataPublicacao;
+          Midias = midias;
+        }
+
+        public PublicacaoModel(Guid id, UsuarioModel usuario, string descricao, DateTime dataPublicacao, List<string> midias)
+        {
+          Id = id;
+          Usuario = usuario;
+          Descricao = descricao;
+          DataPublicacao = dataPublicacao;
+          Midias = midias;
         }
     }
 }

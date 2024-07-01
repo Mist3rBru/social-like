@@ -59,118 +59,83 @@
 <div class="main">
 
     <!-- POST -->
-    <div class="post">
-        <a href="/perfil" class="avatar">
-            <img src="~/img/avatar.png" alt="" />
-            <p>Nome</p>
-        </a>
-        <img src="~/img/gato.jpg" alt="" />
-        <p class="post-description">
-            LLorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text.
-            Lorem Ipsum has been the industry's standard dummy text.
-        </p>
-        <div style="
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-          ">
-            <button type="button" class="post-button" onclick="toggleCurtirPost(1)">
-                <img src="~/img/foguete.png" alt="" />
-            </button>
-            <span style="
-              font-size: small;
-              border-radius: 1rem;
-              background: #1c1c39;
-              color: #fff;
-              height: fit-content;
-              padding: 0.3rem;
-            " id="info-post">
-               0 curtidas e 1 comentário
-            </span>
-        </div>
-    </div>
-
-    <!-- COMENTÁRIOS -->
-    <div class="comments-box">
-
-        <!-- Mary Old -->
-            <div class="comment">
-                <div class="avatar">
-                    <img src="~/img/avatar.png" alt="" /><span>Mary Old</span>
-                </div>
-                <p>
-                    Lorem Ipsum is simply dummy text of the printing and typesetting
-                    industry. Lorem Ipsum has been the industry's standard dummy text
-                    ever since the 1500s.
-                </p>
+    {
+        @if (ViewBag.Publicacao!=null)
+        {
+            var publicacao = (RedeSocial.Models.PublicacaoModel)ViewBag.Publicacao;
+            <div class="post">
+                <a href="/perfil" class="avatar">
+                    <img src="data:image/jpeg;base64,@publicacao.Usuario.FotoPerfil" alt="" />
+                    <p>@publicacao.Usuario.Nome</p>
+                </a>
+                {
+                    @foreach (var midia in publicacao.Midias) {
+                        <img src="data:image/jpeg;base64,@midia" alt="" />
+                    }
+                }
+                <p class="post-description">@publicacao.Descricao</p>
                 <div style="
-                  display: flex;
-                  justify-content: space-between;
-                  align-items: center;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
                 ">
-                    <div style="display: flex; gap: 3px">
-                        <button type="button" class="post-button" onclick="toggleCurtirComentario(1)">
-                            <img src="~/img/foguete.png" alt="" />
-                        </button>
-                        <button type="button" class="post-button" >
-                            <img src="~/img/comentário.png" alt="" />
-                        </button>
-                    </div>
-                    <span id="info-comment-1" style="
+                    <button type="button" class="post-button" onclick="toggleCurtirPost(1)">
+                        <img src="~/img/foguete.png" alt="" />
+                    </button>
+                    <span style="
                     font-size: small;
                     border-radius: 1rem;
                     background: #1c1c39;
                     color: #fff;
                     height: fit-content;
                     padding: 0.3rem;
-                  " >
-                        0 curtida e 0 comentários
+                    " id="info-post">
+                    @publicacao.QuantidadeLikes curtidas e @publicacao.QuantidadeComentarios comentário
                     </span>
                 </div>
             </div>
-            
-        <!-- Usuário logado -->
-        @if (ViewBag.Comentarios != null)
+        }
+    }
+
+    <!-- COMENTÁRIOS -->
+    <div class="comments-box">
+
         {
-            @foreach (var item in ViewBag.Comentarios)
+            @foreach (var item in ViewBag.Comentarios) 
             {
-                var comment = (RedeSocial.Models.ComentarioModel)item;
+                var comentario = (RedeSocial.Models.ComentarioModel)item;
 
                 <div class="comment">
                     <div class="avatar">
-                        <img src="~/img/avatar.png" alt="" /><span>Mary Old</span>
+                        <img src="data:image/jpeg;base64,@comentario.Usuario.FotoPerfil" alt="" /><span>@comentario.Usuario.Nome</span>
                     </div>
-                    <p>
-                        @comment.Conteudo
-                    </p>
+                    <p>@comentario.Conteudo</p>
                     <div style="
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-                          ">
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    ">
                         <div style="display: flex; gap: 3px">
-                            <button type="button" class="post-button" onclick="toggleCurtirComentario(2)">
+                            <button type="button" class="post-button" onclick="toggleCurtirComentario(1)">
                                 <img src="~/img/foguete.png" alt="" />
                             </button>
-                            <button type="button" class="post-button">
+                            <button type="button" class="post-button" >
                                 <img src="~/img/comentário.png" alt="" />
                             </button>
                         </div>
-                        <span id="info-comment-2" style="
-              font-size: small;
-              border-radius: 1rem;
-              background: #1c1c39;
-              color: #fff;
-              height: fit-content;
-              padding: 0.3rem;
-                                ">
-                            @comment.QuantidadeLikes curtidas e 0 comentários
+                        <span id="info-comment-1" style="
+                        font-size: small;
+                        border-radius: 1rem;
+                        background: #1c1c39;
+                        color: #fff;
+                        height: fit-content;
+                        padding: 0.3rem;
+                    " >
+                            @comentario.QuantidadeLikes curtidas e @comentario.QuantidadeComentarios comentários
                         </span>
                     </div>
                 </div>
             }
-
         }
 
         <form id="comment-form" action="/Post/InserirPostComentario"  method="post" class="comment-input">

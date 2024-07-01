@@ -7,10 +7,37 @@ namespace RedeSocial.Controllers
 {
     public class PostController : Controller
     {
-        List<Backend.Models.ComentarioModel> comentarios = [];
-
-        public IActionResult Index()
+        public IActionResult Index(Guid postId)
         {
+            APIHttpClient publicacaoClient = new APIHttpClient("http://grupo5.neurosky.com.br/api");
+            APIHttpClient usuarioClient = new APIHttpClient("http://grupo3.neurosky.com.br/api");
+            APIHttpClient comentariosClient = new APIHttpClient("http://grupo4.neurosky.com.br/api");
+
+            List<ComentarioModel> comentarios = comentariosClient.Get<List<ComentarioModel>>("api/comentarios/post/" + postId);
+            foreach  (ComentarioModel comentario in comentarios) {
+                comentario.Usuario = usuarioClient.Get<UsuarioModel>("api/Usuario/" + comentario.UsuarioId);
+            }
+            ViewBag.Comentarios = comentarios;
+            
+            List<string> publicacaoLikes = comentariosClient.Get<List<string>>("api/likes/post/" + postId);
+            foreach  (ComentarioModel comentario in comentarios) {
+                comentario.Usuario = usuarioClient.Get<UsuarioModel>("api/Usuario/" + comentario.UsuarioId);
+            }
+
+            PublicacaoModelBack publicacaoBack = publicacaoClient.Get<PublicacaoModelBack>("/Publicacao/" + postId);
+            UsuarioModel usuario = usuarioClient.Get<UsuarioModel>("api/Usuario/" + publicacaoBack.Usuario);
+            
+            PublicacaoModel publicacao = new Publicacao(
+                publicacaoBack.Id,
+                usuario,
+                publicacaoBack.Descricao,
+                publicacaoBack.DataPublicacao,
+                publicacaoBack.Midias
+            )
+            publicacao.QuantidadeComentarios = comentarios.Count;
+            publicacao.QuantidadeLikes = publicacaoLikes.Count;
+            ViewBag.Publicacao = publicacao;
+
             return View();
         }
         [HttpPost]
@@ -107,8 +134,6 @@ namespace RedeSocial.Controllers
         [HttpGet]
         public IActionResult ListarPostComentarios(Models.ComentarioModel comentario) //Precisa incluir chamada no front
         {
-
-
             //MOCK:
             Guid postId = Guid.NewGuid();
 

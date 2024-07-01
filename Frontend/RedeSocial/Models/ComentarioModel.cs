@@ -3,6 +3,7 @@ namespace RedeSocial.Models
     public class ComentarioModel
     {
         public Guid UsuarioId { get; set; }
+        public Usuario Usuario { get; set; }
         public DateTime DataCriacao { get; set; }
         public DateTime DataEdicao { get; set; }
         public string Conteudo { get; set; }
