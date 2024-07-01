@@ -141,6 +141,15 @@ namespace RedeSocial.Controllers
 
         }
 
+        [HttpGet]
+        public IActionResult  ListarComentarioRespostas(string comentarioId) //Precisa incluir chamada no front
+        {
+            APIHttpClient client = new APIHttpClient("http://grupo4.neurosky.com.br/api/");
+            List<ComentarioModel> respostas = client.Get<List<ComentarioModel>>("/comentarios/resposta/"+comentarioId);
+
+            return Json(respostas);
+        }
+
 
         //Precisa incluir opção para editar comentário nas views
         public IActionResult EditarComentario(Models.ComentarioModel comentario) 
