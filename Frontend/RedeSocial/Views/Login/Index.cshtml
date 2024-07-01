@@ -2,6 +2,7 @@
     Layout = null;
     ViewData["Title"] = "Login";
 }
+
 <head>
     <link rel="stylesheet" href="~/css/reset.css" type="text/css" />
     <link rel="stylesheet" href="~/css/global.css" type="text/css" />
@@ -73,68 +74,85 @@
         .img-rocket-like {
             width: 210px;
         }
+
+        .socialTitle {
+            font-weight: bold;
+            font-size: 30px;
+            line-height: 1.4rem;
+            font-family: cursive;
+            text-align: center
+        }
+
+        .socialDescription {
+            font-weight: bold;
+            font-size: 20px;
+            line-height: 1.4rem;
+            font-family: cursive;
+            line-height: 1.4rem;
+        }
     </style>
 </head>
 
 <div style="margin: 0 auto; width: 90vw;">
-    <div style="display: flex; flex-direction: column; align-items: end ; height: 100vh;">
-        <h1 style="margin: 1rem 0">RedeSocial</h1>
+    <div style="display: flex; flex-direction: column; align-items: end; height: 100vh;">
+        <h1 style="margin: 1rem 0">SocialLike</h1>
         <div style="display: flex; gap: 0.5rem; height: 100%; align-items: center; justify-content: space-between; width: 100%;">
-            <div style="display: flex;flex-direction: column;gap: 1.5rem;align-items: center;">
-                <h2 style="text-align: center">RedeSocial</h2>
+            <div style="display: flex; flex-direction: column; gap: 1.5rem; align-items: center;">
+                <h2  class="socialTitle">SocialLike</h2>
                 <img class="img-rocket-like" src="~/img/rocket-like.png" alt="" />
-                <p style="line-height:1.4rem;">
-                    LOREM IPSUM IS SIMPLY DUMMY TEXT OF THE PRINTING LOREM AND TYPESETTING INDUSTRY. LOREM IPSUM HAS BEEN THE INDUSTRY'S STANDARD DUMMY TEXT EVER SINCE THE 1500S
+                <p class="socialDescription">
+                    O SocialLike ajuda você a se conectar e compartilhar com as pessoas que fazem parte da sua vida.
                 </p>
             </div>
-            <div style="
-    display: flex;
-    gap: 1rem;
-    justify-content: end;
-    min-width: 70%;
-">
-            <form id="login-form" action="/Login/Autenticar" method="post" class="form-box">
-                <div class="form-box-header">
-                    <h2>Já possui conta?</h2>
-                    <p>FAÇA SEU LOGIN:</p>
-                </div>
-                <div class="input-box">
-                    <label for="">Email</label>
-                    <input name="email" type="text" />
-                </div>
-                <div class="input-box">
-                    <label for="">Senha</label>
-                    <input name="senha" type="text" />
-                </div>
-                <button type="submit" >ENTRAR</button>
-            </form>
-            <form id="register-form"  class="form-box">
-                <div class="form-box-header">
-                    <h2>Quer criar sua conta?</h2>
-                    <p>VAMOS COMEÇAR!</p>
-                </div>
-                <div class="input-box">
-                    <label for="">Nome</label>
-                    <input type="text" />
-                </div>
-                <div class="input-box">
-                    <label for="">Email</label>
-                    <input type="text" />
-                </div>
-                <div class="input-box">
-                    <label for="">Senha</label>
-                    <input type="text" />
-                </div>
-                <button type="submit">CADASTRAR</button>
-            </form>
+            <div style="display: flex; gap: 1rem; justify-content: end; min-width: 70%;">
+                <form id="login-form" action="/Login/Login" method="post" class="form-box">
+                    <div class="form-box-header">
+                        <h2>Já possui conta?</h2>
+                        <p>FAÇA SEU LOGIN:</p>
+                    </div>
+                    <div class="input-box">
+                        <label id="usuarioautentica.email" name="usuarioautentica.email">Email</label>
+                        <input name="email" type="email" />
+                    </div>
+                    <div class="input-box">
+                        <label id="usuarioautentica.senha" name="usuarioautentica.senha">Senha</label>
+                        <input name="senha" type="password" />
+                    </div>
+                    <button type="submit">ENTRAR</button>
+                </form>
+
+                <form id="register-form" action="/Login/Cadastrar" method="post" class="form-box">
+                    <div class="form-box-header">
+                        <h2>Quer criar sua conta?</h2>
+                        <p>VAMOS COMEÇAR!</p>
+                    </div>
+                    <div class="input-box">
+                        <label id="usuariocadastra.nome" name="usuariocadastra.nome">Nome</label>
+                        <input name="nome" type="text" />
+                    </div>
+                    <div class="input-box">
+                        <label id="usuariocadastra.sobrenome" name="usuariocadastra.sobrenome">Sobrenome</label>
+                        <input name="sobrenome" type="text" />
+                    </div>
+                    <div class="input-box">
+                        <label id="usuariocadastra.telefone" name="usuariocadastra.telefone">Telefone</label>
+                        <input name="telefone" type="number" />
+                    </div>
+                    <div class="input-box">
+                        <label id="usuariocadastra.dataComemorativa" name="usuariocadastra.dataComemorativa">Data de nascimento</label>
+                        <input name="datacomemorativa" type="date" />
+                    </div>
+                    <div class="input-box">
+                        <label id="usuariocadastra.email" name="usuariocadastra.email">Email</label>
+                        <input name="email" type="email" />
+                    </div>
+                    <div class="input-box">
+                        <label id="usuariocadastra.senha" name="usuariocadastra.senha">Senha</label>
+                        <input name="senha" type="password" />
+                    </div>
+                    <button type="submit">CADASTRAR</button>
+                </form>
             </div>
         </div>
     </div>
 </div>
-
-<script>
-    document.getElementById("register-form").addEventListener("submit", e => {
-        e.preventDefault()
-        window.location.href = "/feed"
-    })
-</script>

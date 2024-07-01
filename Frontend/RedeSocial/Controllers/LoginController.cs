@@ -1,15 +1,17 @@
 using Microsoft.AspNetCore.Mvc;
 using RedeSocial.Models;
 using System.Diagnostics;
-using System.Reflection;
-using System;
 using RedeSocial.Backend.HTTPClient;
+using System.Text;
+using RedeSocial.Backend.Adapter;
+using RedeSocial.Backend.Models;
 
 namespace RedeSocial.Controllers
 {
     public class LoginController : Controller
     {
         private readonly ILogger<LoginController> _logger;
+        private string URLBase = "http://grupo3.neurosky.com.br/api/";
 
         public LoginController(ILogger<LoginController> logger)
         {
@@ -33,18 +35,37 @@ namespace RedeSocial.Controllers
         }
 
         [HttpPost]
-        public IActionResult Autenticar()
+        public IActionResult Login(LoginModel login)
         {
-          
-            var cookieOptions = new CookieOptions
-            {
-                Expires = DateTimeOffset.Now.AddDays(7) // Set cookie to expire in 7 days
-            };
-            Response.Cookies.Append("UserId", "68f63852-a838-49d4-9232-f2d704be2ee9", cookieOptions);
-            return RedirectToAction("Index", "Feed");
+            var apiModel = UsuarioAdapter.ToUsuarioLoginModel(login);
+            var retorno = new APIHttpClient(URLBase).Post<UsuarioLoginModel, UsuarioModelBack>("Usuario/Login", apiModel);
+            var retornoCadastroModel = UsuarioAdapter.ToUsuarioCadastroModel(retorno);
 
-       
-        
+            if (retorno is not null)
+            {
+                ViewBag.Usuario = retornoCadastroModel;
+                var cookieOptions = new CookieOptions
+                {
+                    Expires = DateTimeOffset.Now.AddDays(7) // Set cookie to expire in 7 days
+                };
+                Response.Cookies.Append("UserId", retornoCadastroModel.Id.ToString(), cookieOptions);
+                Response.Cookies.Append("UserEmail", retornoCadastroModel.Id.ToString(), cookieOptions);
+                Response.Cookies.Append("UserPassword", login.Senha, cookieOptions);
+                return RedirectToAction("Index", "Feed");
+            }
+            else
+            {
+                return this.Index();
+            }
+        }
+
+        public IActionResult Cadastrar(UsuarioCadastroModel usuarioCadastro)
+        {
+            var usuarioModel = UsuarioAdapter.ToUsuarioModel(usuarioCadastro);
+            var request = new APIHttpClient(URLBase).Post("Usuario", usuarioModel);
+            var userLoginData = UsuarioAdapter.CadastroToLoginModel(usuarioCadastro);
+
+            return Login(userLoginData);
         }
     }
 }

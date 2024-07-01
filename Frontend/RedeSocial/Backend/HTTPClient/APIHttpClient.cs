@@ -1,11 +1,11 @@
 ﻿using System.Net.Http.Headers;
 namespace RedeSocial.Backend.HTTPClient
 {
-   
+
 
     public class APIHttpClient
     {
-        private string baseAPI = "http://grupo4.neurosky.com.br/api";
+        private string baseAPI = "http://localhost:3809/api/";
         public APIHttpClient(string baseAPI)
         {
             this.baseAPI = baseAPI;
@@ -22,9 +22,29 @@ namespace RedeSocial.Backend.HTTPClient
                 HttpResponseMessage response = client.PutAsJsonAsync(action + id.ToString(), data).Result;
                 if (response.IsSuccessStatusCode)
                 {
-                    var sucesso = response.Content.ReadAsAsync<Guid>().Result;
+                    var sucesso = response.Content.ReadFromJsonAsync<Guid>().Result;
                     return sucesso;
+                }
+                else
+                {
+                    throw new Exception(response.Content.ReadAsStringAsync().Result);
+                }
+            }
+        }
 
+        public Guid Put<T>(string action, T data)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(baseAPI);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                HttpResponseMessage response = client.PutAsJsonAsync(action, data).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    var sucesso = response.Content.ReadFromJsonAsync<Guid>().Result;
+                    return sucesso;
                 }
                 else
                 {
@@ -54,6 +74,48 @@ namespace RedeSocial.Backend.HTTPClient
             }
         }
 
+        public TReturn Post<T, TReturn>(string action, T data)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(baseAPI);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                HttpResponseMessage response = client.PostAsJsonAsync(action, data).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    var sucesso = response.Content.ReadAsAsync<TReturn>().Result;
+                    return sucesso;
+                }
+                else
+                {
+                    throw new Exception(response.Content.ReadAsStringAsync().Result);
+                }
+            }
+        }
+
+        public Guid Post(string action)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(baseAPI);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                HttpResponseMessage response = client.PostAsync(action, null).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    var sucesso = response.Content.ReadAsAsync<Guid>().Result;
+                    return sucesso;
+                }
+                else
+                {
+                    throw new Exception(response.Content.ReadAsStringAsync().Result);
+                }
+            }
+        }
+
         public T Get<T>(string actionUri)
         {
             using (var client = new HttpClient())
@@ -65,7 +127,7 @@ namespace RedeSocial.Backend.HTTPClient
                 HttpResponseMessage response = client.GetAsync(actionUri).Result;
                 if (response.IsSuccessStatusCode)
                 {
-                   T sucesso = response.Content.ReadAsAsync<T>().Result;
+                    T sucesso = response.Content.ReadAsAsync<T>().Result;
                     return sucesso;
                 }
                 else
@@ -92,6 +154,38 @@ namespace RedeSocial.Backend.HTTPClient
                     return sucesso;
                 }
                 else
+                {
+                    throw new Exception(response.Content.ReadAsStringAsync().Result);
+                }
+            }
+        }
+
+        public void Delete(string action, Guid id)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(baseAPI);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                HttpResponseMessage response = client.DeleteAsync(action + id.ToString()).Result;
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception(response.Content.ReadAsStringAsync().Result);
+                }
+            }
+        }
+
+        public void Delete(string action)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(baseAPI);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                HttpResponseMessage response = client.DeleteAsync(action).Result;
+                if (!response.IsSuccessStatusCode)
                 {
                     throw new Exception(response.Content.ReadAsStringAsync().Result);
                 }
