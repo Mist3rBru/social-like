@@ -20,6 +20,7 @@ namespace RedeSocialBack.API.Adapter
                 comentarioModel.Id = comentario.Id;
                 comentarioModel.IdUsuario = comentario.IdUsuario;
                 comentarioModel.QuantidadeLikes = comentario.QuantidadeLikes;
+                comentarioModel.QuantidadeComentarios = comentario.QuantidadeComentarios;
                 return comentarioModel;
             }
         }

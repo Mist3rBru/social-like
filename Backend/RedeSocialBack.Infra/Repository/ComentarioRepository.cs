@@ -139,7 +139,8 @@ namespace RedeSocialBack.Infra.Repository
             using (NpgsqlConnection conexao = new NpgsqlConnection(strConexao))
             {
                 conexao.Open();
-                using (NpgsqlCommand cmd = new NpgsqlCommand(@"SELECT c.id, c.idusuario, c.conteudo, c.criadoem, c.atualizadoem, cp.idpostagem, COUNT(cc.idcomentario) AS quantidadelikes
+                using (NpgsqlCommand cmd = new NpgsqlCommand(@"SELECT c.id, c.idusuario, c.conteudo, c.criadoem, c.atualizadoem, cp.idpostagem, COUNT(cc.idcomentario) AS quantidadelikes,
+                                                              (SELECT COUNT(*) FROM public.resposta r WHERE r.idcomentario = c.id) AS quantidadeComentarios
                                                        FROM public.comentario c
                                                        JOIN public.comentariopostagem cp ON c.id = cp.idcomentario
                                                        LEFT JOIN public.curtidacomentario cc ON c.id = cc.idcomentario
@@ -159,6 +160,7 @@ namespace RedeSocialBack.Infra.Repository
                                 DateTime.Parse(reader["criadoem"].ToString()),
                                 DateTime.Parse(reader["atualizadoem"].ToString()),
                                 Convert.ToInt32(reader["quantidadelikes"].ToString())
+                                Convert.ToInt32(reader["quantidadeComentarios"].ToString())
                             ));
                         }
                     }
