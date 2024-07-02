@@ -2,17 +2,29 @@ namespace RedeSocial.Models
 {
     public class StoryModel
     {
-        public object Conteudo { get; set; }
-        public DateTime DataPublicacao { get; set; }
-        public int UsuarioId { get; set; }
-        public bool Ativo { get; set; }
-        public StoryModel(object conteudo, DateTime dataPublicacao, int usuarioId, bool ativo)
+        public class UsuarioModel
         {
-            Conteudo = conteudo;
-            DataPublicacao = dataPublicacao;
-            UsuarioId = usuarioId;
-            Ativo = ativo;
+            public Guid Id { get; set; }
+            public string Nome { get; set; }
         }
+
+        public string NomeUsuario { get; set; }
+        public string FotoUsuario { get; set; }
+
+        public Guid Id { get; set; }
+        public Guid IdUsuario { get; set; }
+        public UsuarioModel Usuario { get; set; }
+        public string Conteudo { get; set; }
+        public DateTime DataEnvio { get; set; }
+        public int NumVisualizacao { get; set; }
+        public int Situacao { get; set; }
+
+        public StoryModel(Guid idUsuario, string nomeUsuario, string fotoUsuario)
+        {
+            IdUsuario = idUsuario;
+            NomeUsuario = nomeUsuario;
+            FotoUsuario = fotoUsuario;
+    }
     }
 
 }

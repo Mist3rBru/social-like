@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RedeSocial.Backend.HTTPClient;
-using RedeSocial.Backend.Models;
 using RedeSocial.Models;
 
 namespace RedeSocial.Controllers
@@ -23,16 +22,10 @@ namespace RedeSocial.Controllers
 
             List<string> publicacaoLikes = comentariosClient.Get<List<string>>("api/likes/post/" + postId);
 
-            PublicacaoModelBack publicacaoBack = publicacaoClient.Get<PublicacaoModelBack>("api/Publicacao/" + postId);
+            PublicacaoModel publicacao = publicacaoClient.Get<PublicacaoModel>("api/Publicacao/" + postId);
             UsuarioModel usuario = usuarioClient.Get<UsuarioModel>("api/Usuario/" + publicacaoBack.Usuario);
-
-            PublicacaoModel publicacao = new PublicacaoModel(
-                publicacaoBack.Id,
-                usuario,
-                publicacaoBack.Descricao,
-                publicacaoBack.DataPublicacao,
-                publicacaoBack.Midias
-            );
+            publicacao.NomeUsuario = usuario.Nome;
+            publicacao.FotoUsuario = usuario.FotoPerfil;
             publicacao.QuantidadeComentarios = comentarios.Count;
             publicacao.QuantidadeLikes = publicacaoLikes.Count;
             ViewBag.Publicacao = publicacao;

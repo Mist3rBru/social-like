@@ -10,12 +10,14 @@
             padding: 1rem;
             width: 12rem;
             min-width: 20vw;
+            color: #1C1C39;
         }
 
         .feed {
             display: flex;
             flex-direction: column;
             align-items: center;
+            width: 100%;
         }
 
 
@@ -38,6 +40,7 @@
             background: #fff;
             flex-direction: column;
             height: fit-content;
+            
         }
 
 
@@ -70,6 +73,9 @@
             transform: scaleX(-1);
         }
 
+        .anuncio {
+            color: #8B7900;
+        }
     </style>
 </head>
 
@@ -86,63 +92,156 @@
                 </div>
                 <span>Nome</span>
             </a>
-            <a href="#"> ADD </a>
-        </div>
-        <a href="/perfil" class="avatar">
-            <div class="avatar-border">
-                <img src="~/img/avatar.png" alt="" />
-            </div>
-            <span>Nome</span>
-        </a>
-    </div>
-    @if (ViewBag.Usuario != null)
-    {
-        var user = (RedeSocial.Models.UsuarioModel)ViewBag.Usuario;
-        <p>@user.Nome</p>
-    }
+            <button type="button" id="addButton"  class="post-button">
+                <img src="~/img/add.png" alt="" />
+            </button>
 
+            <input type="file" id="fileInput" style="display:none" />
+        </div>
+
+       
+        @if (ViewBag.Stories != null)
+        {
+
+            @foreach (var item in ViewBag.Stories)
+            {
+                var story = (RedeSocial.Models.StoryModel)item;
+
+                <a href="/perfil" class="avatar">
+                    <div class="avatar-border">
+                        <img  src="data:image/jpeg;base64,@story.FotoUsuario" alt="" />
+                    </div>
+                    <span>@story.NomeUsuario</span>
+                </a>
+            }
+        }
+       
+       
+    </div>
 
     <div class="feed main">
-        <div class="post">
-            <a href="/perfil" class="avatar">
-                <img src="~/img/avatar.png" alt="" />
-                <p>Nome</p>
+        @if (ViewBag.Publicacoes != null)
+        {
+            var publicacoes = (List<RedeSocial.Models.PublicacaoModel>)ViewBag.Publicacoes;
+            var anuncios = (List<RedeSocial.Models.AnuncioModel>)ViewBag.Anuncios;
+            int anuncioIndex = 0;
 
-            </a>
-            <a href="/post/0602cf88-1a99-419e-ae46-108287c9ec32">
-                <img src="~/img/gato.jpg" alt="" />
+            for (int i = 0; i < publicacoes.Count; i++)
+            {
+                if ((i + 1) % 4 == 0 && anuncioIndex < anuncios.Count)
+                {
+                    var anuncio = anuncios[anuncioIndex];
+                    anuncioIndex++;
 
-                <p class="post-description">
-                    Lorem Ipsum is simply dummy text of the printing and typesetting
-                    industry. Lorem Ipsum has been the industry's standard dummy text.
-                    Lorem Ipsum has been the industry's standard dummy text.
-                </p>
-            </a>
-            <div style="
+                    <!-- POST ANÚNCIO -->
+                        <div class="post">
+                             <p class="anuncio">Anúncio</p>
+
+                             <a class="post-conteudo" href="@anuncio.Link">
+                                @if (!string.IsNullOrEmpty(anuncio.UrlImagem))
+                                {
+                                    <img src="@anuncio.UrlImagem" alt="" />
+                                    <p class="post-description">
+                                        @anuncio.Texto
+                                </p>
+                            }
+                            else
+                            {
+                                <p>
+                                    @anuncio.Texto
+                                </p>
+                            }
+
+                                
+                            </a>
+
+                            <div style="
+                                    display: flex;
+                                    justify-content: space-between;
+                                    align-items: center;
+                                  ">
+                                <div style="display: flex; gap: 3px">
+                                    <button type="button" class="post-button">
+                                        <img src="~/img/foguete.png" alt="" />
+                                    </button>
+                                    <button type="button" class="post-button">
+                                        <img src="~/img/comentário.png" alt="" />
+                                    </button>
+                                </div>
+                                <span style="
+                                      font-size: small;
+                                      border-radius: 1rem;
+                                      background: #1c1c39;
+                                      color: #fff;
+                                      padding: 0.3rem;
+                                      align-self: end;
+                                    ">
+                                    0 curtidas e 0 comentários
+                                </span>
+                            </div>
+                        </div>
+                }
+                <!-- POST PUBLICAÇÃO -->
+                var publicacao = publicacoes[i];
+
+                <div class="post">
+                    <a href="/perfil" class="avatar">
+                        @if (!string.IsNullOrEmpty(@publicacao.FotoUsuario))
+                        {
+                            <img src="data:image/jpeg;base64,@publicacao.FotoUsuario" alt="" />
+                        }
+                        else
+                        {
+                            <img src="~/img/avatar.png" alt="" />
+                        }
+                        <p>@publicacao.NomeUsuario</p>
+                    </a>
+
+                    <a class="post-conteudo"  href="/post/@publicacao.Id">
+                        @if (publicacao.Midias.Count > 0)
+                        {                           
+                            <img src="data:@publicacao.Midias[0].ContentType;base64,@publicacao.Midias[0].FileContents" alt="" />
+
+                            <p class="post-description">
+                                @publicacao.Descricao
+                            </p>
+                        }
+                        else
+                        {
+                            <p >@publicacao.Descricao</p>
+                        }
+
+                        
+                    </a>
+                    <div style="
               display: flex;
               justify-content: space-between;
               align-items: center;
-            ">
-                <div style="display: flex; gap: 3px">
-                    <button type="button" class="post-button">
-                        <img src="~/img/foguete.png" alt="" />
-                    </button>
-                    <button type="button" class="post-button">
-                        <img src="~/img/comentário.png" alt="" />
-                    </button>
-                </div>
-                <span style="
+                    ">
+                        <div style="display: flex; gap: 3px">
+                            <button type="button" class="post-button" onclick="curtirPost(@publicacao.Id, 0, 0)">
+                                <img src="~/img/foguete.png" alt="" />
+                            </button>
+                            <button type="button" class="post-button">
+                                <img src="~/img/comentário.png" alt="" />
+                            </button>
+                        </div>
+                        <span id="info-curtidas-comentarios-@publicacao.Id" style="
                 font-size: small;
                 border-radius: 1rem;
                 background: #1c1c39;
                 color: #fff;
-                height: fit-content;
                 padding: 0.3rem;
-              ">
-                    1895 curtidas e 2 comentários
-                </span>
-            </div>
-        </div>
+                align-self: end;
+                      ">
+                            @publicacao.QuantidadeLikes curtidas e @publicacao.QuantidadeComentarios comentários
+                        </span>
+                    </div>
+                </div>
+            }
+
+        }
+       
     </div>
     <!-- STORY
     <div class="story-wrapper">
@@ -177,3 +276,63 @@
     </div>
     -->
 </div>
+
+<script>
+    document.getElementById('addButton').addEventListener('click', function () {
+        document.getElementById('fileInput').click();
+    });
+
+    document.getElementById('fileInput').addEventListener('change', function (event) {
+        const files = event.target.files;
+        if (files.length > 0) {
+            console.log('Selected file:', files[0].name);
+            $.ajax({
+                type: "POST",
+                url: "/Feed/AddStory",
+                data: { id: postId },
+                success: function (response) {
+                    console.log("adiciona story")
+                    adicionaStory = false;
+                }
+            });
+        }
+    });
+
+    function curtirPost(postId, quantidadeCurtidas, quantidadeComentarios) {
+        console.log('CHAMA API');
+
+        $.ajax({
+            type: "POST",
+            url: "/Feed/CurtirPost",
+            data: { postId: postId },
+            success: function (response) {
+                if (response.sucesso) {
+                    console.log('success');
+                    quantidadeCurtidas++;
+                    $("#info-curtidas-comentarios-" + postId).text(quantidadeCurtidas + " curtidas e " + quantidadeComentarios + " comentáriosXXX");
+                } else {
+                    console.log('else');
+                }
+            }
+        });
+    }
+
+ 
+
+  pub =  @Html.Raw(Json.Serialize(ViewBag.Publicacoes));
+
+    console.log("pub:");
+    console.log(pub);
+    for (var i = 0; i < pub.length; i++) {
+        console.log(pub[i]);
+    }
+
+    teste = @Html.Raw(Json.Serialize(ViewBag.Teste));
+
+    console.log("TESTE:");
+    console.log(teste);
+    for (var i = 0; i < teste.length; i++) {
+        console.log(teste[i]);
+    }
+  
+</script>

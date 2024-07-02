@@ -19,9 +19,7 @@ namespace RedeSocial.Models
         public string Telefone { get; set; }
         public string Documento { get; set; }
         public List<UsuarioModel> Amigos { get; set; }
-        public TipoPessoaModel Tipo { get; set; } // 1 - Física, 2 - Jurídica
-
-
+        public TipoPessoaModel Tipo { get; set; } // 1 - Fï¿½sica, 2 - Jurï¿½dica
 
         public enum EstadosBrasilModel
         {
@@ -29,21 +27,21 @@ namespace RedeSocial.Models
             AC,
             [Display(Name = "Alagoas")]
             AL,
-            [Display(Name = "Amapá")]
+            [Display(Name = "Amapï¿½")]
             AP,
             [Display(Name = "Amazonas")]
             AM,
             [Display(Name = "Bahia")]
             BA,
-            [Display(Name = "Ceará")]
+            [Display(Name = "Cearï¿½")]
             CE,
             [Display(Name = "Distrito Federal")]
             DF,
-            [Display(Name = "Espírito Santo")]
+            [Display(Name = "Espï¿½rito Santo")]
             ES,
-            [Display(Name = "Goiás")]
+            [Display(Name = "Goiï¿½s")]
             GO,
-            [Display(Name = "Maranhão")]
+            [Display(Name = "Maranhï¿½o")]
             MA,
             [Display(Name = "Mato Grosso")]
             MT,
@@ -51,15 +49,15 @@ namespace RedeSocial.Models
             MS,
             [Display(Name = "Minas Gerais")]
             MG,
-            [Display(Name = "Pará")]
+            [Display(Name = "Parï¿½")]
             PA,
-            [Display(Name = "Paraíba")]
+            [Display(Name = "Paraï¿½ba")]
             PB,
-            [Display(Name = "Paraná")]
+            [Display(Name = "Paranï¿½")]
             PR,
             [Display(Name = "Pernambuco")]
             PE,
-            [Display(Name = "Piauí")]
+            [Display(Name = "Piauï¿½")]
             PI,
             [Display(Name = "Rio de Janeiro")]
             RJ,
@@ -67,13 +65,13 @@ namespace RedeSocial.Models
             RN,
             [Display(Name = "Rio Grande do Sul")]
             RS,
-            [Display(Name = "Rondônia")]
+            [Display(Name = "Rondï¿½nia")]
             RO,
             [Display(Name = "Roraima")]
             RR,
             [Display(Name = "Santa Catarina")]
             SC,
-            [Display(Name = "São Paulo")]
+            [Display(Name = "Sï¿½o Paulo")]
             SP,
             [Display(Name = "Sergipe")]
             SE,
