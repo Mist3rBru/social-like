@@ -1,0 +1,136 @@
+﻿@{
+    ViewData["Title"] = "CriarPublicacao";
+}
+
+
+<head>
+    <style>
+        .form-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .form-box {
+            border-radius: 2rem;
+            background-color: var(--bg-main);
+            min-width: 40%;
+            max-width: 1000px;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 1rem;
+            padding: 2rem 1rem;
+            justify-content: space-between;
+        }
+
+            .form-box * {
+                color: #fff;
+            }
+
+        .form-box-header {
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            margin: 3rem 0 1rem 0;
+        }
+
+        .form-box button {
+            margin-top: 3rem;
+            border: 0;
+            border-radius: 0.5rem;
+            text-align: center;
+            padding: 0.5rem;
+            width: 100%;
+            background: #000;
+            font-weight: 600;
+        }
+
+        .input-box {
+            display: block;
+            position: relative;
+            border: 1px solid #fff;
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+        }
+
+            .input-box > label {
+                position: absolute;
+                top: -0.5rem;
+                left: 0.75rem;
+                font-size: 0.75rem;
+                background-color: var(--bg-main);
+                padding: 0 0.25rem;
+                font-weight: 600;
+                color: #fff;
+            }
+
+            .input-box > input {
+                background-color: transparent;
+                padding: 0 0.25rem;
+                outline: none;
+                border: 0;
+                width: 100%;
+                color: #fff;
+            }
+
+        .customselect {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="4" height="5"><path fill="none" stroke="%23333" stroke-width="1.1" d="M0 0l2 2 2-2"/></svg>') no-repeat right 10px center;
+            background-color: #fff;
+            background-size: 10px 10px;
+            background-origin: content-box;
+            color: #333;
+        }
+
+            .customselect option {
+                color: #333;
+                background-color: #fff;
+            }
+
+        select::-ms-expand {
+            display: none;
+        }
+
+        .customselect:focus {
+            border-color: #66afe9;
+            outline: none;
+            box-shadow: 0 0 5px rgba(102, 175, 233, 0.6);
+        }
+    </style>
+</head>
+
+<div class="form-container">
+    <form id="register-form" action="/CriarPublicacao/Criar" method="post" class="form-box" enctype="multipart/form-data">
+        @Html.ValidationSummary()
+        <div class="form-box-header">
+            <h2>Bora criar um post novo?</h2>
+            <p>BORA LÁ!</p>
+        </div>
+
+           
+            <div class="input-box">
+            <label id="publicacao.descricao" name="publicacao.descricao">Legenda</label>
+            <input name="Descricao" type="text" />
+            </div>
+
+        <div class="input-box">
+            <label id="publicacao.Midias" name="publicacao.Midias">Selecione sua foto</label>
+            <input type="file" id="Midias" name="Midias">
+        </div>
+        
+        <button type="submit">Publicar</button>
+    </form>
+</div>
