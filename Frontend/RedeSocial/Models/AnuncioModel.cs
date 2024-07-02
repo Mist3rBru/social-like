@@ -7,6 +7,4 @@ namespace RedeSocial.Models
         public string Link { get; set; }
         public string Texto { get; set; }
     }
-
-
 }
