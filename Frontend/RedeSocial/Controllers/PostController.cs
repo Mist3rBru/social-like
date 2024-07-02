@@ -59,28 +59,28 @@ namespace RedeSocial.Controllers
             return Index(postId);
         }
 
-        [HttpPost]
+        [HttpPut]
         public IActionResult InserirLikePost(string postId) // Chamando no front
         {
             var usuarioId = Request.Cookies["UserId"];
 
-            APIHttpClient client = new APIHttpClient("http://grupo4.neurosky.com.br/api");
-            client.Post("/likes/post/" + postId + "/", usuarioId);
+            APIHttpClient client = new APIHttpClient("http://grupo4.neurosky.com.br");
+            client.Post("api/likes/post/" + postId + "/" + usuarioId);
 
-            List<string> likes = client.Get<List<string>>("/likes/post/" + postId);
+            List<string> likes = client.Get<List<string>>("api/likes/post/" + postId);
 
             return Json(new { sucesso = true, likePost = likes.Count });
         }
 
-        [HttpDelete]
+        [HttpPut]
         public IActionResult RemoverLikePost(string postId) // Chamando no front
         {
             var usuarioId = Request.Cookies["UserId"];
 
-            APIHttpClient client = new APIHttpClient("http://grupo4.neurosky.com.br/api");
-            client.Delete("/likes/post/" + postId + "/" + usuarioId);
+            APIHttpClient client = new APIHttpClient("http://grupo4.neurosky.com.br");
+            client.Delete("api/likes/post/" + postId + "/" + usuarioId);
 
-            List<string> likes = client.Get<List<string>>("/likes/post/" + postId);
+            List<string> likes = client.Get<List<string>>("api/likes/post/" + postId);
 
             return Json(new { sucesso = true, likePost = likes.Count });
 

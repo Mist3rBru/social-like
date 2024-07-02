@@ -69,8 +69,8 @@
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                                                    ">
-                <button type="button" class="post-button" onclick="toggleCurtirPost(1)">
+                                                            ">
+                <button type="button" class="post-button" onclick="toggleCurtirPost('@publicacao.Id')">
                     <img src="~/img/foguete.png" alt="" />
                 </button>
                 <span style="
@@ -79,8 +79,7 @@
                 background: #1c1c39;
                 color: #fff;
                 height: fit-content;
-                padding: 0.3rem;
-                                                        " id="info-post">
+                padding: 0.3rem;" id="info-post">
                     @publicacao.QuantidadeLikes curtidas e @publicacao.QuantidadeComentarios comentário
                 </span>
             </div>
@@ -132,7 +131,7 @@
                     </div>
                     @if (comentario.QuantidadeComentarios > 0)
                     {
-                        <button type="button" style="display:block;text-align:center;padding:0.5rem;" onclick="CarregarRespostas(" @comentario.Id")">Carregar respostas</button>
+                        <button type="button" style="display:block;text-align:center;padding:0.5rem;" onclick="CarregarRespostas('@comentario.Id')">Carregar respostas</button>
                     }
                 </div>
                 // <div id="@($"{comentario.Id}-respostas")" style="margin: 0.25rem 0; padding: 2rem 0 0 0"></div>
@@ -186,7 +185,7 @@
         $.ajax({
             type: "PUT",
             url: "/Post/InserirLikePost",
-            data: { id: postId },
+            data: { postId: postId },
             success: function (response) {
                 if (response.sucesso) {
                     $("#info-post").text(response.likePost + " curtidas e 1 comentário");
@@ -200,7 +199,7 @@
         $.ajax({
             type: "PUT",
             url: "/Post/RemoverLikePost",
-            data: { id: postId },
+            data: { postId: postId },
             success: function (response) {
                 if (response.sucesso) {
                     $("#info-post").text(response.likePost + " curtidas e 1 comentário");
@@ -259,28 +258,28 @@
 
                 response.forEach(function (comentario) {
                     var commentHtml = `
-                                                                <div class="comment">
-                                                                    <div class="avatar">
-                                                                        <img src="data:image/jpeg;base64,${comentario.Usuario.FotoPerfil}" alt="" /><span>${comentario.Usuario.Nome}</span>
-                                                                    </div>
-                                                                    <p>${comentario.Conteudo}</p>
-                                                                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                                                                        <div style="display: flex; gap: 3px">
-                                                                            <button type="button" class="post-button" onclick="toggleCurtirComentario(${comentario.Id})">
-                                                                                <img src="~/img/foguete.png" alt="" />
-                                                                            </button>
-                                                                            <button type="button" class="post-button">
-                                                                                <img src="~/img/comentário.png" alt="" />
-                                                                            </button>
+                                                                        <div class="comment">
+                                                                            <div class="avatar">
+                                                                                <img src="data:image/jpeg;base64,${comentario.Usuario.FotoPerfil}" alt="" /><span>${comentario.Usuario.Nome}</span>
+                                                                            </div>
+                                                                            <p>${comentario.Conteudo}</p>
+                                                                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                                                                <div style="display: flex; gap: 3px">
+                                                                                    <button type="button" class="post-button" onclick="toggleCurtirComentario(${comentario.Id})">
+                                                                                        <img src="~/img/foguete.png" alt="" />
+                                                                                    </button>
+                                                                                    <button type="button" class="post-button">
+                                                                                        <img src="~/img/comentário.png" alt="" />
+                                                                                    </button>
+                                                                                </div>
+                                                                                <span id="info-comment-${comentario.Id}" style="font-size: small; border-radius: 1rem; background: #1c1c39; color: #fff; height: fit-content; padding: 0.3rem;">
+                                                                                    ${comentario.QuantidadeLikes} curtidas e ${comentario.QuantidadeComentarios} comentários
+                                                                                </span>
+                                                                            </div>
+                                                                             ${comentario.QuantidadeComentarios === 0 ? '' : `<button type="button" style="display:block;text-align:center;padding:0.5rem;" onclick="carregarRespostas(${comentario.Id})">Carregar respostas</button>`}
                                                                         </div>
-                                                                        <span id="info-comment-${comentario.Id}" style="font-size: small; border-radius: 1rem; background: #1c1c39; color: #fff; height: fit-content; padding: 0.3rem;">
-                                                                            ${comentario.QuantidadeLikes} curtidas e ${comentario.QuantidadeComentarios} comentários
-                                                                        </span>
-                                                                    </div>
-                                                                     ${comentario.QuantidadeComentarios === 0 ? '' : `<button type="button" style="display:block;text-align:center;padding:0.5rem;" onclick="carregarRespostas(${comentario.Id})">Carregar respostas</button>`}
-                                                                </div>
-                                                                <div id="${comentario.Id}-respostas" style="margin: 2rem 0; padding: 2rem 0 0 0"></div>
-                                                            `;
+                                                                        <div id="${comentario.Id}-respostas" style="margin: 2rem 0; padding: 2rem 0 0 0"></div>
+                                                                    `;
                     respostasDiv.append(commentHtml);
                 });
             }
