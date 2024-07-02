@@ -111,7 +111,7 @@
                     align-items: center;
                                 ">
                     <div style="display: flex; gap: 3px">
-                        <button type="button" class="post-button" onclick="toggleCurtirComentario(1)">
+                        <button type="button" class="post-button" onclick="toggleCurtirComentario('@comentario.Id')">
                             <img src="~/img/foguete.png" alt="" />
                         </button>
                         <button type="button" class="post-button">
@@ -129,9 +129,8 @@
                         @comentario.QuantidadeLikes curtidas e @comentario.QuantidadeComentarios comentários
                     </span>
                 </div>
-                @if (comentario.QuantidadeComentarios > 0)
-                {
-                    <button type="button" style="display:block;text-align:center;padding:0.5rem;" onclick="CarregarRespostas(@comentario.Id)">Carregar respostas</button>
+                @if (comentario.QuantidadeComentarios > 0) {
+                    <button type="button" style="display:block;text-align:center;padding:0.5rem;" onclick="CarregarRespostas("@comentario.Id")">Carregar respostas</button>
                 }
             </div>
             <div id="@($"{comentario.Id}-respostas")" style="margin: 0.25rem 0; padding: 2rem 0 0 0"></div>
@@ -222,12 +221,12 @@
         $.ajax({
             type: "PUT",
             url: "/Post/InserirLikeComentario",
-            data: { id: comentarioId },
+            data: { comentarioId: comentarioId },
             success: function (response) {
                 if (response.sucesso) {
                     $("#info-comment-" + comentarioId).text(response.likeComment + " curtidas e 0 comentário");
+                    comentarioCurtido = true;
                 }
-                comentarioCurtido = true;
             }
         });
     }
@@ -236,12 +235,12 @@
         $.ajax({
             type: "PUT",
             url: "/Post/RemoverLikeComentario",
-            data: { id: comentarioId },
+            data: { comentarioId: comentarioId },
             success: function (response) {
                 if (response.sucesso) {
                     $("#info-comment-" + comentarioId).text(response.likeComment + " curtidas e 0 comentário");
+                    comentarioCurtido = false;
                 }
-                comentarioCurtido = false;
             }
         });
     }

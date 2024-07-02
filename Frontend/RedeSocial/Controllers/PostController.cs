@@ -67,7 +67,7 @@ namespace RedeSocial.Controllers
         }
 
         [HttpPost]
-        public IActionResult InserirLikePost(int postId) // Chamando no front
+        public IActionResult InserirLikePost(string postId) // Chamando no front
         {
             var usuarioId = Request.Cookies["UserId"];
 
@@ -80,7 +80,7 @@ namespace RedeSocial.Controllers
         }
 
         [HttpDelete]
-        public IActionResult RemoverLikePost(int postId) // Chamando no front
+        public IActionResult RemoverLikePost(string postId) // Chamando no front
         {
             var usuarioId = Request.Cookies["UserId"];
 
@@ -94,20 +94,20 @@ namespace RedeSocial.Controllers
         }
 
         [HttpPut]
-        public IActionResult InserirLikeComentario(int comentarioId) // Chamando no front
+        public IActionResult InserirLikeComentario(string comentarioId) // Chamando no front
         {
             var usuarioId = Request.Cookies["UserId"];
 
-            APIHttpClient client = new APIHttpClient("http://grupo4.neurosky.com.br/api");
-            client.Post("/likes/comentario/" + comentarioId + "/" + usuarioId);
+            APIHttpClient client = new APIHttpClient("http://grupo4.neurosky.com.br");
+            client.Post("api/likes/comentario/" + comentarioId + "/" + usuarioId);
 
-            List<string> likes = client.Get<List<string>>("/likes/comentario/" + comentarioId);
+            List<string> likes = client.Get<List<string>>("api/likes/comentario/" + comentarioId);
 
             return Json(new { sucesso = true, likeComment = likes.Count });
         }
 
         [HttpDelete]
-        public IActionResult RemoverLikeComentario(int comentarioId) // Chamando no front
+        public IActionResult RemoverLikeComentario(string comentarioId) // Chamando no front
         {
             var usuarioId = Request.Cookies["UserId"];
 
