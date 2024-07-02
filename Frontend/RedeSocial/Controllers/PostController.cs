@@ -37,33 +37,26 @@ namespace RedeSocial.Controllers
             publicacao.QuantidadeLikes = publicacaoLikes.Count;
             ViewBag.Publicacao = publicacao;
 
-            return View();
+            return View("Index");
         }
-        [HttpPost]
-        public IActionResult InserirPostComentario(string conteudo) // Chamando no front
+
+        [HttpPost("/Post/InserirPostComentario/{postId}")]
+        public IActionResult InserirPostComentario(string postId, string conteudo) // Chamando no front
         {
-
-            //MOCK. Ver como passar na view:
-            Guid postId = Guid.NewGuid();
-
-
-            Backend.Models.ComentarioModel comentario = new Backend.Models.ComentarioModel
+            var usuarioId = Request.Cookies["UserId"];
+            Models.ComentarioModel comentario = new Models.ComentarioModel
             {
+                IdUsuario = Guid.Parse(usuarioId),
                 Conteudo = conteudo,
                 DataEdicao = DateTime.Now,
                 DataCriacao = DateTime.Now,
-                UsuarioId = Guid.NewGuid(),
                 QuantidadeLikes = 0
             };
 
-            APIHttpClient client = new APIHttpClient("http://grupo4.neurosky.com.br/api");
-            client.Post("/comentarios/post/" + postId, comentario);
+            APIHttpClient client = new APIHttpClient("http://grupo4.neurosky.com.br");
+            client.Post("api/comentarios/post/" + postId, comentario);
 
-            List<Models.ComentarioModel> comentarios = client.Get<List<Models.ComentarioModel>>("/comentarios/post/" + postId);
-
-            ViewBag.Comentarios = comentarios;
-
-            return View("Index");
+            return Index(postId);
         }
 
         [HttpPost]
