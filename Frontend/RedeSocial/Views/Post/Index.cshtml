@@ -12,13 +12,6 @@
             gap: 1rem;
         }
 
-        .comments-box {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            width: 40vw;
-        }
-
         .comment-box-box {
             display: flex;
             flex-direction: column;
@@ -76,7 +69,7 @@
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                        ">
+                                                    ">
                 <button type="button" class="post-button" onclick="toggleCurtirPost(1)">
                     <img src="~/img/foguete.png" alt="" />
                 </button>
@@ -87,7 +80,7 @@
                 color: #fff;
                 height: fit-content;
                 padding: 0.3rem;
-                            " id="info-post">
+                                                        " id="info-post">
                     @publicacao.QuantidadeLikes curtidas e @publicacao.QuantidadeComentarios comentário
                 </span>
             </div>
@@ -95,46 +88,56 @@
     }
 
     <!-- COMENTÁRIOS -->
-    <div class="comments-box">
-        @foreach (var item in ViewBag.Comentarios)
-        {
-            var comentario = (RedeSocial.Models.ComentarioModel)item;
+    <div style="display: flex;
+         flex-direction: column;
+         gap: 1rem;
+         justify-content:space-between;
+         width: 40vw;">
+        <div style="display: flex;
+         flex-direction: column;
+         gap: 1rem;
+         width: 100%;
+         max-height: 80vh;
+         overflow:auto">
+            @foreach (var item in ViewBag.Comentarios)
+            {
+                var comentario = (RedeSocial.Models.ComentarioModel)item;
 
-            <div class="comment">
-                <div class="avatar">
-                    <img src="data:image/jpeg;base64,@comentario.Usuario.FotoPerfil" alt="" /><span>@comentario.Usuario.Nome</span>
-                </div>
-                <p>@comentario.Conteudo</p>
-                <div style="
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                                ">
-                    <div style="display: flex; gap: 3px">
-                        <button type="button" class="post-button" onclick="toggleCurtirComentario('@comentario.Id')">
-                            <img src="~/img/foguete.png" alt="" />
-                        </button>
-                        <button type="button" class="post-button">
-                            <img src="~/img/comentário.png" alt="" />
-                        </button>
+                <div class="comment">
+                    <div class="avatar">
+                        <img src="data:image/jpeg;base64,@comentario.Usuario.FotoPerfil" alt="" /><span>@comentario.Usuario.Nome</span>
                     </div>
-                    <span id="info-comment-1" style="
-                        font-size: small;
-                        border-radius: 1rem;
-                        background: #1c1c39;
-                        color: #fff;
-                        height: fit-content;
-                        padding: 0.3rem;
-                                ">
-                        @comentario.QuantidadeLikes curtidas e @comentario.QuantidadeComentarios comentários
-                    </span>
+                    <p>@comentario.Conteudo</p>
+                    <div style="
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;">
+                        <div style="display: flex; gap: 3px">
+                            <button type="button" class="post-button" onclick="toggleCurtirComentario('@comentario.Id')">
+                                <img src="~/img/foguete.png" alt="" />
+                            </button>
+                            <button type="button" class="post-button">
+                                <img src="~/img/comentário.png" alt="" />
+                            </button>
+                        </div>
+                        <span id="info-comment-1" style="
+                            font-size: small;
+                            border-radius: 1rem;
+                            background: #1c1c39;
+                            color: #fff;
+                            height: fit-content;
+                            padding: 0.3rem;">
+                            @comentario.QuantidadeLikes curtidas e @comentario.QuantidadeComentarios comentários
+                        </span>
+                    </div>
+                    @if (comentario.QuantidadeComentarios > 0)
+                    {
+                        <button type="button" style="display:block;text-align:center;padding:0.5rem;" onclick="CarregarRespostas(" @comentario.Id")">Carregar respostas</button>
+                    }
                 </div>
-                @if (comentario.QuantidadeComentarios > 0) {
-                    <button type="button" style="display:block;text-align:center;padding:0.5rem;" onclick="CarregarRespostas("@comentario.Id")">Carregar respostas</button>
-                }
-            </div>
-            <div id="@($"{comentario.Id}-respostas")" style="margin: 0.25rem 0; padding: 2rem 0 0 0"></div>
-        }
+                // <div id="@($"{comentario.Id}-respostas")" style="margin: 0.25rem 0; padding: 2rem 0 0 0"></div>
+            }
+        </div>
         <form id="comment-form" action="/Post/InserirPostComentario/@ViewBag.Publicacao.Id" method="post" class="comment-input">
             <input id="comment-input" type="text" name="conteudo" />
             <button type="submit" style="display: none;" />
@@ -256,28 +259,28 @@
 
                 response.forEach(function (comentario) {
                     var commentHtml = `
-                                    <div class="comment">
-                                        <div class="avatar">
-                                            <img src="data:image/jpeg;base64,${comentario.Usuario.FotoPerfil}" alt="" /><span>${comentario.Usuario.Nome}</span>
-                                        </div>
-                                        <p>${comentario.Conteudo}</p>
-                                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                                            <div style="display: flex; gap: 3px">
-                                                <button type="button" class="post-button" onclick="toggleCurtirComentario(${comentario.Id})">
-                                                    <img src="~/img/foguete.png" alt="" />
-                                                </button>
-                                                <button type="button" class="post-button">
-                                                    <img src="~/img/comentário.png" alt="" />
-                                                </button>
-                                            </div>
-                                            <span id="info-comment-${comentario.Id}" style="font-size: small; border-radius: 1rem; background: #1c1c39; color: #fff; height: fit-content; padding: 0.3rem;">
-                                                ${comentario.QuantidadeLikes} curtidas e ${comentario.QuantidadeComentarios} comentários
-                                            </span>
-                                        </div>
-                                         ${comentario.QuantidadeComentarios === 0 ? '' : `<button type="button" style="display:block;text-align:center;padding:0.5rem;" onclick="carregarRespostas(${comentario.Id})">Carregar respostas</button>`}
-                                    </div>
-                                    <div id="${comentario.Id}-respostas" style="margin: 2rem 0; padding: 2rem 0 0 0"></div>
-                                `;
+                                                                <div class="comment">
+                                                                    <div class="avatar">
+                                                                        <img src="data:image/jpeg;base64,${comentario.Usuario.FotoPerfil}" alt="" /><span>${comentario.Usuario.Nome}</span>
+                                                                    </div>
+                                                                    <p>${comentario.Conteudo}</p>
+                                                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                                                        <div style="display: flex; gap: 3px">
+                                                                            <button type="button" class="post-button" onclick="toggleCurtirComentario(${comentario.Id})">
+                                                                                <img src="~/img/foguete.png" alt="" />
+                                                                            </button>
+                                                                            <button type="button" class="post-button">
+                                                                                <img src="~/img/comentário.png" alt="" />
+                                                                            </button>
+                                                                        </div>
+                                                                        <span id="info-comment-${comentario.Id}" style="font-size: small; border-radius: 1rem; background: #1c1c39; color: #fff; height: fit-content; padding: 0.3rem;">
+                                                                            ${comentario.QuantidadeLikes} curtidas e ${comentario.QuantidadeComentarios} comentários
+                                                                        </span>
+                                                                    </div>
+                                                                     ${comentario.QuantidadeComentarios === 0 ? '' : `<button type="button" style="display:block;text-align:center;padding:0.5rem;" onclick="carregarRespostas(${comentario.Id})">Carregar respostas</button>`}
+                                                                </div>
+                                                                <div id="${comentario.Id}-respostas" style="margin: 2rem 0; padding: 2rem 0 0 0"></div>
+                                                            `;
                     respostasDiv.append(commentHtml);
                 });
             }
