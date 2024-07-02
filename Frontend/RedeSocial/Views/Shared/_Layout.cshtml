@@ -18,7 +18,15 @@
             {
                 var user = (RedeSocial.Models.UsuarioModel)ViewBag.Usuario;
                 <p class="header-avatar-name">@user.Nome</p>
-                <img class="header-avatar-img" src="data:image/jpeg;base64,@user.FotoPerfil" alt="lerigou" />
+                @if (!string.IsNullOrEmpty(@user.FotoPerfil))
+                {
+                    <img class="header-avatar-img" src="data:image/jpeg;base64,@user.FotoPerfil" alt="" />
+                }
+                else
+                {
+                    <img src="~/img/avatar.png" alt="" />
+                }
+                
             }
         </div>
     </header>
