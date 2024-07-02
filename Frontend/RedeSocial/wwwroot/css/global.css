@@ -95,20 +95,29 @@ img {
     background-color: #fff;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
-    padding: 0.5rem;
+    gap: 1rem;
+    padding:0.8rem;
     width: 70%;
     height: fit-content;
+    margin-bottom: 2rem;
+    color: #1C1C39;
+
 }
 
-    .post > img {
+.post-conteudo {
+    display: flex;
+    flex-direction: column;
+}
+
+    .post-conteudo > img {
         max-width: 100%;
-        margin: 0 auto;
+        max-height: 250px;
     }
 
 .post-description {
     padding: 0.5rem;
     text-align: justify;
+    background: #A764CF;
 }
 
 .post-button {
@@ -116,6 +125,8 @@ img {
     justify-content: center;
     align-items: center;
     padding: 2px;
-    border-radius: 50%;
+    all: unset;
     overflow: hidden;
+    width: 30px;
+    cursor: pointer;
 }

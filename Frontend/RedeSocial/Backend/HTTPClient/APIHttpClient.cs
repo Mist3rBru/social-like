@@ -5,7 +5,7 @@ namespace RedeSocial.Backend.HTTPClient
 
     public class APIHttpClient
     {
-        private string baseAPI = "http://grupo4.neurosky.com.br/api";
+        private string baseAPI = "http://grupo4.neurosky.com.br/";
         public APIHttpClient(string baseAPI)
         {
             this.baseAPI = baseAPI;
@@ -66,6 +66,7 @@ namespace RedeSocial.Backend.HTTPClient
                 if (response.IsSuccessStatusCode)
                 {
                    T sucesso = response.Content.ReadAsAsync<T>().Result;
+                    
                     return sucesso;
                 }
                 else
