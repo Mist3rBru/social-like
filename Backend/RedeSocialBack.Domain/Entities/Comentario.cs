@@ -15,6 +15,7 @@ namespace RedeSocialBack.Domain.Entities
         public DateTime DataCriacao { get; set; }
         public DateTime DataEdicao { get; set; }
         public int QuantidadeLikes { get; set; }
+        public int QuantidadeComentarios { get; set; }
 
         public Comentario()
         {
@@ -24,6 +25,7 @@ namespace RedeSocialBack.Domain.Entities
             this.DataCriacao = DateTime.Now;
             this.DataEdicao = DateTime.Now;
             this.QuantidadeLikes = 0;
+            this.QuantidadeComentarios = 0;
         }
 
         public Comentario(Guid IdUsuario, string Conteudo) { 
@@ -43,6 +45,17 @@ namespace RedeSocialBack.Domain.Entities
             this.DataCriacao = DataCriacao;
             this.DataEdicao = DataEdicao;
             this.QuantidadeLikes = QuantidadeLikes;
+        }
+
+        public Comentario(Guid Id, Guid IdUsuario, string Conteudo, DateTime DataCriacao, DateTime DataEdicao, int QuantidadeLikes, int QuantidadeComentarios)
+        {
+            this.Id = Id;
+            this.IdUsuario = IdUsuario;
+            this.Conteudo = Conteudo;
+            this.DataCriacao = DataCriacao;
+            this.DataEdicao = DataEdicao;
+            this.QuantidadeLikes = QuantidadeLikes;
+            this.QuantidadeComentarios = QuantidadeComentarios;
         }
     }
 }

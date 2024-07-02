@@ -7,117 +7,121 @@ namespace RedeSocial.Controllers
 {
     public class PostController : Controller
     {
-        List<Backend.Models.ComentarioModel> comentarios = [];
-
-        public IActionResult Index()
+        [HttpGet("/Post/{postId}")]
+        public IActionResult Index(string postId)
         {
-            return View();
-        }
-        [HttpPost]
-        public IActionResult InserirPostComentario(string conteudo) // Chamando no front
-        {
+            APIHttpClient publicacaoClient = new APIHttpClient("http://grupo5.neurosky.com.br");
+            APIHttpClient usuarioClient = new APIHttpClient("http://grupo3.neurosky.com.br");
+            APIHttpClient comentariosClient = new APIHttpClient("http://grupo4.neurosky.com.br");
 
-            //MOCK. Ver como passar na view:
-            Guid postId = Guid.NewGuid();
-
-
-            Backend.Models.ComentarioModel comentario = new Backend.Models.ComentarioModel
+            List<Models.ComentarioModel> comentarios = comentariosClient.Get<List<Models.ComentarioModel>>("api/comentarios/post/" + postId);
+            foreach (var comentario in comentarios)
             {
-               Conteudo = conteudo,
-               DataEdicao = DateTime.Now,
-               DataCriacao = DateTime.Now,
-               UsuarioId = Guid.NewGuid(),
-               QuantidadeLikes = 0
-           };
-
-            comentarios.Add(comentario);
-
-            APIHttpClient client;
-            client = new APIHttpClient("http://grupo4.neurosky.com.br/api/");
-            client.Post("comentarios/post/"+postId, comentario);
-
-            comentarios.Add(comentario);
-
+                comentario.Usuario = usuarioClient.Get<UsuarioModel>("api/Usuario/" + comentario.IdUsuario);
+            }
             ViewBag.Comentarios = comentarios;
+
+            List<string> publicacaoLikes = comentariosClient.Get<List<string>>("api/likes/post/" + postId);
+
+            PublicacaoModelBack publicacaoBack = publicacaoClient.Get<PublicacaoModelBack>("api/Publicacao/" + postId);
+            UsuarioModel usuario = usuarioClient.Get<UsuarioModel>("api/Usuario/" + publicacaoBack.Usuario);
+
+            PublicacaoModel publicacao = new PublicacaoModel(
+                publicacaoBack.Id,
+                usuario,
+                publicacaoBack.Descricao,
+                publicacaoBack.DataPublicacao,
+                publicacaoBack.Midias
+            );
+            publicacao.QuantidadeComentarios = comentarios.Count;
+            publicacao.QuantidadeLikes = publicacaoLikes.Count;
+            ViewBag.Publicacao = publicacao;
 
             return View("Index");
         }
 
-        [HttpPost]
-        public IActionResult InserirLikePost(int postId) // Chamando no front
+        [HttpPost("/Post/InserirPostComentario/{postId}")]
+        public IActionResult InserirPostComentario(string postId, string conteudo) // Chamando no front
         {
+            var usuarioId = Request.Cookies["UserId"];
+            Models.ComentarioModel comentario = new Models.ComentarioModel
+            {
+                IdUsuario = Guid.Parse(usuarioId),
+                Conteudo = conteudo,
+                DataEdicao = DateTime.Now,
+                DataCriacao = DateTime.Now,
+                QuantidadeLikes = 0
+            };
 
-            //MOCK:
-            Guid usuarioId = Guid.NewGuid();
-            int quantidadeLikes = 0;
+            APIHttpClient client = new APIHttpClient("http://grupo4.neurosky.com.br");
+            client.Post("api/comentarios/post/" + postId, comentario);
 
-            APIHttpClient client;
-            client = new APIHttpClient("http://grupo4.neurosky.com.br/api/");
-            client.Post("likes/post/" + postId + "/",usuarioId);
-
-            return Json(new { sucesso = true, likePost = quantidadeLikes++ });
-
+            return Index(postId);
         }
 
-        [HttpDelete]
-        public IActionResult RemoverLikePost(int postId) // Chamando no front
+        [HttpPut]
+        public IActionResult InserirLikePost(string postId) // Chamando no front
         {
-            //MOCK:
-            Guid usuarioId = Guid.NewGuid();
-            int quantidadeLikes = 1;
+            var usuarioId = Request.Cookies["UserId"];
 
-            APIHttpClient client;
-            client = new APIHttpClient("http://grupo4.neurosky.com.br/api/");
-           // client.Delete("likes/post/" + postId + "/" + usuarioId);
+            APIHttpClient client = new APIHttpClient("http://grupo4.neurosky.com.br");
+            client.Post("api/likes/post/" + postId + "/" + usuarioId);
 
-            return Json(new { sucesso = true, likePost = quantidadeLikes-- });
+            List<string> likes = client.Get<List<string>>("api/likes/post/" + postId);
+
+            return Json(new { sucesso = true, likePost = likes.Count });
+        }
+
+        [HttpPut]
+        public IActionResult RemoverLikePost(string postId) // Chamando no front
+        {
+            var usuarioId = Request.Cookies["UserId"];
+
+            APIHttpClient client = new APIHttpClient("http://grupo4.neurosky.com.br");
+            client.Delete("api/likes/post/" + postId + "/" + usuarioId);
+
+            List<string> likes = client.Get<List<string>>("api/likes/post/" + postId);
+
+            return Json(new { sucesso = true, likePost = likes.Count });
 
         }
 
         [HttpPut]
-        public IActionResult InserirLikeComentario(int comentarioId) // Chamando no front
+        public IActionResult InserirLikeComentario(string comentarioId) // Chamando no front
         {
+            var usuarioId = Request.Cookies["UserId"];
 
-            //MOCK:
-            Guid usuarioId = Guid.NewGuid();
-            int quantidadeLikes = 0;
+            APIHttpClient client = new APIHttpClient("http://grupo4.neurosky.com.br");
+            client.Post("api/likes/comentario/" + comentarioId + "/" + usuarioId);
 
-            APIHttpClient client;
-            client = new APIHttpClient("http://grupo4.neurosky.com.br/api/");
-           // client.Post("likes/comentario/" + comentarioId + "/" + usuarioId);
+            List<string> likes = client.Get<List<string>>("api/likes/comentario/" + comentarioId);
 
-            return Json(new { sucesso = true, likeComment = quantidadeLikes++ });
+            return Json(new { sucesso = true, likeComment = likes.Count });
         }
 
         [HttpDelete]
-        public IActionResult RemoverLikeComentario(int comentarioId) // Chamando no front
+        public IActionResult RemoverLikeComentario(string comentarioId) // Chamando no front
         {
+            var usuarioId = Request.Cookies["UserId"];
 
-            //MOCK:
-            Guid usuarioId = Guid.NewGuid();
-            int quantidadeLikes = 1;
+            APIHttpClient client = new APIHttpClient("http://grupo4.neurosky.com.br/api/");
+            client.Delete("likes/comentario/" + comentarioId + "/" + usuarioId);
 
-            APIHttpClient client;
-            client = new APIHttpClient("http://grupo4.neurosky.com.br/api/");
-         //   client.Delete("likes/comentario/" + comentarioId + "/" + usuarioId);
+            List<string> likes = client.Get<List<string>>("/likes/comentario/" + comentarioId);
 
-            return Json(new { sucesso = true, likeComment = quantidadeLikes-- });
+            return Json(new { sucesso = true, likeComment = likes.Count });
         }
 
         [HttpGet]
         public IActionResult ListarPostComentarios(Models.ComentarioModel comentario) //Precisa incluir chamada no front
         {
-
-
             //MOCK:
             Guid postId = Guid.NewGuid();
 
             List<Backend.Models.ComentarioModel> comentariosResponse;
-            APIHttpClient client;
-            client = new APIHttpClient("http://grupo4.neurosky.com.br/api/");
-           // comentariosResponse = client.Get("comentarios/post/");
+            APIHttpClient client = new APIHttpClient("http://grupo4.neurosky.com.br/api/");
 
-           // comentarios.Add(comentariosResponse);
+            List<Models.ComentarioModel> comentarios = client.Get<List<Models.ComentarioModel>>("/comentarios/post/" + postId);
 
             ViewBag.Comentarios = comentarios;
 
@@ -125,9 +129,18 @@ namespace RedeSocial.Controllers
 
         }
 
+        [HttpGet]
+        public IActionResult ListarComentarioRespostas(string comentarioId) //Precisa incluir chamada no front
+        {
+            APIHttpClient client = new APIHttpClient("http://grupo4.neurosky.com.br/api/");
+            List<Models.ComentarioModel> respostas = client.Get<List<Models.ComentarioModel>>("/comentarios/resposta/" + comentarioId);
+
+            return Json(respostas);
+        }
+
 
         //Precisa incluir opção para editar comentário nas views
-        public IActionResult EditarComentario(Models.ComentarioModel comentario) 
+        public IActionResult EditarComentario(Models.ComentarioModel comentario)
         {
 
             ViewBag.Comment = comentario;
@@ -136,7 +149,7 @@ namespace RedeSocial.Controllers
         }
 
         //Precisa incluir opção para excluir comentário nas views
-        public IActionResult ExcluirComentario(Models.ComentarioModel comentario) 
+        public IActionResult ExcluirComentario(Models.ComentarioModel comentario)
         {
 
             ViewBag.Comment = comentario;
@@ -145,7 +158,7 @@ namespace RedeSocial.Controllers
         }
 
         //Precisa incluir opção de responder comentário nas views
-        public IActionResult ListarRespostaComentarios(Models.ComentarioModel comentario) 
+        public IActionResult ListarRespostaComentarios(Models.ComentarioModel comentario)
         {
 
             ViewBag.Comment = comentario;
