@@ -40,7 +40,7 @@ namespace RedeSocial.Controllers
             {
                 Expires = DateTimeOffset.Now.AddDays(7) // Set cookie to expire in 7 days
             };
-            Response.Cookies.Append("UserId", "136a15e3-91fb-4afa-9dfb-909a850e4d55", cookieOptions);
+            Response.Cookies.Append("UserId", "68f63852-a838-49d4-9232-f2d704be2ee9", cookieOptions);
             return RedirectToAction("Index", "Feed");
 
        

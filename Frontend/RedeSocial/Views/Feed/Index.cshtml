@@ -95,7 +95,11 @@
                 </div>
                 <span>Nome</span>
             </a>
-            <a href="#"> ADD </a>
+            <button type="button" id="addButton"  class="post-button">
+                <img src="~/img/add.png" alt="" />
+            </button>
+
+            <input type="file" id="fileInput" style="display:none" />
         </div>
 
        
@@ -174,8 +178,8 @@
                                       border-radius: 1rem;
                                       background: #1c1c39;
                                       color: #fff;
-                                      height: fit-content;
                                       padding: 0.3rem;
+                                      align-self: end;
                                     ">
                                     0 curtidas e 0 comentários
                                 </span>
@@ -232,8 +236,8 @@
                 border-radius: 1rem;
                 background: #1c1c39;
                 color: #fff;
-                height: fit-content;
                 padding: 0.3rem;
+                align-self: end;
                       ">
                             0 curtidas e 0 comentários
                         </span>
@@ -279,26 +283,34 @@
 </div>
 
 <script>
-    /*
-      $.ajax({
-        type: "GET",
-        url: "/Post/RemoverLikeComentario",
-        data: { id: comentarioId },
-        success: function (response) {
-            if (response.sucesso) {
-                $("#info-comment-" + comentarioId).text(response.likeComment + " curtidas e 0 comentário");
-            }
-            comentarioCurtido = false;
+    document.getElementById('addButton').addEventListener('click', function () {
+        document.getElementById('fileInput').click();
+    });
+
+    document.getElementById('fileInput').addEventListener('change', function (event) {
+        const files = event.target.files;
+        if (files.length > 0) {
+            console.log('Selected file:', files[0].name);
+            $.ajax({
+                type: "POST",
+                url: "/Feed/AddStory",
+                data: { id: postId },
+                success: function (response) {
+                    console.log("adiciona story")
+                    adicionaStory = false;
+                }
+            });
         }
     });
-    */
 
-   publicacoes =  @Html.Raw(Json.Serialize(ViewBag.Publicacoes));
+ 
 
-    console.log("Descrições das publicações:");
-    console.log(publicacoes[9])
-    for (var i = 0; i < publicacoes.length; i++) {
-        console.log(publicacoes[i]);
+  teste =  @Html.Raw(Json.Serialize(ViewBag.Teste));
+
+    console.log("TESTE:");
+    console.log(teste);
+    for (var i = 0; i < teste.length; i++) {
+        console.log(teste[i]);
     }
   
 </script>

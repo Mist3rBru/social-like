@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RedeSocial.Backend.HTTPClient;
 using RedeSocial.Models;
+using System.Collections.Generic;
+using static RedeSocial.Models.PublicacaoModel;
 
 namespace RedeSocial.Controllers
 {
@@ -31,19 +33,37 @@ namespace RedeSocial.Controllers
         [HttpGet]
         private List<PublicacaoModel> listaPublicacoes(string? userId)
         {
-            APIHttpClient client;
-            client = new APIHttpClient(URLBasePublicacao);
-            List<PublicacaoModel> publicacoes = client.Get<List<PublicacaoModel>>("Publicacao?idUsuario=" + userId);
+            List<PublicacaoModel> todasPublicacoes = new List<PublicacaoModel>();
 
-            foreach(var publicacao in publicacoes)
+            APIHttpClient client;
+            client = new APIHttpClient(URLBaseUsuario);
+            UsuarioModel usuarioLogado = client.Get<UsuarioModel>($"Usuario/{userId}");
+
+            client = new APIHttpClient(URLBasePublicacao);
+            List<PublicacaoModel> publicacoesUsuarioLogado = client.Get<List<PublicacaoModel>>("Publicacao?idUsuario=" + userId);
+
+            foreach (var publicacao in publicacoesUsuarioLogado)
             {
-                client = new APIHttpClient(URLBaseUsuario);
-                UsuarioModel usuario = client.Get<UsuarioModel>($"Usuario/{publicacao.Usuario}") ;
-                publicacao.NomeUsuario = usuario.Nome;
-                publicacao.FotoUsuario = usuario.FotoPerfil;
+                publicacao.NomeUsuario = usuarioLogado.Nome;
+                publicacao.FotoUsuario = usuarioLogado.FotoPerfil;
+                todasPublicacoes.Add(publicacao);
             }
 
-            return publicacoes;
+            foreach (var amigo in usuarioLogado.Amigos)
+            {
+                client = new APIHttpClient(URLBasePublicacao);
+                List<PublicacaoModel> publicacoesAmigos = client.Get<List<PublicacaoModel>>("Publicacao?idUsuario=" + amigo.Id);
+
+                foreach (var publicacaoAmigo in publicacoesAmigos)
+                {
+                    publicacaoAmigo.NomeUsuario = amigo.Nome;
+                    publicacaoAmigo.FotoUsuario = amigo.FotoPerfil;
+                }
+                   
+                todasPublicacoes.AddRange(publicacoesAmigos);
+            }
+
+            return todasPublicacoes;
         }
 
         [HttpGet]
@@ -75,6 +95,18 @@ namespace RedeSocial.Controllers
             List<AnuncioModel> anuncios = client.Get<List<AnuncioModel>>("Anuncio");
 
             return anuncios;
+        }
+
+        [HttpPost]
+        private IActionResult adicionaStory()
+        {
+            APIHttpClient client;
+            client = new APIHttpClient(URLBaseAnuncio);
+            //List<AnuncioModel> anuncios = client.Get<List<AnuncioModel>>("Anuncio");
+
+            //return anuncios;
+
+            return Json(new { sucesso = true  });
         }
 
     }

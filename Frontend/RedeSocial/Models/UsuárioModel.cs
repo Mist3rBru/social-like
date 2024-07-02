@@ -2,6 +2,7 @@ namespace RedeSocial.Models
 {
     public class UsuarioModel
     {
+        public Guid Id { get; set; }
         public string Nome { get; set; }
         public string Sobrenome { get; set; }
         public string Senha { get; set; }
@@ -15,9 +16,11 @@ namespace RedeSocial.Models
         public string Documento { get; set; }
         public int Tipo { get; set; } // 1 - Física, 2 - Jurídica
 
-        public UsuarioModel(string nome, string sobrenome, string senha, string dataComemorativa, int sexo, string biografia,
+        public List<UsuarioModel> Amigos { get; set; }
+        public UsuarioModel(string nome, Guid id, List<UsuarioModel> amigos, string sobrenome, string senha, string dataComemorativa, int sexo, string biografia,
                        string fotoPerfil, string cidade, string uf, string telefone, string documento, int tipo)
         {
+            Id=id;
             Nome = nome;
             Sobrenome = sobrenome;
             Senha = senha;
@@ -30,6 +33,7 @@ namespace RedeSocial.Models
             Telefone = telefone;
             Documento = documento;
             Tipo = tipo;
+            Amigos = amigos;
         }
     }
 
