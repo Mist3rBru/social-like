@@ -159,7 +159,7 @@ namespace RedeSocialBack.Infra.Repository
                                 reader["conteudo"].ToString(),
                                 DateTime.Parse(reader["criadoem"].ToString()),
                                 DateTime.Parse(reader["atualizadoem"].ToString()),
-                                Convert.ToInt32(reader["quantidadelikes"].ToString())
+                                Convert.ToInt32(reader["quantidadelikes"].ToString()),
                                 Convert.ToInt32(reader["quantidadeComentarios"].ToString())
                             ));
                         }
