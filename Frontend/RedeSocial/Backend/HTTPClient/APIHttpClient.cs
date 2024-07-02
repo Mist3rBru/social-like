@@ -54,7 +54,7 @@ namespace RedeSocial.Backend.HTTPClient
             }
         }
 
-        public T Get<T>(string actionUri)
+            public T Get<T>(string actionUri)
         {
             using (var client = new HttpClient())
             {

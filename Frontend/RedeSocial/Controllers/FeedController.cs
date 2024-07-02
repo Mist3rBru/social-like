@@ -8,21 +8,19 @@ namespace RedeSocial.Controllers
 {
     public class FeedController : Controller
     {
+
+        APIHttpClient client;
+
         private static readonly string URLBaseAnuncio = "http://grupo1.neurosky.com.br/api/";
         private static readonly string URLBaseStories = "http://grupo2.neurosky.com.br/api/";
         private static readonly string URLBaseUsuario = "http://grupo3.neurosky.com.br/api/";
+        private static readonly string URLBaseCurtidaComentario = "http://grupo4.neurosky.com.br/api/";
         private static readonly string URLBasePublicacao = "http://grupo5.neurosky.com.br/api/";
 
         public IActionResult Index()
         {
             var userId = Request.Cookies["UserId"];
-
-            APIHttpClient client;
-            client = new APIHttpClient(URLBaseUsuario);
-            UsuarioModel usuario = client.Get<UsuarioModel>("Usuario/" + userId);
-
-
-            ViewBag.Usuario = usuario;
+        
             ViewBag.Publicacoes = listaPublicacoes(userId);
             ViewBag.Anuncios = listaAnuncios();
             ViewBag.Stories = listaStories();
@@ -35,7 +33,6 @@ namespace RedeSocial.Controllers
         {
             List<PublicacaoModel> todasPublicacoes = new List<PublicacaoModel>();
 
-            APIHttpClient client;
             client = new APIHttpClient(URLBaseUsuario);
             UsuarioModel usuarioLogado = client.Get<UsuarioModel>($"Usuario/{userId}");
 
@@ -63,6 +60,20 @@ namespace RedeSocial.Controllers
                 todasPublicacoes.AddRange(publicacoesAmigos);
             }
 
+
+            foreach (var publicacao in todasPublicacoes)
+            {
+                publicacao.Curtidas = listaCurtidasPost(publicacao.Id).Count;
+
+                List<ComentarioModel> comentarios = listaComentariosPost(publicacao.Id);
+                publicacao.Comentarios = comentarios.Count;
+
+                /*foreach (var comentario in comentarios)
+                {
+                    
+                }*/
+            }
+            
             return todasPublicacoes;
         }
 
@@ -107,6 +118,34 @@ namespace RedeSocial.Controllers
             //return anuncios;
 
             return Json(new { sucesso = true  });
+        }
+
+        [HttpGet]
+        private List<Guid> listaCurtidasPost(Guid postId)
+        {
+            client = new APIHttpClient(URLBaseCurtidaComentario);
+            List<Guid> curtidasPost = client.Get<List<Guid>>($"likes/post/{postId}");
+
+            return curtidasPost;
+        }
+
+        [HttpGet]
+        private List<ComentarioModel> listaComentariosPost(Guid postId)
+        {
+            client = new APIHttpClient(URLBaseCurtidaComentario);
+            List<ComentarioModel> comentariosPost = client.Get<List<ComentarioModel>>($"comentarios/post/{postId}");
+
+            return comentariosPost;
+        }
+
+        [HttpPost]
+        private IActionResult CurtirPost(Guid postId)
+        {
+            var userId = Request.Cookies["UserId"];
+
+            client = new APIHttpClient(URLBaseCurtidaComentario);
+            client.Post<string>($"likes/post/{postId}/{userId}","");
+            return Json(new { sucesso = true });
         }
 
     }

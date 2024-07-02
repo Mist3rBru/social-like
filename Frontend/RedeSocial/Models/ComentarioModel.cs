@@ -9,7 +9,6 @@ namespace RedeSocial.Models
 
         public int QuantidadeLikes { get; set; }
 
-        public ComentarioModel() { }
         public ComentarioModel(Guid usuarioId, DateTime dataCriacao, DateTime dataEdicao, string conteudo, int quantidadeLikes)
         {
             UsuarioId = usuarioId;
