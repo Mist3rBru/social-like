@@ -67,8 +67,15 @@ namespace RedeSocial.Controllers
 
                 List<ComentarioModel> comentarios = listaComentariosPost(publicacao.Id);
                 publicacao.QuantidadeComentarios = comentarios.Count;
+
+                publicacao.UsuarioLogadoCurtiuPost = usuarioLogadoCurtiuPost(publicacao.Id);
+
+                /*foreach (var comentario in comentarios)
+                {
+                    
+                }*/
             }
-            
+
             return todasPublicacoes;
         }
 
@@ -134,13 +141,38 @@ namespace RedeSocial.Controllers
         }
 
         [HttpPost]
-        private IActionResult CurtirPost(Guid postId)
+        public IActionResult CurtirPost(Guid postId)
         {
             var userId = Request.Cookies["UserId"];
 
             client = new APIHttpClient(URLBaseCurtidaComentario);
-            client.Post<string>($"likes/post/{postId}/{userId}","");
-            return Json(new { sucesso = true });
+            client.Post($"likes/post/{postId}/{userId}");
+
+            return Json(new { sucesso = true, quantidadeLikes = listaCurtidasPost(postId).Count });
+        }
+
+        [HttpDelete]
+        public IActionResult DescurtirPost(Guid postId)
+        {
+            var userId = Request.Cookies["UserId"];
+
+            client = new APIHttpClient(URLBaseCurtidaComentario);
+            client.Delete($"likes/post/{postId}/{userId}");
+
+            return Json(new { sucesso = true, quantidadeLikes = listaCurtidasPost(postId).Count });
+        }
+
+
+        [HttpPost]
+        public bool usuarioLogadoCurtiuPost(Guid postId)
+        {
+            var userId = Request.Cookies["UserId"];
+
+            List<Guid> usuariosCurtiramPost = listaCurtidasPost(postId);
+
+            bool curtiu = usuariosCurtiramPost.Any(u => u.ToString() == userId);
+
+            return curtiu;
         }
 
     }

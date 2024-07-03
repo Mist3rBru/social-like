@@ -219,7 +219,9 @@
               align-items: center;
                     ">
                         <div style="display: flex; gap: 3px">
-                            <button type="button" class="post-button" onclick="curtirPost(@publicacao.Id, 0, 0)">
+                            <button type="button" id="post-button-curtir-@publicacao.Id"
+                                    class="post-button @(publicacao.UsuarioLogadoCurtiuPost ? "post-button-active" : "")"
+                                    onclick="toggleCurtirPost('@publicacao.Id', @publicacao.QuantidadeComentarios)">
                                 <img src="~/img/foguete.png" alt="" />
                             </button>
                             <button type="button" class="post-button">
@@ -278,6 +280,8 @@
 </div>
 
 <script>
+     //Ajustar story:
+
     document.getElementById('addButton').addEventListener('click', function () {
         document.getElementById('fileInput').click();
     });
@@ -298,41 +302,45 @@
         }
     });
 
-    function curtirPost(postId, quantidadeCurtidas, quantidadeComentarios) {
-        console.log('CHAMA API');
+    function toggleCurtirPost(postId, quantidadeComentarios) {
+        var button = $("#post-button-curtir-" + postId);
+        if (button.hasClass("post-button-active")) {
+            descurtirPost(postId, quantidadeComentarios);
+        } else {
+            curtirPost(postId, quantidadeComentarios);
+        }
+    }
 
+    function getTextoCurtidaComentarios(quantidadeLikes, quantidadeComentarios) {
+        var flexCurtidas = quantidadeLikes < 2 ? 'curtida' : 'curtidas';
+        var flexComentarios = quantidadeComentarios < 2 ? 'comentário' : 'comentários';
+        return quantidadeLikes + ' ' + flexCurtidas + ' e ' + quantidadeComentarios + ' ' + flexComentarios;
+    }
+
+    function curtirPost(postId, quantidadeComentarios) {
         $.ajax({
             type: "POST",
             url: "/Feed/CurtirPost",
             data: { postId: postId },
             success: function (response) {
-                if (response.sucesso) {
-                    console.log('success');
-                    quantidadeCurtidas++;
-                    $("#info-curtidas-comentarios-" + postId).text(quantidadeCurtidas + " curtidas e " + quantidadeComentarios + " comentáriosXXX");
-                } else {
-                    console.log('else');
-                }
+                $("#info-curtidas-comentarios-" + postId).text(getTextoCurtidaComentarios(response.quantidadeLikes, quantidadeComentarios));
+                $("#post-button-curtir-" + postId).addClass("post-button-active");
             }
         });
     }
 
- 
 
-  pub =  @Html.Raw(Json.Serialize(ViewBag.Publicacoes));
 
-    console.log("pub:");
-    console.log(pub);
-    for (var i = 0; i < pub.length; i++) {
-        console.log(pub[i]);
+    function descurtirPost(postId, quantidadeComentarios) {
+        $.ajax({
+            type: "DELETE",
+            url: "/Feed/DescurtirPost",
+            data: { postId: postId },
+            success: function (response) {
+                $("#info-curtidas-comentarios-" + postId).text(getTextoCurtidaComentarios(response.quantidadeLikes, quantidadeComentarios));
+                $("#post-button-curtir-" + postId).removeClass("post-button-active");
+            }
+        });
     }
 
-    teste = @Html.Raw(Json.Serialize(ViewBag.Teste));
-
-    console.log("TESTE:");
-    console.log(teste);
-    for (var i = 0; i < teste.length; i++) {
-        console.log(teste[i]);
-    }
-  
 </script>

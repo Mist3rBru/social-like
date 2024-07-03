@@ -24,5 +24,6 @@ namespace RedeSocial.Models
         public List<MidiaModel> Midias { get; set; }
         public int QuantidadeLikes { get; set; }
         public int QuantidadeComentarios { get; set; }
+        public bool UsuarioLogadoCurtiuPost { get; set; }
     }
 }
