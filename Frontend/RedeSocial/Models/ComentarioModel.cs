@@ -5,9 +5,9 @@ namespace RedeSocial.Models
         public Guid Id { get; set; }
         public Guid IdUsuario { get; set; }
         public UsuarioModel Usuario { get; set; }
+        public string Conteudo { get; set; }
         public DateTime DataCriacao { get; set; }
         public DateTime DataEdicao { get; set; }
-        public string Conteudo { get; set; }
 
         public int QuantidadeLikes { get; set; }
         public int QuantidadeComentarios{ get; set; }

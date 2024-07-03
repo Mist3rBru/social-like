@@ -57,12 +57,12 @@
         var publicacao = (RedeSocial.Models.PublicacaoModel)ViewBag.Publicacao;
         <div class="post">
             <a href="/perfil" class="avatar">
-                <img src="data:image/jpeg;base64,@publicacao.FotoUsuario" alt="" />
+                <img src="data:image/jpeg;base64,@publicacao.FotoUsuario" alt="Foto @publicacao.NomeUsuario" />
                 <p>@publicacao.NomeUsuario</p>
             </a>
             @foreach (var midia in publicacao.Midias)
             {
-                <img src="data:image/jpeg;base64,@midia" alt="" />
+                <img src="data:@midia.ContentType;base64,@midia.FileContents" alt="" />
             }
             <p class="post-description">@publicacao.Descricao</p>
             <div style="
