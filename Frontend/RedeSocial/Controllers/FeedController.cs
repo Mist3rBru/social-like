@@ -37,7 +37,7 @@ namespace RedeSocial.Controllers
             UsuarioModel usuarioLogado = client.Get<UsuarioModel>($"Usuario/{userId}");
 
             client = new APIHttpClient(URLBasePublicacao);
-            List<PublicacaoModel> publicacoesUsuarioLogado = client.Get<List<PublicacaoModel>>("Publicacao?idUsuario=" + userId);
+            List<PublicacaoModel> publicacoesUsuarioLogado = client.Get<List<PublicacaoModel>>($"Publicacao?idUsuario={userId}");
 
             foreach (var publicacao in publicacoesUsuarioLogado)
             {
@@ -49,7 +49,7 @@ namespace RedeSocial.Controllers
             foreach (var amigo in usuarioLogado.Amigos)
             {
                 client = new APIHttpClient(URLBasePublicacao);
-                List<PublicacaoModel> publicacoesAmigos = client.Get<List<PublicacaoModel>>("Publicacao?idUsuario=" + amigo.Id);
+                List<PublicacaoModel> publicacoesAmigos = client.Get<List<PublicacaoModel>>($"Publicacao?idUsuario={amigo.Id}");
 
                 foreach (var publicacaoAmigo in publicacoesAmigos)
                 {

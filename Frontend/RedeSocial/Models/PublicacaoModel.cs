@@ -15,7 +15,7 @@ namespace RedeSocial.Models
 
     public class PublicacaoModel
     {
-        public Guid Id { get; }
+        public Guid Id { get; set; }
         public Guid Usuario { get; set; }
         public string NomeUsuario { get; set; }
         public string FotoUsuario { get; set; }

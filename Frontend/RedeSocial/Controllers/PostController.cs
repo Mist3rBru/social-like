@@ -23,7 +23,7 @@ namespace RedeSocial.Controllers
             List<string> publicacaoLikes = comentariosClient.Get<List<string>>("api/likes/post/" + postId);
 
             PublicacaoModel publicacao = publicacaoClient.Get<PublicacaoModel>("api/Publicacao/" + postId);
-            UsuarioModel usuario = usuarioClient.Get<UsuarioModel>("api/Usuario/" + publicacaoBack.Usuario);
+            UsuarioModel usuario = usuarioClient.Get<UsuarioModel>("api/Usuario/" + publicacao.Usuario);
             publicacao.NomeUsuario = usuario.Nome;
             publicacao.FotoUsuario = usuario.FotoPerfil;
             publicacao.QuantidadeComentarios = comentarios.Count;
