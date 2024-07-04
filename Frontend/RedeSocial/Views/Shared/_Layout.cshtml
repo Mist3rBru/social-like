@@ -11,8 +11,7 @@
 </head>
 <body>
     <header class="header">
-        <h2 class="header-title">SocialLike</h2>
-        <input class="header-search" type="text" />
+        <a class="header-title" href="/Feed">SocialLike</a>
         <div class="header-avatar avatar">
             @if (ViewBag.Usuario != null)
             {
@@ -30,8 +29,48 @@
             }
         </div>
     </header>
-    @RenderBody()
+    <div style="display: flex">
+        <div class="sidebar">
+            <div style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          ">
+                <a href="/perfil" class="avatar">
+                    <div class="avatar-border">
+                        <img src="~/img/avatar.png" alt="" />
+                    </div>
+                    <span>Nome</span>
+                </a>
+                <button type="button" id="addButton" class="post-button">
+                    <img src="~/img/add.png" alt="" />
+                </button>
 
+                <input type="file" id="fileInput" style="display:none" />
+            </div>
+
+
+            @if (ViewBag.Stories != null)
+            {
+
+                @foreach (var item in ViewBag.Stories)
+                {
+                    var story = (RedeSocial.Models.StoryModel)item;
+
+                    <a href="/perfil" class="avatar">
+                        <div class="avatar-border">
+                            <img src="data:image/jpeg;base64,@story.FotoUsuario" alt="" />
+                        </div>
+                        <span>@story.NomeUsuario</span>
+                    </a>
+                }
+            }
+
+
+        </div>
+
+        @RenderBody()
+    </div>
    
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

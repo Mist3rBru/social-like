@@ -3,23 +3,12 @@
 }
 <head>
     <style>
-        .sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            padding: 1rem;
-            width: 12rem;
-            min-width: 20vw;
-            color: #1C1C39;
-        }
-
         .feed {
             display: flex;
             flex-direction: column;
             align-items: center;
             width: 100%;
         }
-
 
         .story-wrapper {
             width: 100%;
@@ -40,15 +29,12 @@
             background: #fff;
             flex-direction: column;
             height: fit-content;
-            
         }
-
 
         .story-header {
             display: flex;
             justify-content: space-between;
         }
-
 
         .story-comment-like {
             display: flex;
@@ -74,213 +60,145 @@
         }
 
         .anuncio {
-            color: #8B7900;
+            border: 2px solid #888;
+            border-radius: 0.5rem;
+            padding: 0.25rem 0.5rem;
+            text-align: center;
+            width: fit-content;
         }
     </style>
 </head>
 
-<div style="display: flex">
-    <div class="sidebar">
-        <div style="
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-          ">
-            <a href="/perfil" class="avatar">
-                <div class="avatar-border">
-                    <img src="~/img/avatar.png" alt="" />
-                </div>
-                <span>Nome</span>
-            </a>
-            <button type="button" id="addButton"  class="post-button">
-                <img src="~/img/add.png" alt="" />
-            </button>
+<div class="feed main">
+    @if (ViewBag.Publicacoes != null)
+    {
+        var publicacoes = (List<RedeSocial.Models.PublicacaoModel>)ViewBag.Publicacoes;
+        var anuncios = (List<RedeSocial.Models.AnuncioModel>)ViewBag.Anuncios;
+        int anuncioIndex = 0;
 
-            <input type="file" id="fileInput" style="display:none" />
-        </div>
-
-       
-        @if (ViewBag.Stories != null)
+        for (int i = 0; i < publicacoes.Count; i++)
         {
-
-            @foreach (var item in ViewBag.Stories)
+            if ((i + 1) % 4 == 0 && anuncioIndex < anuncios.Count)
             {
-                var story = (RedeSocial.Models.StoryModel)item;
+                var anuncio = anuncios[anuncioIndex];
+                anuncioIndex++;
 
-                <a href="/perfil" class="avatar">
-                    <div class="avatar-border">
-                        <img  src="data:image/jpeg;base64,@story.FotoUsuario" alt="" />
-                    </div>
-                    <span>@story.NomeUsuario</span>
-                </a>
-            }
-        }
-       
-       
-    </div>
+                <!-- POST ANÚNCIO -->
+                <div class="post">
+                    <p class="anuncio">Anúncio</p>
 
-    <div class="feed main">
-        @if (ViewBag.Publicacoes != null)
-        {
-            var publicacoes = (List<RedeSocial.Models.PublicacaoModel>)ViewBag.Publicacoes;
-            var anuncios = (List<RedeSocial.Models.AnuncioModel>)ViewBag.Anuncios;
-            int anuncioIndex = 0;
+                    <a class="post-conteudo" href="@anuncio.Link">
+                        @if (!string.IsNullOrEmpty(anuncio.UrlImagem))
+                        {
+                            <img src="@anuncio.UrlImagem" alt="" />
+                        }
+                        <p class="post-description">
+                            @anuncio.Texto
+                        </p>
+                    </a>
 
-            for (int i = 0; i < publicacoes.Count; i++)
-            {
-                if ((i + 1) % 4 == 0 && anuncioIndex < anuncios.Count)
-                {
-                    var anuncio = anuncios[anuncioIndex];
-                    anuncioIndex++;
-
-                    <!-- POST ANÚNCIO -->
-                        <div class="post">
-                             <p class="anuncio">Anúncio</p>
-
-                             <a class="post-conteudo" href="@anuncio.Link">
-                                @if (!string.IsNullOrEmpty(anuncio.UrlImagem))
-                                {
-                                    <img src="@anuncio.UrlImagem" alt="" />
-                                    <p class="post-description">
-                                        @anuncio.Texto
-                                </p>
-                            }
-                            else
-                            {
-                                <p>
-                                    @anuncio.Texto
-                                </p>
-                            }
-
-                                
-                            </a>
-
-                            <div style="
+                    <div style="
                                     display: flex;
                                     justify-content: space-between;
                                     align-items: center;
-                                  ">
-                                <div style="display: flex; gap: 3px">
-                                    <button type="button" class="post-button">
-                                        <img src="~/img/foguete.png" alt="" />
-                                    </button>
-                                    <button type="button" class="post-button">
-                                        <img src="~/img/comentário.png" alt="" />
-                                    </button>
-                                </div>
-                                <span style="
-                                      font-size: small;
-                                      border-radius: 1rem;
-                                      background: #1c1c39;
-                                      color: #fff;
-                                      padding: 0.3rem;
-                                      align-self: end;
-                                    ">
-                                    0 curtidas e 0 comentários
-                                </span>
-                            </div>
-                        </div>
-                }
-                <!-- POST PUBLICAÇÃO -->
-                var publicacao = publicacoes[i];
-
-                <div class="post">
-                    <a href="/perfil" class="avatar">
-                        @if (!string.IsNullOrEmpty(@publicacao.FotoUsuario))
-                        {
-                            <img src="data:image/jpeg;base64,@publicacao.FotoUsuario" alt="" />
-                        }
-                        else
-                        {
-                            <img src="~/img/avatar.png" alt="" />
-                        }
-                        <p>@publicacao.NomeUsuario</p>
-                    </a>
-
-                    <a class="post-conteudo"  href="/post/@publicacao.Id">
-                        @if (publicacao.Midias.Count > 0)
-                        {                           
-                            <img src="data:@publicacao.Midias[0].ContentType;base64,@publicacao.Midias[0].FileContents" alt="" />
-
-                            <p class="post-description">
-                                @publicacao.Descricao
-                            </p>
-                        }
-                        else
-                        {
-                            <p >@publicacao.Descricao</p>
-                        }
-
-                        
-                    </a>
-                    <div style="
-              display: flex;
-              justify-content: space-between;
-              align-items: center;
-                    ">
+                                                                                                                      ">
                         <div style="display: flex; gap: 3px">
-                            <button type="button" id="post-button-curtir-@publicacao.Id"
-                                    class="post-button @(publicacao.UsuarioLogadoCurtiuPost ? "post-button-active" : "")"
-                                    onclick="toggleCurtirPost('@publicacao.Id', @publicacao.QuantidadeComentarios)">
+                            <button type="button" class="post-button">
                                 <img src="~/img/foguete.png" alt="" />
                             </button>
                             <button type="button" class="post-button">
                                 <img src="~/img/comentário.png" alt="" />
                             </button>
                         </div>
-                        <span id="info-curtidas-comentarios-@publicacao.Id" style="
-                font-size: small;
-                border-radius: 1rem;
-                background: #1c1c39;
-                color: #fff;
-                padding: 0.3rem;
-                align-self: end;
-                      ">
-                            @publicacao.QuantidadeLikes curtidas e @publicacao.QuantidadeComentarios comentários
+                        <span class="post-info">
+                            0 curtidas e 0 comentários
                         </span>
                     </div>
                 </div>
             }
+            <!-- POST PUBLICAÇÃO -->
+            var publicacao = publicacoes[i];
 
-        }
-       
-    </div>
-    <!-- STORY
-    <div class="story-wrapper">
-        <div >
-            <a href="">
-                <img class="story-before" src="~/img/arrow.png" alt="" />
-            </a>
-        </div>
-
-        <div class="story">
-            <div class="story-header">
+            <div class="post">
                 <a href="/perfil" class="avatar">
-                    <img src="~/img/avatar.png" alt="" />
-                    <p>Nome</p>
+                    @if (!string.IsNullOrEmpty(@publicacao.FotoUsuario))
+                    {
+                        <img src="data:image/jpeg;base64,@publicacao.FotoUsuario" alt="" />
+                    }
+                    else
+                    {
+                        <img src="~/img/avatar.png" alt="" />
+                    }
+                    <p>@publicacao.NomeUsuario</p>
                 </a>
-                <button class="story-header-close">X</button>
-            </div>
-            <img class="story-img"  src="~/img/gato.jpg" alt="" />
-            <div class="story-comment-like">
-                <input class="story-comment" type="text" name="conteudo" />
-                <button type="button" class="post-button" onclick="toggleCurtirPost(1)">
-                    <img class="story-like" src="~/img/foguete.png" alt="" />
-                </button>
-            </div>
-        </div>
 
-        <div>
-            <a href="">
-                <img class="story-after"  src="~/img/arrow.png" alt="" />
+                <a class="post-conteudo" href="/post/@publicacao.Id">
+                    @if (publicacao.Midias.Count > 0)
+                    {
+                        <img src="data:@publicacao.Midias[0].ContentType;base64,@publicacao.Midias[0].FileContents" alt="" />
+                    }
+                    <p class="post-description">@publicacao.Descricao</p>
+                </a>
+                <div style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+                                                                            ">
+                    <div style="display: flex; gap: 3px">
+                        <button type="button" id="post-button-curtir-@publicacao.Id"
+                                class="post-button @(publicacao.UsuarioLogadoCurtiuPost ? "post-button-active" : "")"
+                                onclick="toggleCurtirPost('@publicacao.Id', @publicacao.QuantidadeComentarios)">
+                            <img src="~/img/foguete.png" alt="" />
+                        </button>
+                        <button type="button" class="post-button">
+                            <img src="~/img/comentário.png" alt="" />
+                        </button>
+                    </div>
+                    <span id="info-curtidas-comentarios-@publicacao.Id" class="post-info">
+                        @publicacao.QuantidadeLikes curtidas e @publicacao.QuantidadeComentarios comentários
+                    </span>
+                </div>
+            </div>
+        }
+
+    }
+
+</div>
+<!-- STORY
+<div class="story-wrapper">
+    <div >
+        <a href="">
+            <img class="story-before" src="~/img/arrow.png" alt="" />
+        </a>
+    </div>
+
+    <div class="story">
+        <div class="story-header">
+            <a href="/perfil" class="avatar">
+                <img src="~/img/avatar.png" alt="" />
+                <p>Nome</p>
             </a>
+            <button class="story-header-close">X</button>
+        </div>
+        <img class="story-img"  src="~/img/gato.jpg" alt="" />
+        <div class="story-comment-like">
+            <input class="story-comment" type="text" name="conteudo" />
+            <button type="button" class="post-button" onclick="toggleCurtirPost(1)">
+                <img class="story-like" src="~/img/foguete.png" alt="" />
+            </button>
         </div>
     </div>
-    -->
+
+    <div>
+        <a href="">
+            <img class="story-after"  src="~/img/arrow.png" alt="" />
+        </a>
+    </div>
 </div>
+-->
 
 <script>
-     //Ajustar story:
+    //Ajustar story:
 
     document.getElementById('addButton').addEventListener('click', function () {
         document.getElementById('fileInput').click();

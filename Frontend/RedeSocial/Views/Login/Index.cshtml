@@ -17,6 +17,7 @@
             gap: 1rem;
             padding: 2rem 1rem;
             justify-content: space-between;
+            box-shadow: 0 0 4px #ccc;
         }
 
             .form-box * {
@@ -34,22 +35,38 @@
 
         .form-box button {
             margin-top: 3rem;
-            border: 0;
+            background: black;
+            border: 2px solid black;
             border-radius: 0.5rem;
             text-align: center;
             padding: 0.5rem;
             width: 100%;
-            background: #000;
+            background: #black;
             font-weight: 600;
+            transition: all 150ms;
+        }
+
+        .form-box button:hover {
+            border-color:#777;
         }
 
         .input-box {
             display: block;
             position: relative;
-            border: 1px solid #fff;
+            border: 1px solid #909090;
             border-radius: 0.5rem;
             padding: 0.5rem;
+            transition: border 150ms;
         }
+
+            .input-box:hover {
+                border-color: #ccc;
+        }
+
+
+            .input-box:focus {
+                border-color: #fff;
+            }
 
             .input-box > label {
                 position: absolute;
@@ -98,7 +115,7 @@
         <h1 style="margin: 1rem 0">SocialLike</h1>
         <div style="display: flex; gap: 0.5rem; height: 100%; align-items: center; justify-content: space-between; width: 100%;">
             <div style="display: flex; flex-direction: column; gap: 1.5rem; align-items: center;">
-                <h2  class="socialTitle">SocialLike</h2>
+                <h2 class="socialTitle">SocialLike</h2>
                 <img class="img-rocket-like" src="~/img/rocket-like.png" alt="" />
                 <p class="socialDescription">
                     O SocialLike ajuda você a se conectar e compartilhar com as pessoas que fazem parte da sua vida.
