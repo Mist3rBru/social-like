@@ -40,7 +40,6 @@
             background: #fff;
             flex-direction: column;
             height: fit-content;
-            
         }
 
 
@@ -92,31 +91,30 @@
                 </div>
                 <span>Nome</span>
             </a>
-            <button type="button" id="addButton"  class="post-button">
+            <button type="button" id="addButton" class="post-button">
                 <img src="~/img/add.png" alt="" />
             </button>
 
             <input type="file" id="fileInput" style="display:none" />
         </div>
 
-       
+
         @if (ViewBag.Stories != null)
         {
-
             @foreach (var item in ViewBag.Stories)
             {
                 var story = (RedeSocial.Models.StoryModel)item;
 
                 <a href="/perfil" class="avatar">
                     <div class="avatar-border">
-                        <img  src="data:image/jpeg;base64,@story.FotoUsuario" alt="" />
+                        <img src="data:image/jpeg;base64,@story.FotoUsuario" alt="" />
                     </div>
                     <span>@story.NomeUsuario</span>
                 </a>
             }
         }
-       
-       
+
+
     </div>
 
     <div class="feed main">
@@ -134,15 +132,15 @@
                     anuncioIndex++;
 
                     <!-- POST ANÚNCIO -->
-                        <div class="post">
-                             <p class="anuncio">Anúncio</p>
+                    <div class="post">
+                        <p class="anuncio">Anúncio</p>
 
-                             <a class="post-conteudo" href="@anuncio.Link">
-                                @if (!string.IsNullOrEmpty(anuncio.UrlImagem))
-                                {
-                                    <img src="@anuncio.UrlImagem" alt="" />
-                                    <p class="post-description">
-                                        @anuncio.Texto
+                        <a class="post-conteudo" href="@anuncio.Link">
+                            @if (!string.IsNullOrEmpty(anuncio.UrlImagem))
+                            {
+                                <img src="@anuncio.UrlImagem" alt="" />
+                                <p class="post-description">
+                                    @anuncio.Texto
                                 </p>
                             }
                             else
@@ -151,41 +149,38 @@
                                     @anuncio.Texto
                                 </p>
                             }
+                        </a>
 
-                                
-                            </a>
-
-                            <div style="
+                        <div style="
                                     display: flex;
                                     justify-content: space-between;
                                     align-items: center;
-                                  ">
-                                <div style="display: flex; gap: 3px">
-                                    <button type="button" class="post-button">
-                                        <img src="~/img/foguete.png" alt="" />
-                                    </button>
-                                    <button type="button" class="post-button">
-                                        <img src="~/img/comentário.png" alt="" />
-                                    </button>
-                                </div>
-                                <span style="
-                                      font-size: small;
-                                      border-radius: 1rem;
-                                      background: #1c1c39;
-                                      color: #fff;
-                                      padding: 0.3rem;
-                                      align-self: end;
-                                    ">
-                                    0 curtidas e 0 comentários
-                                </span>
+                                                                                              ">
+                            <div style="display: flex; gap: 3px">
+                                <button type="button" id="post-button-curtir-@anuncio.Id"
+                                        class="post-button @(anuncio.UsuarioLogadoCurtiuAnuncio ? "post-button-active" : "")"
+                                        onclick="toggleCurtirAnuncio('@anuncio.Id')">
+                                    <img src="~/img/foguete.png" alt="" />
+                                </button>
                             </div>
+                            <span id="anuncio-curtidas-comentarios-@anuncio.Id" style="
+                    font-size: small;
+                    border-radius: 1rem;
+                    background: #1c1c39;
+                    color: #fff;
+                    padding: 0.3rem;
+                    align-self: end;
+                                                                                              ">
+                                @anuncio.QuantidadeLikes curtidas
+                            </span>
                         </div>
+                    </div>
                 }
                 <!-- POST PUBLICAÇÃO -->
                 var publicacao = publicacoes[i];
 
                 <div class="post">
-                    <a href="/perfil" class="avatar">
+                    <a href="/perfil/@publicacao.Usuario" class="avatar">
                         @if (!string.IsNullOrEmpty(@publicacao.FotoUsuario))
                         {
                             <img src="data:image/jpeg;base64,@publicacao.FotoUsuario" alt="" />
@@ -197,9 +192,9 @@
                         <p>@publicacao.NomeUsuario</p>
                     </a>
 
-                    <a class="post-conteudo"  href="/post/@publicacao.Id">
+                    <a class="post-conteudo" href="/post/@publicacao.Id">
                         @if (publicacao.Midias.Count > 0)
-                        {                           
+                        {
                             <img src="data:@publicacao.Midias[0].ContentType;base64,@publicacao.Midias[0].FileContents" alt="" />
 
                             <p class="post-description">
@@ -208,34 +203,34 @@
                         }
                         else
                         {
-                            <p >@publicacao.Descricao</p>
+                            <p>@publicacao.Descricao</p>
                         }
 
-                        
+
                     </a>
                     <div style="
               display: flex;
               justify-content: space-between;
               align-items: center;
-                    ">
+                                                            ">
                         <div style="display: flex; gap: 3px">
                             <button type="button" id="post-button-curtir-@publicacao.Id"
                                     class="post-button @(publicacao.UsuarioLogadoCurtiuPost ? "post-button-active" : "")"
                                     onclick="toggleCurtirPost('@publicacao.Id', @publicacao.QuantidadeComentarios)">
                                 <img src="~/img/foguete.png" alt="" />
                             </button>
-                            <button type="button" class="post-button">
+                            <a class="post-button" href="/post/@publicacao.Id">
                                 <img src="~/img/comentário.png" alt="" />
-                            </button>
+                            </a>
                         </div>
-                        <span id="info-curtidas-comentarios-@publicacao.Id" style="
+                        <span id="post-curtidas-comentarios-@publicacao.Id" style="
                 font-size: small;
                 border-radius: 1rem;
                 background: #1c1c39;
                 color: #fff;
                 padding: 0.3rem;
                 align-self: end;
-                      ">
+                                                              ">
                             @publicacao.QuantidadeLikes curtidas e @publicacao.QuantidadeComentarios comentários
                         </span>
                     </div>
@@ -243,7 +238,7 @@
             }
 
         }
-       
+
     </div>
     <!-- STORY
     <div class="story-wrapper">
@@ -280,7 +275,7 @@
 </div>
 
 <script>
-     //Ajustar story:
+    //Story:
 
     document.getElementById('addButton').addEventListener('click', function () {
         document.getElementById('fileInput').click();
@@ -302,6 +297,8 @@
         }
     });
 
+    //Post:
+
     function toggleCurtirPost(postId, quantidadeComentarios) {
         var button = $("#post-button-curtir-" + postId);
         if (button.hasClass("post-button-active")) {
@@ -317,19 +314,25 @@
         return quantidadeLikes + ' ' + flexCurtidas + ' e ' + quantidadeComentarios + ' ' + flexComentarios;
     }
 
+    function removeCurtidas(id, type, quantidadeComentarios, quantidadeLikes) {
+        var idText = `#${type}-curtidas-comentarios-${id}`
+        var idButton = `#${type}-button-curtir-${id}`
+        console.log(idText)
+        console.log(idButton)
+        $(idText).text(getTextoCurtidaComentarios(quantidadeLikes, quantidadeComentarios));
+        $(idButton).removeClass("post-button-active");
+    }
+
     function curtirPost(postId, quantidadeComentarios) {
         $.ajax({
             type: "POST",
             url: "/Feed/CurtirPost",
             data: { postId: postId },
             success: function (response) {
-                $("#info-curtidas-comentarios-" + postId).text(getTextoCurtidaComentarios(response.quantidadeLikes, quantidadeComentarios));
-                $("#post-button-curtir-" + postId).addClass("post-button-active");
+                atualizaCurtidas(postId, "post", quantidadeComentarios, response.quantidadeLikes)
             }
         });
     }
-
-
 
     function descurtirPost(postId, quantidadeComentarios) {
         $.ajax({
@@ -337,8 +340,73 @@
             url: "/Feed/DescurtirPost",
             data: { postId: postId },
             success: function (response) {
-                $("#info-curtidas-comentarios-" + postId).text(getTextoCurtidaComentarios(response.quantidadeLikes, quantidadeComentarios));
-                $("#post-button-curtir-" + postId).removeClass("post-button-active");
+                removeCurtidas(postId, "post", quantidadeComentarios, response.quantidadeLikes)
+            }
+        });
+    }
+
+    //Anúncio:
+    //TODO: Refatorar anúncios, para reutilizar funções do post.
+
+    function toggleCurtirAnuncio(postId) {
+        var button = $("#post-button-curtir-" + postId);
+        if (button.hasClass("post-button-active")) {
+            descurtirAnuncio(postId);
+        } else {
+            curtirAnuncio(postId);
+        }
+    }
+
+    function getTextoCurtidaComentariosAnuncio(quantidadeLikes) {
+        var flexCurtidas = quantidadeLikes < 2 ? 'curtida' : 'curtidas';
+        return quantidadeLikes + ' ' + flexCurtidas;
+    }
+
+    function atualizaCurtidas(id, type, quantidadeComentarios, quantidadeLikes) {
+        var idText = `#${type}-curtidas-comentarios-${id}`
+        var idButton = `#${type}-button-curtir-${id}`
+        console.log(idText)
+        console.log(idButton)
+        $(idText).text(getTextoCurtidaComentarios(quantidadeLikes, quantidadeComentarios));
+        $(idButton).addClass("post-button-active");
+    }
+
+    function removeCurtidasAnuncio(id, type, quantidadeLikes) {
+        var idText = `#${type}-curtidas-comentarios-${id}`
+        var idButton = `#${type}-button-curtir-${id}`
+        console.log(idText)
+        console.log(idButton)
+        $(idText).text(getTextoCurtidaComentariosAnuncio(quantidadeLikes));
+        $(idButton).removeClass("post-button-active");
+    }
+
+    function atualizaCurtidasAnuncio(id, type, quantidadeLikes) {
+        var idText = `#${type}-curtidas-comentarios-${id}`
+        var idButton = `#${type}-button-curtir-${id}`
+        console.log(idText)
+        console.log(idButton)
+        $(idText).text(getTextoCurtidaComentariosAnuncio(quantidadeLikes));
+        $(idButton).addClass("post-button-active");
+    }
+
+    function curtirAnuncio(anuncioId) {
+        $.ajax({
+            type: "POST",
+            url: "/Feed/CurtirPost",
+            data: { anuncioId: anuncioId },
+            success: function (response) {
+                atualizaCurtidasAnuncio(anuncioId, "anuncio", response.quantidadeLikes)
+            }
+        });
+    }
+
+    function descurtirAnuncio(anuncioId) {
+        $.ajax({
+            type: "DELETE",
+            url: "/Feed/DescurtirPost",
+            data: { anuncioId: anuncioId },
+            success: function (response) {
+                removeCurtidasAnuncio(anuncioId, "anuncio", response.quantidadeLikes)
             }
         });
     }
