@@ -130,3 +130,7 @@ img {
     width: 30px;
     cursor: pointer;
 }
+
+.post-button-active {
+    filter: sepia(1);
+}
