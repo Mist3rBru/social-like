@@ -12,13 +12,6 @@
             gap: 1rem;
         }
 
-        .comments-box {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            width: 40vw;
-        }
-
         .comment-box-box {
             display: flex;
             flex-direction: column;
@@ -37,7 +30,7 @@
                 margin: 0.5rem 0;
             }
 
-           
+
 
         .comment-input {
             background: #1c1c39;
@@ -51,7 +44,7 @@
             .comment-input > input {
                 all: unset;
                 width: 100%;
-        }
+            }
 
     </style>
 </head>
@@ -59,133 +52,103 @@
 <div class="main">
 
     <!-- POST -->
-    <div class="post">
-        <a href="/perfil" class="avatar">
-            <img src="~/img/avatar.png" alt="" />
-            <p>Nome</p>
-        </a>
-        <img src="~/img/gato.jpg" alt="" />
-        <p class="post-description">
-            LLorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text.
-            Lorem Ipsum has been the industry's standard dummy text.
-        </p>
-        <div style="
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-          ">
-            <button type="button" class="post-button" onclick="toggleCurtirPost(1)">
-                <img src="~/img/foguete.png" alt="" />
-            </button>
-            <span style="
-              font-size: small;
-              border-radius: 1rem;
-              background: #1c1c39;
-              color: #fff;
-              height: fit-content;
-              padding: 0.3rem;
-            " id="info-post">
-               0 curtidas e 1 comentário
-            </span>
+    @if (ViewBag.Publicacao != null)
+    {
+        var publicacao = (RedeSocial.Models.PublicacaoModel)ViewBag.Publicacao;
+        <div class="post">
+            <a href="/perfil" class="avatar">
+                <img src="data:image/jpeg;base64,@publicacao.FotoUsuario" alt="Foto @publicacao.NomeUsuario" />
+                <p>@publicacao.NomeUsuario</p>
+            </a>
+            @foreach (var midia in publicacao.Midias)
+            {
+                <img src="data:@midia.ContentType;base64,@midia.FileContents" alt="" />
+            }
+            <p class="post-description">@publicacao.Descricao</p>
+            <div style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                                                            ">
+                <button type="button" class="post-button" onclick="toggleCurtirPost('@publicacao.Id')">
+                    <img src="~/img/foguete.png" alt="" />
+                </button>
+                <span style="
+                font-size: small;
+                border-radius: 1rem;
+                background: #1c1c39;
+                color: #fff;
+                height: fit-content;
+                padding: 0.3rem;" id="info-post">
+                    @publicacao.QuantidadeLikes curtidas e @publicacao.QuantidadeComentarios comentário
+                </span>
+            </div>
         </div>
-    </div>
+    }
 
     <!-- COMENTÁRIOS -->
-    <div class="comments-box">
-
-        <!-- Mary Old -->
-            <div class="comment">
-                <div class="avatar">
-                    <img src="~/img/avatar.png" alt="" /><span>Mary Old</span>
-                </div>
-                <p>
-                    Lorem Ipsum is simply dummy text of the printing and typesetting
-                    industry. Lorem Ipsum has been the industry's standard dummy text
-                    ever since the 1500s.
-                </p>
-                <div style="
-                  display: flex;
-                  justify-content: space-between;
-                  align-items: center;
-                ">
-                    <div style="display: flex; gap: 3px">
-                        <button type="button" class="post-button" onclick="toggleCurtirComentario(1)">
-                            <img src="~/img/foguete.png" alt="" />
-                        </button>
-                        <button type="button" class="post-button" >
-                            <img src="~/img/comentário.png" alt="" />
-                        </button>
-                    </div>
-                    <span id="info-comment-1" style="
-                    font-size: small;
-                    border-radius: 1rem;
-                    background: #1c1c39;
-                    color: #fff;
-                    height: fit-content;
-                    padding: 0.3rem;
-                  " >
-                        0 curtida e 0 comentários
-                    </span>
-                </div>
-            </div>
-            
-        <!-- Usuário logado -->
-        @if (ViewBag.Comentarios != null)
-        {
+    <div style="display: flex;
+         flex-direction: column;
+         gap: 1rem;
+         justify-content:space-between;
+         width: 40vw;">
+        <div style="display: flex;
+         flex-direction: column;
+         gap: 1rem;
+         width: 100%;
+         max-height: 80vh;
+         overflow:auto">
             @foreach (var item in ViewBag.Comentarios)
             {
-                var comment = (RedeSocial.Models.ComentarioModel)item;
+                var comentario = (RedeSocial.Models.ComentarioModel)item;
 
                 <div class="comment">
                     <div class="avatar">
-                        <img src="~/img/avatar.png" alt="" /><span>Mary Old</span>
+                        <img src="data:image/jpeg;base64,@comentario.Usuario.FotoPerfil" alt="" /><span>@comentario.Usuario.Nome</span>
                     </div>
-                    <p>
-                        @comment.Conteudo
-                    </p>
+                    <p>@comentario.Conteudo</p>
                     <div style="
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-                          ">
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;">
                         <div style="display: flex; gap: 3px">
-                            <button type="button" class="post-button" onclick="toggleCurtirComentario(2)">
+                            <button type="button" class="post-button" onclick="toggleCurtirComentario('@comentario.Id')">
                                 <img src="~/img/foguete.png" alt="" />
                             </button>
                             <button type="button" class="post-button">
                                 <img src="~/img/comentário.png" alt="" />
                             </button>
                         </div>
-                        <span id="info-comment-2" style="
-              font-size: small;
-              border-radius: 1rem;
-              background: #1c1c39;
-              color: #fff;
-              height: fit-content;
-              padding: 0.3rem;
-                                ">
-                            @comment.QuantidadeLikes curtidas e 0 comentários
+                        <span id="info-comment-1" style="
+                            font-size: small;
+                            border-radius: 1rem;
+                            background: #1c1c39;
+                            color: #fff;
+                            height: fit-content;
+                            padding: 0.3rem;">
+                            @comentario.QuantidadeLikes curtidas e @comentario.QuantidadeComentarios comentários
                         </span>
                     </div>
+                    @if (comentario.QuantidadeComentarios > 0)
+                    {
+                        <button type="button" style="display:block;text-align:center;padding:0.5rem;" onclick="CarregarRespostas('@comentario.Id')">Carregar respostas</button>
+                    }
                 </div>
+                // <div id="@($"{comentario.Id}-respostas")" style="margin: 0.25rem 0; padding: 2rem 0 0 0"></div>
             }
-
-        }
-
-        <form id="comment-form" action="/Post/InserirPostComentario"  method="post" class="comment-input">
-            <input id="comment-input" type="text"  name="conteudo" />
-            <button type="submit" style="display: none;"/>
+        </div>
+        <form id="comment-form" action="/Post/InserirPostComentario/@ViewBag.Publicacao.Id" method="post" class="comment-input">
+            <input id="comment-input" type="text" name="conteudo" />
+            <button type="submit" style="display: none;" />
         </form>
     </div>
-
-  
 </div>
 
 
 
 <script>
-    document.getElementById("comment-input").addEventListener("keypress", e => {d
+    document.getElementById("comment-input").addEventListener("keypress", e => {
+        d
         if (e.key === 'Enter') {
             e.preventDefault();
             document.getElementById("comment-form").submit();
@@ -193,18 +156,18 @@
     })
 
 
-        $.ajax({
-            type: "GET",
-            url: "/Post/InserirLikePost",
-            data: { id: postId },
-            success: function (response) {
-                if (response.sucesso) {
-                    $("#info-post").text(response.likePost + " curtidas e 1 comentário");
-                }
-                postCurtido = true;
+    $.ajax({
+        type: "GET",
+        url: "/Post/InserirLikePost",
+        data: { id: postId },
+        success: function (response) {
+            if (response.sucesso) {
+                $("#info-post").text(response.likePost + " curtidas e 1 comentário");
             }
-        });
-    
+            postCurtido = true;
+        }
+    });
+
 
     var postCurtido = false;
 
@@ -222,7 +185,7 @@
         $.ajax({
             type: "PUT",
             url: "/Post/InserirLikePost",
-            data: { id: postId },
+            data: { postId: postId },
             success: function (response) {
                 if (response.sucesso) {
                     $("#info-post").text(response.likePost + " curtidas e 1 comentário");
@@ -236,7 +199,7 @@
         $.ajax({
             type: "PUT",
             url: "/Post/RemoverLikePost",
-            data: { id: postId },
+            data: { postId: postId },
             success: function (response) {
                 if (response.sucesso) {
                     $("#info-post").text(response.likePost + " curtidas e 1 comentário");
@@ -260,12 +223,12 @@
         $.ajax({
             type: "PUT",
             url: "/Post/InserirLikeComentario",
-            data: { id: comentarioId },
+            data: { comentarioId: comentarioId },
             success: function (response) {
                 if (response.sucesso) {
-                    $("#info-comment-"+comentarioId).text(response.likeComment + " curtidas e 0 comentário");
+                    $("#info-comment-" + comentarioId).text(response.likeComment + " curtidas e 0 comentário");
+                    comentarioCurtido = true;
                 }
-                comentarioCurtido = true;
             }
         });
     }
@@ -274,12 +237,51 @@
         $.ajax({
             type: "PUT",
             url: "/Post/RemoverLikeComentario",
-            data: { id: comentarioId },
+            data: { comentarioId: comentarioId },
             success: function (response) {
                 if (response.sucesso) {
-                    $("#info-comment-"+comentarioId).text(response.likeComment + " curtidas e 0 comentário");
+                    $("#info-comment-" + comentarioId).text(response.likeComment + " curtidas e 0 comentário");
+                    comentarioCurtido = false;
                 }
-                comentarioCurtido = false;
+            }
+        });
+    }
+
+    function CarregarRespostas(comentarioId) {
+        $.ajax({
+            type: "GET",
+            url: "/Post/ListarComentarioRespostas",
+            data: { id: comentarioId },
+            success: function (response) {
+                var respostasDiv = $("#" + comentarioId + "-respostas");
+                respostasDiv.empty();
+
+                response.forEach(function (comentario) {
+                    var commentHtml = `
+                                                                        <div class="comment">
+                                                                            <div class="avatar">
+                                                                                <img src="data:image/jpeg;base64,${comentario.Usuario.FotoPerfil}" alt="" /><span>${comentario.Usuario.Nome}</span>
+                                                                            </div>
+                                                                            <p>${comentario.Conteudo}</p>
+                                                                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                                                                <div style="display: flex; gap: 3px">
+                                                                                    <button type="button" class="post-button" onclick="toggleCurtirComentario(${comentario.Id})">
+                                                                                        <img src="~/img/foguete.png" alt="" />
+                                                                                    </button>
+                                                                                    <button type="button" class="post-button">
+                                                                                        <img src="~/img/comentário.png" alt="" />
+                                                                                    </button>
+                                                                                </div>
+                                                                                <span id="info-comment-${comentario.Id}" style="font-size: small; border-radius: 1rem; background: #1c1c39; color: #fff; height: fit-content; padding: 0.3rem;">
+                                                                                    ${comentario.QuantidadeLikes} curtidas e ${comentario.QuantidadeComentarios} comentários
+                                                                                </span>
+                                                                            </div>
+                                                                             ${comentario.QuantidadeComentarios === 0 ? '' : `<button type="button" style="display:block;text-align:center;padding:0.5rem;" onclick="carregarRespostas(${comentario.Id})">Carregar respostas</button>`}
+                                                                        </div>
+                                                                        <div id="${comentario.Id}-respostas" style="margin: 2rem 0; padding: 2rem 0 0 0"></div>
+                                                                    `;
+                    respostasDiv.append(commentHtml);
+                });
             }
         });
     }

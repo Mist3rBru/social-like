@@ -5,7 +5,7 @@ namespace RedeSocial.Backend.HTTPClient
 
     public class APIHttpClient
     {
-        private string baseAPI = "http://localhost:3809/api/";
+        private string baseAPI = "http://grupo4.neurosky.com.br/";
         public APIHttpClient(string baseAPI)
         {
             this.baseAPI = baseAPI;
@@ -116,7 +116,7 @@ namespace RedeSocial.Backend.HTTPClient
             }
         }
 
-        public T Get<T>(string actionUri)
+            public T Get<T>(string actionUri)
         {
             using (var client = new HttpClient())
             {

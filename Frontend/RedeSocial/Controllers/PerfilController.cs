@@ -37,10 +37,11 @@ namespace RedeSocial.Controllers
             client = new APIHttpClient(URLBasePublicacao);
             List<PublicacaoModel> publicacoes = client.Get<List<PublicacaoModel>>("Publicacao?idUsuario=" + userId);
 
+            client = new APIHttpClient(URLBaseUsuario);
+            UsuarioModel usuario;
             foreach (var publicacao in publicacoes)
             {
-                client = new APIHttpClient(URLBaseUsuario);
-                UsuarioModel usuario = client.Get<UsuarioModel>($"api/Usuario/{publicacao.Usuario}");
+                usuario = client.Get<UsuarioModel>($"api/Usuario/{publicacao.Usuario}");
                 publicacao.NomeUsuario = usuario.Nome;
                 publicacao.FotoUsuario = usuario.FotoPerfil;
             }
