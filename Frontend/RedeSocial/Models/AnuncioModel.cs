@@ -6,5 +6,7 @@ namespace RedeSocial.Models
         public string UrlImagem { get; set; }
         public string Link { get; set; }
         public string Texto { get; set; }
+        public int QuantidadeLikes { get; set; }
+        public bool UsuarioLogadoCurtiuAnuncio { get; set; }
     }
 }

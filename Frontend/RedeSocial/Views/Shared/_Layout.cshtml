@@ -12,11 +12,12 @@
 <body>
     <header class="header">
         <a class="header-title" href="/Feed">SocialLike</a>
-        <div class="header-avatar avatar">
-            @if (ViewBag.Usuario != null)
-            {
-                var user = (RedeSocial.Models.UsuarioModel)ViewBag.Usuario;
-                <p class="header-avatar-name">@user.Nome</p>
+        @if (ViewBag.Usuario != null)
+        {
+            var user = (RedeSocial.Models.UsuarioModel)ViewBag.Usuario;
+            
+            <a class="header-avatar avatar" href="/Perfil/@user.Id">
+                <p class="header-avatar-name" >@user.Nome</p>
                 @if (!string.IsNullOrEmpty(@user.FotoPerfil))
                 {
                     <img class="header-avatar-img" src="data:image/jpeg;base64,@user.FotoPerfil" alt="" />
@@ -25,9 +26,8 @@
                 {
                     <img src="~/img/avatar.png" alt="" />
                 }
-                
-            }
-        </div>
+            </a>
+        }
     </header>
     <div style="display: flex">
         <div class="sidebar">

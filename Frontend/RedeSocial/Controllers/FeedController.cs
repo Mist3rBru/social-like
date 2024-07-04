@@ -17,13 +17,18 @@ namespace RedeSocial.Controllers
         private static readonly string URLBaseCurtidaComentario = "http://grupo4.neurosky.com.br/api/";
         private static readonly string URLBasePublicacao = "http://grupo5.neurosky.com.br/api/";
 
+        [HttpGet]
         public IActionResult Index()
         {
             var userId = Request.Cookies["UserId"];
-        
+
+            client = new APIHttpClient(URLBaseUsuario);
+            UsuarioModel usuarioLogado = client.Get<UsuarioModel>($"Usuario/{userId}");
+
             ViewBag.Publicacoes = listaPublicacoes(userId);
             ViewBag.Anuncios = listaAnuncios();
             ViewBag.Stories = listaStories();
+            ViewBag.Usuario = usuarioLogado;
 
             return View();
         }
@@ -107,6 +112,13 @@ namespace RedeSocial.Controllers
             client = new APIHttpClient(URLBaseAnuncio);
             List<AnuncioModel> anuncios = client.Get<List<AnuncioModel>>("Anuncio");
 
+            foreach (var anuncio in anuncios)
+            {
+                anuncio.QuantidadeLikes = listaCurtidasAnuncio(anuncio.Id).Count;
+
+                anuncio.UsuarioLogadoCurtiuAnuncio = usuarioLogadoCurtiuAnuncio(anuncio.Id);
+            }
+
             return anuncios;
         }
 
@@ -162,18 +174,64 @@ namespace RedeSocial.Controllers
             return Json(new { sucesso = true, quantidadeLikes = listaCurtidasPost(postId).Count });
         }
 
-
         [HttpPost]
-        public bool usuarioLogadoCurtiuPost(Guid postId)
+        public bool usuarioLogadoCurtiuPost(Guid anuncioId)
         {
             var userId = Request.Cookies["UserId"];
 
-            List<Guid> usuariosCurtiramPost = listaCurtidasPost(postId);
+            List<Guid> usuariosCurtiramPost = listaCurtidasPost(anuncioId);
 
             bool curtiu = usuariosCurtiramPost.Any(u => u.ToString() == userId);
 
             return curtiu;
         }
+
+        [HttpGet]
+        private List<Guid> listaCurtidasAnuncio(Guid anuncioId)
+        {
+            client = new APIHttpClient(URLBaseCurtidaComentario);
+            List<Guid> curtidasAnuncio = client.Get<List<Guid>>($"likes/anuncio/{anuncioId}");
+
+            return curtidasAnuncio;
+        }
+
+        [HttpPost]
+        public IActionResult CurtirAnuncio(Guid anuncioId)
+        {
+            var userId = Request.Cookies["UserId"];
+
+            client = new APIHttpClient(URLBaseCurtidaComentario);
+            client.Post($"likes/anuncio/{anuncioId}/{userId}");
+
+            // return Json(new { sucesso = true, quantidadeLikes = listaCurtidasAnuncio(anuncioId).Count });
+            return Json(new { sucesso = true, quantidadeLikes = 1 });
+        }
+
+        [HttpDelete]
+        public IActionResult DescurtirAnuncio(Guid anuncioId)
+        {
+            var userId = Request.Cookies["UserId"];
+
+            client = new APIHttpClient(URLBaseCurtidaComentario);
+            client.Delete($"likes/anuncio/{anuncioId}/{userId}");
+
+            return Json(new { sucesso = true, quantidadeLikes = listaCurtidasAnuncio(anuncioId).Count });
+        }
+
+        [HttpPost]
+        public bool usuarioLogadoCurtiuAnuncio(Guid anuncioId)
+        {
+            var userId = Request.Cookies["UserId"];
+
+            List<Guid> usuariosCurtiramAnuncio = listaCurtidasAnuncio(anuncioId);
+
+            //bool curtiu = usuariosCurtiramAnuncio.Any(u => u.ToString() == userId);
+            bool curtiu = true;
+            return curtiu;
+        }
+
+
+
 
     }
 
