@@ -165,10 +165,11 @@
                     @if (user.Id.ToString() == currentId)
                     {
                           <div style="display: flex; gap: 10px; height: 60px;">
-                            <button type="submit" class="buttonProfile">
+                              <a href="/EditarPerfil">
+                            <button type="button" class="buttonProfile">
                                 Editar perfil
                             </button>
-
+                            </a>
                             <a href="/CriarPublicacao">
                                 <button type="button" class="buttonProfile">
                                     Criar Publicação
