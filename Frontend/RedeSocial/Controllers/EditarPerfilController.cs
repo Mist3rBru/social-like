@@ -20,27 +20,30 @@ namespace RedeSocial.Controllers
             UsuarioModel usuario = client.Get<UsuarioModel>("api/Usuario/" + userId);
 
             ViewBag.Usuario = usuario;
-            TempData["Usuario"] = JsonConvert.SerializeObject(usuario);
+            HttpContext.Session.SetString("Usuario", JsonConvert.SerializeObject(usuario));
 
             return View();
         }
 
+      
+
         [HttpPost]
         public IActionResult Atualizar(UsuarioAlterarModel model)
         {
-            var user = JsonConvert.DeserializeObject<UsuarioModelBack>(TempData["Usuario"].ToString());
+            var usuarioJson = HttpContext.Session.GetString("Usuario");
+            var user = JsonConvert.DeserializeObject<UsuarioModelBack>(usuarioJson);
 
             model.Id = user.Id;
-                model.Senha = user.Senha ?? string.Empty;
+            model.Senha = user.Senha ?? string.Empty;
 
-                var usuarioAlteradoModel = UsuarioAdapter.ToUsuarioModel(model);
-                usuarioAlteradoModel.Amigos = user?.Amigos;
-                usuarioAlteradoModel.FotoPerfil ??= user.FotoPerfil;
-                new APIHttpClient(URLBase).Put("Usuario", usuarioAlteradoModel);
+            var usuarioAlteradoModel = UsuarioAdapter.ToUsuarioModel(model);
+            usuarioAlteradoModel.Amigos = user?.Amigos;
+            usuarioAlteradoModel.FotoPerfil ??= user.FotoPerfil;
+            new APIHttpClient(URLBase).Put("Usuario", usuarioAlteradoModel);
 
-                var usuarioAlterado = new APIHttpClient(URLBase).Get<RedeSocial.Backend.Models.UsuarioModelBack>($"Usuario/{model.Id}");
+            var usuarioAlterado = new APIHttpClient(URLBase).Get<RedeSocial.Backend.Models.UsuarioModelBack>($"Usuario/{model.Id}");
 
-                return RedirectToAction("Index", "Perfil");
+            return Redirect($"/Perfil/{model.Id}");
         }
 
     }
