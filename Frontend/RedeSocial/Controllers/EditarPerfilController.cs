@@ -28,7 +28,6 @@ namespace RedeSocial.Controllers
         [HttpPost]
         public IActionResult Atualizar(UsuarioAlterarModel model)
         {
-
             var user = JsonConvert.DeserializeObject<UsuarioModelBack>(TempData["Usuario"].ToString());
 
             model.Id = user.Id;
