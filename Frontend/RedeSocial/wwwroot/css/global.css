@@ -192,3 +192,96 @@ input:-webkit-autofill:active {
     -webkit-box-shadow: 0 0 0 30px white inset;
     -webkit-text-fill-color: #000;
 }
+
+.form-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: stretch;
+    border-radius: 2rem;
+    background-color: var(--bg-main);
+    min-width: 40%;
+    gap: 1rem;
+    padding: 2rem 1rem;
+    box-shadow: 0 0 4px #ccc;
+}
+
+    .form-box * {
+        color: #fff;
+    }
+
+.form-box-header {
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin: 3rem 0 1rem 0;
+}
+
+.form-box button {
+    margin-top: 3rem;
+    background: black;
+    border: 2px solid black;
+    border-radius: 0.5rem;
+    text-align: center;
+    padding: 0.5rem;
+    width: 100%;
+    background: #black;
+    font-weight: 600;
+    transition: all 150ms;
+}
+
+    .form-box button:hover {
+        border-color: #777;
+    }
+
+.input-box {
+    display: block;
+    position: relative;
+    border: 1px solid #909090;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    transition: border 150ms;
+}
+
+    .input-box:hover {
+        border-color: #ccc;
+    }
+
+
+    .input-box:focus {
+        border-color: #fff;
+    }
+
+    .input-box label {
+        position: absolute;
+        top: -0.5rem;
+        left: 0.75rem;
+        font-size: 0.75rem;
+        background-color: var(--bg-main);
+        padding: 0 0.25rem;
+        font-weight: 600;
+        color: #fff;
+    }
+
+    .input-box input {
+        background-color: transparent;
+        padding: 0 0.25rem;
+        outline: none;
+        border: 0;
+        width: 100%;
+        color: #fff;
+    }
+
+    .input-box select {
+        background: transparent;
+        border: 0;
+        outline: none;
+        width: 100%;
+    }
+
+    .input-box option {
+        background: transparent;
+        color: black;
+    }
