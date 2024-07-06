@@ -31,12 +31,12 @@
                 @if (ViewBag.Usuario != null)
                 {
                     var usuario = (RedeSocial.Models.UsuarioModel)ViewBag.Usuario;
-                    <a class="avatar" onclick="mostrarStory()" href="#">
-                        <div class="avatar-border">
+                    <div class="avatar">
+                        <button class="avatar-border" onclick="mostrarStory()">
                             <img src="data:image/jpeg;base64,@usuario.FotoDePerfilTratada" alt="" />
-                        </div>
-                        <span>@usuario.Nome</span>
-                    </a>
+                        </button>
+                        <a href="/Perfil/@usuario.Id">@usuario.Nome</a>
+                    </div>
                 }
                 <button type="button" id="addButton">
                     adicionar story
@@ -52,12 +52,12 @@
                 {
                     var amigosStory = (RedeSocial.Models.UsuarioModel)item;
 
-                    <a class="avatar" id="mostrarElemento" href="#" onclick="mostrarStory()">
-                        <div class="avatar-border">
+                    <div class="avatar">
+                        <button class="avatar-border" onclick="mostrarStory()">
                             <img src="data:image/jpeg;base64,@amigosStory.FotoDePerfilTratada" alt="" />
-                        </div>
-                        <span>@amigosStory.Nome</span>
-                    </a>
+                        </button>
+                        <a href="/Perfil/@amigosStory.Id">@amigosStory.Nome</a>
+                    </div>
                 }
             }
 

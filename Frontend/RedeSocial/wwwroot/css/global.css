@@ -106,7 +106,8 @@ img {
         line-height: 2rem;
     }
 
-    .avatar:hover > p {
+    .avatar:hover > p,
+    .avatar:hover > a {
         text-decoration: underline #ccc;
     }
 
