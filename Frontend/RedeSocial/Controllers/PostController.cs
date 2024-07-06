@@ -35,7 +35,7 @@ namespace RedeSocial.Controllers
 
             PublicacaoModel publicacao = publicacaoClient.Get<PublicacaoModel>("api/Publicacao/" + postId);
             publicacao.NomeUsuario = usuario.Nome;
-            publicacao.FotoUsuario = usuario.FotoPerfil;
+            publicacao.FotoUsuario = usuario.FotoDePerfilTratada;
             publicacao.QuantidadeComentarios = comentarios.Count;
             publicacao.QuantidadeLikes = publicacaoLikes.Count;
             publicacao.UsuarioLogadoCurtiuPost = usuarioLogadoCurtiuPost(Guid.Parse(postId));

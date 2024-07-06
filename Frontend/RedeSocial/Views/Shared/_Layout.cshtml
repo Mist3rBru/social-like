@@ -17,14 +17,7 @@
 
             <a class="header-avatar avatar" href="/Perfil/@user.Id">
                 <p class="header-avatar-name">@user.Nome</p>
-                @if (!string.IsNullOrEmpty(@user.FotoPerfil))
-                {
-                    <img class="header-avatar-img" src="data:image/jpeg;base64,@user.FotoPerfil" alt="" />
-                }
-                else
-                {
-                    <img src="~/img/avatar.png" alt="" />
-                }
+                <img class="header-avatar-img" src="data:image/jpeg;base64,@user.FotoDePerfilTratada" alt="" />
             </a>
         }
     </header>
@@ -40,7 +33,7 @@
                     var usuario = (RedeSocial.Models.UsuarioModel)ViewBag.Usuario;
                     <a class="avatar" onclick="mostrarStory()" href="#">
                         <div class="avatar-border">
-                            <img src="data:image/jpeg;base64,@usuario.FotoPerfil" alt="" />
+                            <img src="data:image/jpeg;base64,@usuario.FotoDePerfilTratada" alt="" />
                         </div>
                         <span>@usuario.Nome</span>
                     </a>
@@ -61,7 +54,7 @@
 
                     <a class="avatar" id="mostrarElemento" href="#" onclick="mostrarStory()">
                         <div class="avatar-border">
-                            <img src="data:image/jpeg;base64,@amigosStory.FotoPerfil" alt="" />
+                            <img src="data:image/jpeg;base64,@amigosStory.FotoDePerfilTratada" alt="" />
                         </div>
                         <span>@amigosStory.Nome</span>
                     </a>

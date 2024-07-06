@@ -67,14 +67,7 @@
 
             <div class="post">
                 <a href="/perfil/@publicacao.Usuario" class="avatar">
-                    @if (!string.IsNullOrEmpty(@publicacao.FotoUsuario))
-                    {
-                        <img src="data:image/jpeg;base64,@publicacao.FotoUsuario" alt="" />
-                    }
-                    else
-                    {
-                        <img src="~/img/avatar.png" alt="" />
-                    }
+                    <img src="data:image/jpeg;base64,@publicacao.FotoUsuario" alt="" />
                     <p>@publicacao.NomeUsuario</p>
                 </a>
 
