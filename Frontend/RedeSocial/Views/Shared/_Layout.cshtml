@@ -35,44 +35,115 @@
             justify-content: space-between;
             align-items: center;
           ">
-                <a href="/perfil" class="avatar">
-                    <div class="avatar-border">
-                        <img src="~/img/avatar.png" alt="" />
-                    </div>
-                    <span>Nome</span>
-                </a>
+                @if (ViewBag.Usuario != null)
+                {
+                    var usuario = (RedeSocial.Models.UsuarioModel)ViewBag.Usuario;
+                    <a class="avatar" onclick="mostrarStory()" href="#">
+                        <div class="avatar-border">
+                            <img src="data:image/jpeg;base64,@usuario.FotoPerfil" alt="" />
+                        </div>
+                        <span>@usuario.Nome</span>
+                    </a>
+                }
                 <button type="button" id="addButton" class="post-button">
-                    <img src="~/img/add.png" alt="" />
+                    Adicionar story
                 </button>
 
                 <input type="file" id="fileInput" style="display:none" />
             </div>
 
 
-            @if (ViewBag.Stories != null)
+            @if (ViewBag.Usuario.Amigos != null)
             {
-
-                @foreach (var item in ViewBag.Stories)
+                @foreach (var item in ViewBag.Usuario.Amigos)
                 {
-                    var story = (RedeSocial.Models.StoryModel)item;
+                    var amigosStory = (RedeSocial.Models.UsuarioModel)item;
 
-                    <a href="/perfil" class="avatar">
+                    <a class="avatar" id="mostrarElemento" href="#" onclick="mostrarStory()">
                         <div class="avatar-border">
-                            <img src="data:image/jpeg;base64,@story.FotoUsuario" alt="" />
+                            <img src="data:image/jpeg;base64,@amigosStory.FotoPerfil" alt="" />
                         </div>
-                        <span>@story.NomeUsuario</span>
+                        <span>@amigosStory.Nome</span>
                     </a>
                 }
             }
 
-
         </div>
+
+        <div class="story-wrapper" id="story-show" style="display: none;">
+            <div>
+                <a href="">
+                    <img class="story-before" src="~/img/arrow.png" alt="" />
+                </a>
+            </div>
+
+            <div class="story">
+                <div class="story-header">
+                    <a href="/perfil" class="avatar">
+                        <img src="~/img/avatar.png" alt="" />
+                        <p>Nome</p>
+                    </a>
+                    <button class="story-header-close" style="cursor: pointer;" onclick="fecharStory()">X</button>
+                </div>
+                <img class="story-img" src="~/img/gato.jpg" alt="" />
+                <div class="story-comment-like">
+                    <input class="story-comment" type="text" name="conteudo" />
+                    <button type="button" class="post-button" onclick="toggleCurtirPost(1)">
+                        <img class="story-like" src="~/img/foguete.png" alt="" />
+                    </button>
+                </div>
+            </div>
+
+            <div>
+                <a href="">
+                    <img class="story-after" src="~/img/arrow.png" alt="" />
+                </a>
+            </div>
+        </div>
+
+   
+
 
         @RenderBody()
     </div>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        //Story:
+
+        document.getElementById('addButton').addEventListener('click', function () {
+            document.getElementById('fileInput').click();
+        });
+
+        document.getElementById('fileInput').addEventListener('change', function (event) {
+            const files = event.target.files;
+            if (files.length > 0) {
+                console.log('Selected file:', files[0].name);
+                $.ajax({
+                    type: "POST",
+                    url: "/Feed/AddStory",
+                    data: { id: postId },
+                    success: function (response) {
+                        console.log("adiciona story")
+                        adicionaStory = false;
+                    }
+                });
+            }
+        });
+
+
+        function mostrarStory() {
+            $("#story-show").css("display", "flex");
+        }
+
+        function fecharStory() {
+            $("#story-show").css("display", "none");
+        }
+
+
+
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
