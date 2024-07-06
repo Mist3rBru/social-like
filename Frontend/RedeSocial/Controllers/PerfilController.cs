@@ -22,8 +22,8 @@ namespace RedeSocial.Controllers
             client = new APIHttpClient(URLBaseUsuario);
             UsuarioModel usuario = client.Get<UsuarioModel>("api/Usuario/" + UserId);
 
-            ViewBag.Usuario = usuario;
-            ViewBag.CurrentUsuario = currentUsuario;
+            ViewBag.Usuario = currentUsuario;
+            ViewBag.CurrentUsuario = usuario;
             ViewBag.Publicacoes = listaPublicacoes(UserId);
             return View();
         }
