@@ -65,22 +65,19 @@
                 <img src="data:@midia.ContentType;base64,@midia.FileContents" alt="" />
             }
             <p class="post-description">@publicacao.Descricao</p>
-            <div style="
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                                                            ">
-                <button type="button" class="post-button" onclick="toggleCurtirPost('@publicacao.Id')">
-                    <img src="~/img/foguete.png" alt="" />
-                </button>
-                <span style="
-                font-size: small;
-                border-radius: 1rem;
-                background: #1c1c39;
-                color: #fff;
-                height: fit-content;
-                padding: 0.3rem;" id="info-post">
-                    @publicacao.QuantidadeLikes curtidas e @publicacao.QuantidadeComentarios comentário
+
+
+            <div style="display: flex;justify-content: space-between;align-items: center;">
+                <div style="display: flex; gap: 3px">
+                    <button type="button" id="post-button-curtir-@publicacao.Id"
+                            title="@(publicacao.UsuarioLogadoCurtiuPost ? "descurtir" : "curtir")"
+                            class="post-button @(publicacao.UsuarioLogadoCurtiuPost ? "post-button-active" : "")"
+                            onclick="toggleCurtirPost('@publicacao.Id', @publicacao.QuantidadeComentarios)">
+                        <img src="~/img/foguete.png" alt="" />
+                    </button>
+                </div>
+                <span id="post-curtidas-comentarios-@publicacao.Id" class="post-info" title="Abrir comentários">
+                    @publicacao.GetTextoCurtidaComentarios()
                 </span>
             </div>
         </div>
@@ -112,21 +109,15 @@
                         justify-content: space-between;
                         align-items: center;">
                         <div style="display: flex; gap: 3px">
-                            <button type="button" class="post-button" onclick="toggleCurtirComentario('@comentario.Id')">
+                            <button type="button" id="comentario-button-curtir-@comentario.Id"
+                                    title="@(comentario.UsuarioLogadoCurtiuComentario ? "descurtir" : "curtir")"
+                                    class="post-button @(comentario.UsuarioLogadoCurtiuComentario ? "post-button-active" : "")"
+                                    onclick="toggleCurtirComentario('@comentario.Id', @comentario.QuantidadeComentarios)">
                                 <img src="~/img/foguete.png" alt="" />
                             </button>
-                            <button type="button" class="post-button">
-                                <img src="~/img/comentário.png" alt="" />
-                            </button>
                         </div>
-                        <span id="info-comment-1" style="
-                            font-size: small;
-                            border-radius: 1rem;
-                            background: #1c1c39;
-                            color: #fff;
-                            height: fit-content;
-                            padding: 0.3rem;">
-                            @comentario.QuantidadeLikes curtidas e @comentario.QuantidadeComentarios comentários
+                        <span id="comentario-curtidas-comentarios-@comentario.Id" class="post-info" title="Abrir comentários">
+                            @comentario.GetTextoCurtidaComentarios()
                         </span>
                     </div>
                     @if (comentario.QuantidadeComentarios > 0)
@@ -134,7 +125,6 @@
                         <button type="button" style="display:block;text-align:center;padding:0.5rem;" onclick="CarregarRespostas('@comentario.Id')">Carregar respostas</button>
                     }
                 </div>
-                // <div id="@($"{comentario.Id}-respostas")" style="margin: 0.25rem 0; padding: 2rem 0 0 0"></div>
             }
         </div>
         <form id="comment-form" action="/Post/InserirPostComentario/@ViewBag.Publicacao.Id" method="post" class="comment-input">
@@ -155,94 +145,109 @@
         }
     })
 
+    //POST:
 
-    $.ajax({
-        type: "GET",
-        url: "/Post/InserirLikePost",
-        data: { id: postId },
-        success: function (response) {
-            if (response.sucesso) {
-                $("#info-post").text(response.likePost + " curtidas e 1 comentário");
-            }
-            postCurtido = true;
-        }
-    });
-
-
-    var postCurtido = false;
-
-    function toggleCurtirPost(postId) {
-        if (!postCurtido) {
-            InserirLikePost(postId);
+    function toggleCurtirPost(postId, quantidadeComentarios) {
+        var button = $("#post-button-curtir-" + postId);
+        if (button.hasClass("post-button-active")) {
+            descurtirPost(postId, quantidadeComentarios);
         } else {
-            RemoverLikePost(postId);
+            curtirPost(postId, quantidadeComentarios);
         }
     }
 
+    function getTextoCurtidaComentarios(quantidadeLikes, quantidadeComentarios) {
+        var flexCurtidas = quantidadeLikes < 2 ? 'curtida' : 'curtidas';
+        var flexComentarios = quantidadeComentarios < 2 ? 'comentário' : 'comentários';
+        return quantidadeLikes + ' ' + flexCurtidas + ' e ' + quantidadeComentarios + ' ' + flexComentarios;
+    }
+
+    function removeCurtidas(id, type, quantidadeComentarios, quantidadeLikes) {
+        var idText = `#${type}-curtidas-comentarios-${id}`
+        var idButton = `#${type}-button-curtir-${id}`
+        console.log(idText)
+        console.log(idButton)
+        $(idText).text(getTextoCurtidaComentarios(quantidadeLikes, quantidadeComentarios));
+        $(idButton).removeClass("post-button-active");
+    }
+
+    function atualizaCurtidas(id, type, quantidadeComentarios, quantidadeLikes) {
+        var idText = `#${type}-curtidas-comentarios-${id}`
+        var idButton = `#${type}-button-curtir-${id}`
+        console.log(idText)
+        console.log(idButton)
+        $(idText).text(getTextoCurtidaComentarios(quantidadeLikes, quantidadeComentarios));
+        $(idButton).addClass("post-button-active");
+    }
 
 
-    function InserirLikePost(postId) {
+    function curtirPost(postId, quantidadeComentarios) {
         $.ajax({
-            type: "PUT",
-            url: "/Post/InserirLikePost",
+            type: "POST",
+            url: "/Post/CurtirPost",
             data: { postId: postId },
             success: function (response) {
-                if (response.sucesso) {
-                    $("#info-post").text(response.likePost + " curtidas e 1 comentário");
-                }
-                postCurtido = true;
+                atualizaCurtidas(postId, "post", quantidadeComentarios, response.quantidadeLikes)
             }
         });
     }
 
-    function RemoverLikePost(postId) {
+    function descurtirPost(postId, quantidadeComentarios) {
         $.ajax({
-            type: "PUT",
-            url: "/Post/RemoverLikePost",
+            type: "DELETE",
+            url: "/Post/DescurtirPost",
             data: { postId: postId },
             success: function (response) {
-                if (response.sucesso) {
-                    $("#info-post").text(response.likePost + " curtidas e 1 comentário");
-                }
-                postCurtido = false;
+                removeCurtidas(postId, "post", quantidadeComentarios, response.quantidadeLikes)
             }
         });
     }
 
-    var comentarioCurtido = false;
+    //COMENTÁRIO:
 
-    function toggleCurtirComentario(comentarioId) {
-        if (!comentarioCurtido) {
-            InserirLikeComentario(comentarioId);
+    function toggleCurtirComentario(comentarioId, quantidadeComentarios) {
+        var button = $("#comentario-button-curtir-" + comentarioId);
+        if (button.hasClass("post-button-active")) {
+            descurtirComentario(comentarioId, quantidadeComentarios);
         } else {
-            RemoverLikeComentario(comentarioId);
+            curtirComentario(comentarioId, quantidadeComentarios);
         }
     }
+    function removeCurtidas(id, type, quantidadeComentarios, quantidadeLikes) {
+        var idText = `#${type}-curtidas-comentarios-${id}`
+        var idButton = `#${type}-button-curtir-${id}`
 
-    function InserirLikeComentario(comentarioId) {
+        $(idText).text(getTextoCurtidaComentarios(quantidadeLikes, quantidadeComentarios));
+        $(idButton).removeClass("post-button-active");
+    }
+
+    function atualizaCurtidas(id, type, quantidadeComentarios, quantidadeLikes) {
+        var idText = `#${type}-curtidas-comentarios-${id}`
+        var idButton = `#${type}-button-curtir-${id}`
+
+        $(idText).text(getTextoCurtidaComentarios(quantidadeLikes, quantidadeComentarios));
+        $(idButton).addClass("post-button-active");
+    }
+
+
+    function curtirComentario(comentarioId, quantidadeComentarios) {
         $.ajax({
-            type: "PUT",
-            url: "/Post/InserirLikeComentario",
+            type: "POST",
+            url: "/Post/CurtirComentario",
             data: { comentarioId: comentarioId },
             success: function (response) {
-                if (response.sucesso) {
-                    $("#info-comment-" + comentarioId).text(response.likeComment + " curtidas e 0 comentário");
-                    comentarioCurtido = true;
-                }
+                atualizaCurtidas(comentarioId, "comentario", quantidadeComentarios, response.quantidadeLikes)
             }
         });
     }
 
-    function RemoverLikeComentario(comentarioId) {
+    function descurtirComentario(comentarioId, quantidadeComentarios) {
         $.ajax({
-            type: "PUT",
-            url: "/Post/RemoverLikeComentario",
+            type: "DELETE",
+            url: "/Post/DescurtirComentario",
             data: { comentarioId: comentarioId },
             success: function (response) {
-                if (response.sucesso) {
-                    $("#info-comment-" + comentarioId).text(response.likeComment + " curtidas e 0 comentário");
-                    comentarioCurtido = false;
-                }
+                removeCurtidas(comentarioId, "comentario", quantidadeComentarios, response.quantidadeLikes)
             }
         });
     }
@@ -258,28 +263,28 @@
 
                 response.forEach(function (comentario) {
                     var commentHtml = `
-                                                                        <div class="comment">
-                                                                            <div class="avatar">
-                                                                                <img src="data:image/jpeg;base64,${comentario.Usuario.FotoPerfil}" alt="" /><span>${comentario.Usuario.Nome}</span>
-                                                                            </div>
-                                                                            <p>${comentario.Conteudo}</p>
-                                                                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                                                                <div style="display: flex; gap: 3px">
-                                                                                    <button type="button" class="post-button" onclick="toggleCurtirComentario(${comentario.Id})">
-                                                                                        <img src="~/img/foguete.png" alt="" />
-                                                                                    </button>
-                                                                                    <button type="button" class="post-button">
-                                                                                        <img src="~/img/comentário.png" alt="" />
-                                                                                    </button>
+                                                                            <div class="comment">
+                                                                                <div class="avatar">
+                                                                                    <img src="data:image/jpeg;base64,${comentario.Usuario.FotoPerfil}" alt="" /><span>${comentario.Usuario.Nome}</span>
                                                                                 </div>
-                                                                                <span id="info-comment-${comentario.Id}" style="font-size: small; border-radius: 1rem; background: #1c1c39; color: #fff; height: fit-content; padding: 0.3rem;">
-                                                                                    ${comentario.QuantidadeLikes} curtidas e ${comentario.QuantidadeComentarios} comentários
-                                                                                </span>
+                                                                                <p>${comentario.Conteudo}</p>
+                                                                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                                                                    <div style="display: flex; gap: 3px">
+                                                                                        <button type="button" class="post-button" onclick="toggleCurtirComentario(${comentario.Id})">
+                                                                                            <img src="~/img/foguete.png" alt="" />
+                                                                                        </button>
+                                                                                        <button type="button" class="post-button">
+                                                                                            <img src="~/img/comentário.png" alt="" />
+                                                                                        </button>
+                                                                                    </div>
+                                                                                    <span id="info-comment-${comentario.Id}" style="font-size: small; border-radius: 1rem; background: #1c1c39; color: #fff; height: fit-content; padding: 0.3rem;">
+                                                                                        ${comentario.QuantidadeLikes} curtidas e ${comentario.QuantidadeComentarios} comentários
+                                                                                    </span>
+                                                                                </div>
+                                                                                 ${comentario.QuantidadeComentarios === 0 ? '' : `<button type="button" style="display:block;text-align:center;padding:0.5rem;" onclick="carregarRespostas(${comentario.Id})">Carregar respostas</button>`}
                                                                             </div>
-                                                                             ${comentario.QuantidadeComentarios === 0 ? '' : `<button type="button" style="display:block;text-align:center;padding:0.5rem;" onclick="carregarRespostas(${comentario.Id})">Carregar respostas</button>`}
-                                                                        </div>
-                                                                        <div id="${comentario.Id}-respostas" style="margin: 2rem 0; padding: 2rem 0 0 0"></div>
-                                                                    `;
+                                                                            <div id="${comentario.Id}-respostas" style="margin: 2rem 0; padding: 2rem 0 0 0"></div>
+                                                                        `;
                     respostasDiv.append(commentHtml);
                 });
             }

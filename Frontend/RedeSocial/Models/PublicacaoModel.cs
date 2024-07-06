@@ -25,5 +25,11 @@ namespace RedeSocial.Models
         public int QuantidadeLikes { get; set; }
         public int QuantidadeComentarios { get; set; }
         public bool UsuarioLogadoCurtiuPost { get; set; }
+        public string GetTextoCurtidaComentarios()
+        {
+            var flexCurtidas = QuantidadeLikes < 2 ? "curtida" : "curtidas";
+            var flexComentarios = QuantidadeComentarios < 2 ? "comentário" : "comentários";
+            return $"{QuantidadeLikes} {flexCurtidas} e {QuantidadeComentarios} {flexComentarios}";
+        }
     }
 }

@@ -1,3 +1,5 @@
+using static System.Runtime.InteropServices.JavaScript.JSType;
+
 namespace RedeSocial.Models
 {
     public class ComentarioModel
@@ -12,14 +14,25 @@ namespace RedeSocial.Models
         public int QuantidadeLikes { get; set; }
         public int QuantidadeComentarios{ get; set; }
 
+        public bool UsuarioLogadoCurtiuComentario { get; set; }
+
         public ComentarioModel() { }
-        public ComentarioModel(Guid idUsuario, DateTime dataCriacao, DateTime dataEdicao, string conteudo, int quantidadeLikes)
+        public ComentarioModel(Guid idUsuario, DateTime dataCriacao, DateTime dataEdicao, string conteudo, int quantidadeLikes, bool UsuarioLogadoCurtiuComentario)
         {
             IdUsuario = idUsuario;
             DataCriacao = dataCriacao;
             DataEdicao = dataEdicao;
             Conteudo = conteudo;
             QuantidadeLikes = quantidadeLikes;
+            UsuarioLogadoCurtiuComentario = UsuarioLogadoCurtiuComentario;
         }
+
+        public string GetTextoCurtidaComentarios()
+        {
+            var flexCurtidas = QuantidadeLikes < 2 ? "curtida" : "curtidas";
+            var flexComentarios = QuantidadeComentarios < 2 ? "comentário" : "comentários";
+            return $"{QuantidadeLikes} {flexCurtidas} e {QuantidadeComentarios} {flexComentarios}";
+        }
+
     }
 }
