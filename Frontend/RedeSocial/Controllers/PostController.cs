@@ -22,10 +22,13 @@ namespace RedeSocial.Controllers
             ViewBag.Usuario = usuario;
 
             var comentarios = comentariosClient.Get<List<ComentarioModel>>("api/comentarios/post/" + postId);
+
             foreach (var comentario in comentarios)
             {
                 comentario.Usuario = usuarioClient.Get<UsuarioModel>("api/Usuario/" + comentario.IdUsuario);
+                comentario.UsuarioLogadoCurtiuComentario = usuarioLogadoCurtiuComentario(comentario.Id);
             }
+            
             ViewBag.Comentarios = comentarios;
 
             var publicacaoLikes = comentariosClient.Get<List<string>>("api/likes/post/" + postId);
@@ -82,6 +85,54 @@ namespace RedeSocial.Controllers
 
             return curtiu;
         }
+
+        //Comentário:
+
+        [HttpPost]
+        public bool usuarioLogadoCurtiuComentario(Guid comentarioId)
+        {
+            var userId = Request.Cookies["UserId"];
+
+            List<Guid> usuariosCurtiramComentario = listaCurtidaComentario(comentarioId);
+
+            bool curtiu = usuariosCurtiramComentario.Any(u => u.ToString() == userId);
+
+            return curtiu;
+        }
+
+
+        [HttpGet]
+        private List<Guid> listaCurtidaComentario(Guid comentarioId)
+        {
+
+            var userId = Request.Cookies["UserId"];
+
+            return comentariosClient.Get<List<Guid>>($"api/likes/comentario/{comentarioId}");
+
+
+        }
+
+        [HttpPost]
+        public IActionResult CurtirComentario(Guid comentarioId)
+        {
+            var userId = Request.Cookies["UserId"];
+
+
+            comentariosClient.Post("api/likes/comentario/" + comentarioId + "/" + userId);
+
+            return Json(new { sucesso = true, quantidadeLikes = listaCurtidaComentario(comentarioId).Count });
+        }
+
+        [HttpDelete]
+        public IActionResult DescurtirComentario(Guid comentarioId)
+        {
+            var userId = Request.Cookies["UserId"];
+
+            comentariosClient.Delete("api/likes/comentario/" + comentarioId + "/" + userId);
+
+            return Json(new { sucesso = true, quantidadeLikes = listaCurtidaComentario(comentarioId).Count });
+        }
+
         [HttpPost("/Post/InserirPostComentario/{postId}")]
         public IActionResult InserirPostComentario(string postId, string conteudo) // Chamando no front
         {
@@ -100,54 +151,7 @@ namespace RedeSocial.Controllers
             return Index(postId);
         }
 
-        [HttpPut]
-        public IActionResult InserirLikePost(string postId) // Chamando no front
-        {
-            var usuarioId = Request.Cookies["UserId"];
 
-            comentariosClient.Post("api/likes/post/" + postId + "/" + usuarioId);
-
-            var likes = comentariosClient.Get<List<string>>("api/likes/post/" + postId);
-
-            return Json(new { sucesso = true, likePost = likes.Count });
-        }
-
-        [HttpPut]
-        public IActionResult RemoverLikePost(string postId) // Chamando no front
-        {
-            var usuarioId = Request.Cookies["UserId"];
-
-            comentariosClient.Delete("api/likes/post/" + postId + "/" + usuarioId);
-
-            var likes = comentariosClient.Get<List<string>>("api/likes/post/" + postId);
-
-            return Json(new { sucesso = true, likePost = likes.Count });
-
-        }
-
-        [HttpPut]
-        public IActionResult InserirLikeComentario(string comentarioId) // Chamando no front
-        {
-            var usuarioId = Request.Cookies["UserId"];
-
-            comentariosClient.Post("api/likes/comentario/" + comentarioId + "/" + usuarioId);
-
-            var likes = comentariosClient.Get<List<string>>("api/likes/comentario/" + comentarioId);
-
-            return Json(new { sucesso = true, likeComment = likes.Count });
-        }
-
-        [HttpDelete]
-        public IActionResult RemoverLikeComentario(string comentarioId) // Chamando no front
-        {
-            var usuarioId = Request.Cookies["UserId"];
-
-            comentariosClient.Delete("api/likes/comentario/" + comentarioId + "/" + usuarioId);
-
-            var likes = comentariosClient.Get<List<string>>("api/likes/comentario/" + comentarioId);
-
-            return Json(new { sucesso = true, likeComment = likes.Count });
-        }
 
         [HttpGet]
         public IActionResult ListarPostComentarios(ComentarioModel comentario) //Precisa incluir chamada no front

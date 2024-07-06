@@ -109,17 +109,14 @@
                         justify-content: space-between;
                         align-items: center;">
                         <div style="display: flex; gap: 3px">
-                            <button type="button" class="post-button" onclick="toggleCurtirComentario('@comentario.Id')">
+                            <button type="button" id="comentario-button-curtir-@comentario.Id"
+                                    title="@(comentario.UsuarioLogadoCurtiuComentario ? "descurtir" : "curtir")"
+                                    class="post-button @(comentario.UsuarioLogadoCurtiuComentario ? "post-button-active" : "")"
+                                    onclick="toggleCurtirComentario('@comentario.Id', @comentario.QuantidadeComentarios)">
                                 <img src="~/img/foguete.png" alt="" />
                             </button>
                         </div>
-                        <span id="info-comment-1" style="
-                            font-size: small;
-                            border-radius: 1rem;
-                            background: #1c1c39;
-                            color: #fff;
-                            height: fit-content;
-                            padding: 0.3rem;">
+                        <span id="comentario-curtidas-comentarios-@comentario.Id" class="post-info" title="Abrir comentários">
                             @comentario.QuantidadeLikes curtidas e @comentario.QuantidadeComentarios comentários
                         </span>
                     </div>
@@ -209,40 +206,49 @@
 
     //COMENTÁRIO:
 
-    var comentarioCurtido = false;
-
-    function toggleCurtirComentario(comentarioId) {
-        if (!comentarioCurtido) {
-            InserirLikeComentario(comentarioId);
+    function toggleCurtirComentario(comentarioId, quantidadeComentarios) {
+        var button = $("#comentario-button-curtir-" + comentarioId);
+        if (button.hasClass("post-button-active")) {
+            descurtirComentario(comentarioId, quantidadeComentarios);
         } else {
-            RemoverLikeComentario(comentarioId);
+            curtirComentario(comentarioId, quantidadeComentarios);
         }
     }
+    function removeCurtidas(id, type, quantidadeComentarios, quantidadeLikes) {
+        var idText = `#${type}-curtidas-comentarios-${id}`
+        var idButton = `#${type}-button-curtir-${id}`
 
-    function InserirLikeComentario(comentarioId) {
+        $(idText).text(getTextoCurtidaComentarios(quantidadeLikes, quantidadeComentarios));
+        $(idButton).removeClass("post-button-active");
+    }
+
+    function atualizaCurtidas(id, type, quantidadeComentarios, quantidadeLikes) {
+        var idText = `#${type}-curtidas-comentarios-${id}`
+        var idButton = `#${type}-button-curtir-${id}`
+
+        $(idText).text(getTextoCurtidaComentarios(quantidadeLikes, quantidadeComentarios));
+        $(idButton).addClass("post-button-active");
+    }
+
+
+    function curtirComentario(comentarioId, quantidadeComentarios) {
         $.ajax({
-            type: "PUT",
-            url: "/Post/InserirLikeComentario",
+            type: "POST",
+            url: "/Post/CurtirComentario",
             data: { comentarioId: comentarioId },
             success: function (response) {
-                if (response.sucesso) {
-                    $("#info-comment-" + comentarioId).text(response.likeComment + " curtidas e 0 comentário");
-                    comentarioCurtido = true;
-                }
+                atualizaCurtidas(comentarioId, "comentario", quantidadeComentarios, response.quantidadeLikes)
             }
         });
     }
 
-    function RemoverLikeComentario(comentarioId) {
+    function descurtirComentario(comentarioId, quantidadeComentarios) {
         $.ajax({
-            type: "PUT",
-            url: "/Post/RemoverLikeComentario",
+            type: "DELETE",
+            url: "/Post/DescurtirComentario",
             data: { comentarioId: comentarioId },
             success: function (response) {
-                if (response.sucesso) {
-                    $("#info-comment-" + comentarioId).text(response.likeComment + " curtidas e 0 comentário");
-                    comentarioCurtido = false;
-                }
+                removeCurtidas(comentarioId, "comentario", quantidadeComentarios, response.quantidadeLikes)
             }
         });
     }

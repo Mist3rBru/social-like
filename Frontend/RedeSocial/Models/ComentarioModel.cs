@@ -12,14 +12,17 @@ namespace RedeSocial.Models
         public int QuantidadeLikes { get; set; }
         public int QuantidadeComentarios{ get; set; }
 
+        public bool UsuarioLogadoCurtiuComentario { get; set; }
+
         public ComentarioModel() { }
-        public ComentarioModel(Guid idUsuario, DateTime dataCriacao, DateTime dataEdicao, string conteudo, int quantidadeLikes)
+        public ComentarioModel(Guid idUsuario, DateTime dataCriacao, DateTime dataEdicao, string conteudo, int quantidadeLikes, bool UsuarioLogadoCurtiuComentario)
         {
             IdUsuario = idUsuario;
             DataCriacao = dataCriacao;
             DataEdicao = dataEdicao;
             Conteudo = conteudo;
             QuantidadeLikes = quantidadeLikes;
+            UsuarioLogadoCurtiuComentario = UsuarioLogadoCurtiuComentario;
         }
     }
 }
