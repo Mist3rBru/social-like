@@ -35,11 +35,53 @@ namespace RedeSocial.Controllers
             publicacao.FotoUsuario = usuario.FotoPerfil;
             publicacao.QuantidadeComentarios = comentarios.Count;
             publicacao.QuantidadeLikes = publicacaoLikes.Count;
+            publicacao.UsuarioLogadoCurtiuPost = usuarioLogadoCurtiuPost(Guid.Parse(postId));
             ViewBag.Publicacao = publicacao;
 
             return View("Index");
         }
 
+        [HttpPost]
+        public IActionResult CurtirPost(Guid postId)
+        {
+            var userId = Request.Cookies["UserId"];
+
+           
+            comentariosClient.Post($"api/likes/post/{postId}/{userId}");
+
+            return Json(new { sucesso = true, quantidadeLikes = listaCurtidasPost(postId).Count });
+        }
+
+        [HttpDelete]
+        public IActionResult DescurtirPost(Guid postId)
+        {
+            var userId = Request.Cookies["UserId"];
+
+            comentariosClient.Delete($"api/likes/post/{postId}/{userId}");
+
+            return Json(new { sucesso = true, quantidadeLikes = listaCurtidasPost(postId).Count });
+        }
+
+        [HttpGet]
+        private List<Guid> listaCurtidasPost(Guid postId)
+        {
+      
+            List<Guid> curtidasPost = comentariosClient.Get<List<Guid>>($"api/likes/post/{postId}");
+
+            return curtidasPost;
+        }
+
+        [HttpPost]
+        public bool usuarioLogadoCurtiuPost(Guid postId)
+        {
+            var userId = Request.Cookies["UserId"];
+
+            List<Guid> usuariosCurtiramPost = listaCurtidasPost(postId);
+
+            bool curtiu = usuariosCurtiramPost.Any(u => u.ToString() == userId);
+
+            return curtiu;
+        }
         [HttpPost("/Post/InserirPostComentario/{postId}")]
         public IActionResult InserirPostComentario(string postId, string conteudo) // Chamando no front
         {
