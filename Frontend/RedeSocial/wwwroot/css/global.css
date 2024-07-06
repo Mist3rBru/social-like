@@ -183,6 +183,57 @@ img {
     align-self: end;
 }
 
+
+.story-wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    position: absolute;
+    background: #3333338c;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.story {
+    width: 50%;
+    gap: 1rem;
+    display: flex;
+    padding: 1rem;
+    background: #fff;
+    flex-direction: column;
+    height: fit-content;
+    z-index: 1;
+}
+
+.story-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.story-comment-like {
+    display: flex;
+    gap: 1rem;
+}
+
+.story-comment {
+    background: #1c1c39;
+    color: white;
+    padding: 0.5rem;
+    border-radius: 1rem;
+    margin-top: auto;
+    width: 100%;
+}
+
+.story-before {
+    width: 50%;
+}
+
+.story-after {
+    width: 50%;
+    transform: scaleX(-1);
+}
+
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
