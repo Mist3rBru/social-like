@@ -148,20 +148,20 @@
             @if (ViewBag.Usuario != null)
             {
                 var user = (RedeSocial.Models.UsuarioModel)ViewBag.Usuario;
-                var currentId = ViewBag.CurrentId;
+                var currentUserario = (RedeSocial.Models.UsuarioModel)ViewBag.CurrentUsuario;
 
                 <div class="profileContainer">
                     <div class="profileavatar">
                         <div class="profile-img">
-                            <img src="data:image/jpeg;base64,@user.FotoPerfil" alt="ProfilePic" />
+                            <img src="data:image/jpeg;base64,@currentUserario.FotoPerfil" alt="ProfilePic" />
                         </div>
                         <div class="profileDescription">
-                            <p class="profileName">@user.Nome</p>
-                            <p class="profileBio">@user.Bio</p>
-                            <p class="profileDate">@user.DataComemorativa.ToString("dd/MM/yyyy")</p>
+                            <p class="profileName">@currentUserario.Nome</p>
+                            <p class="profileBio">@currentUserario.Bio</p>
+                            <p class="profileDate">@currentUserario.DataComemorativa.ToString("dd/MM/yyyy")</p>
                         </div>
                     </div>
-                    @if (user.Id.ToString() == currentId)
+                    @if (user.Id.ToString() == currentUserario.Id.ToString())
                     {
                         <div class="profile-button-box">
                             <a href="/EditarPerfil">

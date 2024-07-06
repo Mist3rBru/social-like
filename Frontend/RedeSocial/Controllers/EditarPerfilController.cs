@@ -39,6 +39,8 @@ namespace RedeSocial.Controllers
 
             var usuarioAlterado = new APIHttpClient(URLBase).Get<UsuarioModel>($"Usuario/{model.Id}");
 
+            HttpContext.Session.SetString("Usuario", JsonConvert.SerializeObject(usuarioAlterado));
+
             return Redirect($"/Perfil/{model.Id}");
         }
 
