@@ -148,7 +148,7 @@
             @if (ViewBag.Usuario != null)
             {
                 var user = (RedeSocial.Models.UsuarioModel)ViewBag.Usuario;
-                var currentId = ViewBag.CurrentId;
+                var currentUserario = (RedeSocial.Models.UsuarioModel)ViewBag.CurrentUsuario;
 
                 <div class="profileContainer">
                     <div class="profileavatar">
@@ -161,7 +161,7 @@
                             <p class="profileDate">@user.DataComemorativa.ToString("dd/MM/yyyy")</p>
                         </div>
                     </div>
-                    @if (user.Id.ToString() == currentId)
+                    @if (user.Id.ToString() == currentUserario.Id.ToString())
                     {
                         <div class="profile-button-box">
                             <a href="/EditarPerfil">

@@ -16,13 +16,15 @@ namespace RedeSocial.Controllers
         public IActionResult Index(string UserId)
         {
             var usuarioJson = HttpContext.Session.GetString("Usuario");
-            var usuario = JsonConvert.DeserializeObject<UsuarioModel>(usuarioJson);
-            ViewBag.Usuario = usuario;
+            var currentUsuario = JsonConvert.DeserializeObject<UsuarioModel>(usuarioJson);
+
+            APIHttpClient client;
+            client = new APIHttpClient(URLBaseUsuario);
+            UsuarioModel usuario = client.Get<UsuarioModel>("api/Usuario/" + UserId);
 
             ViewBag.Usuario = usuario;
+            ViewBag.CurrentUsuario = currentUsuario;
             ViewBag.Publicacoes = listaPublicacoes(UserId);
-            ViewBag.CurrentId = UserId;
-
             return View();
         }
 
