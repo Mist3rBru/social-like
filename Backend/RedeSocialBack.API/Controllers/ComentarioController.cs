@@ -184,7 +184,7 @@ namespace RedeSocialBack.API.Controllers
         {
             List<string> likes = new List<string>();
             ComentarioApplication app = new ComentarioApplication();
-            var anuncioLikes = app.ListarLikesStory(idAnuncio);
+            var anuncioLikes = app.ListarLikesAnuncio(idAnuncio);
             foreach (var like in anuncioLikes)
             {
                 likes.Add(like);
