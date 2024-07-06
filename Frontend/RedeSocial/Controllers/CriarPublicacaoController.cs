@@ -15,6 +15,10 @@ namespace RedeSocial.Controllers
         private static readonly string URLBasePublicacao = "http://grupo5.neurosky.com.br/api/";
         public IActionResult Index()
         {
+            var usuarioJson = HttpContext.Session.GetString("Usuario");
+            var user = JsonConvert.DeserializeObject<UsuarioModel>(usuarioJson);
+            ViewBag.Usuario = user;
+
             return View();
         }
 

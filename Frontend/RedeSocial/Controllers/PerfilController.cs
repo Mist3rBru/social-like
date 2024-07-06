@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using RedeSocial.Backend.HTTPClient;
+using RedeSocial.Backend.Models;
 using RedeSocial.Models;
 using System.Runtime.Intrinsics.Arm;
 
@@ -13,14 +15,13 @@ namespace RedeSocial.Controllers
         [HttpGet("/Perfil/{UserId}")]
         public IActionResult Index(string UserId)
         {
-            var userId = Request.Cookies["UserId"];
-            APIHttpClient client;
-            client = new APIHttpClient(URLBaseUsuario);
-            UsuarioModel usuario = client.Get<UsuarioModel>("api/Usuario/" + UserId);
+            var usuarioJson = HttpContext.Session.GetString("Usuario");
+            var usuario = JsonConvert.DeserializeObject<UsuarioModel>(usuarioJson);
+            ViewBag.Usuario = usuario;
 
             ViewBag.Usuario = usuario;
             ViewBag.Publicacoes = listaPublicacoes(UserId);
-            ViewBag.CurrentId = userId;
+            ViewBag.CurrentId = UserId;
 
             return View();
         }

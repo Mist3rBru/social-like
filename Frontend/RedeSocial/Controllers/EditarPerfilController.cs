@@ -14,13 +14,9 @@ namespace RedeSocial.Controllers
         private string URLBase = "http://grupo3.neurosky.com.br/api/";
         public IActionResult Index()
         {
-            var userId = Request.Cookies["UserId"];
-            APIHttpClient client;
-            client = new APIHttpClient("http://grupo3.neurosky.com.br/");
-            UsuarioModel usuario = client.Get<UsuarioModel>("api/Usuario/" + userId);
-
-            ViewBag.Usuario = usuario;
-            HttpContext.Session.SetString("Usuario", JsonConvert.SerializeObject(usuario));
+            var usuarioJson = HttpContext.Session.GetString("Usuario");
+            var user = JsonConvert.DeserializeObject<UsuarioModel>(usuarioJson);
+            ViewBag.Usuario = user;
 
             return View();
         }
@@ -31,7 +27,7 @@ namespace RedeSocial.Controllers
         public IActionResult Atualizar(UsuarioAlterarModel model)
         {
             var usuarioJson = HttpContext.Session.GetString("Usuario");
-            var user = JsonConvert.DeserializeObject<UsuarioModelBack>(usuarioJson);
+            var user = JsonConvert.DeserializeObject<UsuarioModel>(usuarioJson);
 
             model.Id = user.Id;
             model.Senha = user.Senha ?? string.Empty;
@@ -41,7 +37,7 @@ namespace RedeSocial.Controllers
             usuarioAlteradoModel.FotoPerfil ??= user.FotoPerfil;
             new APIHttpClient(URLBase).Put("Usuario", usuarioAlteradoModel);
 
-            var usuarioAlterado = new APIHttpClient(URLBase).Get<RedeSocial.Backend.Models.UsuarioModelBack>($"Usuario/{model.Id}");
+            var usuarioAlterado = new APIHttpClient(URLBase).Get<UsuarioModel>($"Usuario/{model.Id}");
 
             return Redirect($"/Perfil/{model.Id}");
         }

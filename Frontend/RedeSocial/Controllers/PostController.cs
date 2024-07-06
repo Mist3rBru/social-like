@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using RedeSocial.Backend.HTTPClient;
+using RedeSocial.Backend.Models;
 using RedeSocial.Models;
 
 namespace RedeSocial.Controllers
@@ -15,6 +17,9 @@ namespace RedeSocial.Controllers
         [HttpGet("/Post/{postId}")]
         public IActionResult Index(string postId)
         {
+            var usuarioJson = HttpContext.Session.GetString("Usuario");
+            var usuario = JsonConvert.DeserializeObject<UsuarioModel>(usuarioJson);
+            ViewBag.Usuario = usuario;
 
             var comentarios = comentariosClient.Get<List<ComentarioModel>>("api/comentarios/post/" + postId);
             foreach (var comentario in comentarios)
@@ -26,7 +31,6 @@ namespace RedeSocial.Controllers
             var publicacaoLikes = comentariosClient.Get<List<string>>("api/likes/post/" + postId);
 
             PublicacaoModel publicacao = publicacaoClient.Get<PublicacaoModel>("api/Publicacao/" + postId);
-            UsuarioModel usuario = usuarioClient.Get<UsuarioModel>("api/Usuario/" + publicacao.Usuario);
             publicacao.NomeUsuario = usuario.Nome;
             publicacao.FotoUsuario = usuario.FotoPerfil;
             publicacao.QuantidadeComentarios = comentarios.Count;

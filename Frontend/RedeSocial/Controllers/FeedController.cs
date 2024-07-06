@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using RedeSocial.Backend.HTTPClient;
 using RedeSocial.Models;
 using System.Collections.Generic;
@@ -28,6 +29,8 @@ namespace RedeSocial.Controllers
             ViewBag.Publicacoes = listaPublicacoes(userId);
             ViewBag.Anuncios = listaAnuncios();
             ViewBag.Stories = listaStories();
+
+            HttpContext.Session.SetString("Usuario", JsonConvert.SerializeObject(usuarioLogado));
             ViewBag.Usuario = usuarioLogado;
 
             return View();

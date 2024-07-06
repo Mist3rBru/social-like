@@ -6,7 +6,7 @@ namespace RedeSocial.Backend.Adapter
 {
    public static class UsuarioAdapter
     {
-        public static UsuarioModelBack ToUsuarioModel(UsuarioCadastroModel usuarioCadastro)
+        public static UsuarioModel ToUsuarioModel(UsuarioCadastroModel usuarioCadastro)
         {
             return new()
             {
@@ -27,9 +27,9 @@ namespace RedeSocial.Backend.Adapter
             };
         }
 
-        public static UsuarioModelBack ToUsuarioModel(UsuarioAlterarModel usuarioAlterarModel)
+        public static UsuarioModel ToUsuarioModel(UsuarioAlterarModel usuarioAlterarModel)
         {
-            var usuarioModel = new UsuarioModelBack()
+            var usuarioModel = new UsuarioModel()
             {
                 Id = usuarioAlterarModel.Id,
                 Nome = usuarioAlterarModel.Nome,
@@ -57,7 +57,7 @@ namespace RedeSocial.Backend.Adapter
             return usuarioModel;
         }
 
-        public static UsuarioCadastroModel ToUsuarioCadastroModel(UsuarioModelBack usuarioModel)
+        public static UsuarioCadastroModel ToUsuarioCadastroModel(UsuarioModel usuarioModel)
         {
             return new()
             {

@@ -38,7 +38,7 @@ namespace RedeSocial.Controllers
         public IActionResult Login(LoginModel login)
         {
             var apiModel = UsuarioAdapter.ToUsuarioLoginModel(login);
-            var retorno = new APIHttpClient(URLBase).Post<UsuarioLoginModel, UsuarioModelBack>("Usuario/Login", apiModel);
+            var retorno = new APIHttpClient(URLBase).Post<UsuarioLoginModel, UsuarioModel>("Usuario/Login", apiModel);
             var retornoCadastroModel = UsuarioAdapter.ToUsuarioCadastroModel(retorno);
 
             if (retorno is not null)
