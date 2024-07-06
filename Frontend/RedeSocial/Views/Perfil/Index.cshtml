@@ -11,6 +11,7 @@
 
         .main {
             background: #5d0096;
+            width: 100%;
         }
 
         .user-feed {
@@ -32,12 +33,6 @@
             gap: 0.5rem;
         }
 
-            .profileavatar img {
-                border-radius: 50%;
-                height: 8rem;
-                width: 8rem;
-            }
-
         .profileavatar-border {
             display: flex;
             align-items: center;
@@ -47,97 +42,103 @@
             padding: 2px;
         }
 
-        .profileName {
-            font-size: 25px;
-            font-weight: bold;
-            margin-left: 20px;
-            font-family: cursive;
-        }
-
         .profileDescription {
             display: flex;
             flex-direction: column;
+            margin-left: 20px;
+        }
+
+        .profile-img {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2px;
+            border: 2px solid #5d0096;
+            border-radius: 50%;
+        }
+
+            .profile-img img {
+                border-radius: 50%;
+                height: 6rem;
+                width: 6rem;
+            }
+
+        .profileName {
+            font-size: 2.5rem;
+            font-weight: bold;
         }
 
         .profileBio {
-            font-size: 20px;
-            font-weight: bold;
-            margin-left: 20px;
-            font-family: cursive;
-            margin-top: 1rem;
+            font-size: 1.2rem;
         }
 
         .profileDate {
-            font-size: 15px;
-            font-weight: bold;
-            margin-left: 20px;
-            font-family: cursive;
-            margin-top: 1rem;
+            font-size: 0.8rem;
+            margin-top: 0.2rem;
         }
 
         .profileContainer {
-            background-color:#f3f2fd;
-            padding: 1.5rem;
+            background-color: #f3f2fd;
             display: flex;
+            padding: 1rem;
             justify-content: space-between;
+            border-radius: 0.5rem;
+            box-shadow: 0 0 4px #333;
+        }
+
+        .profile-button-box {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: auto;
         }
 
         .buttonProfile {
-            border: 0;
+            border: 1px solid #ccc;
             border-radius: 0.5rem;
             text-align: center;
             padding: 0.5rem;
-            width: 115px;
-            background: #000;
             font-weight: 600;
-            color: white;
-            height: 65px;
+            margin-top: auto;
+            transition: border 150ms;
         }
 
-        .posts-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            margin-top: 20px;
-            width: 100%;
-        }
+            .buttonProfile:hover {
+                border-color: #333;
+            }
 
-        .posts-local {
+        .post-container {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             grid-auto-rows: auto;
             margin: 2rem auto;
-            width: 70rem;
-            gap: 50px;
-         
+            gap: 1rem;
         }
 
-        .post-local {
-            padding: 5px;
-            border: 5px solid #ccc;
-            height: 260px;
+        .profile-post {
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            background: #9b9a9a;
+            height: 260px;
+            padding: 0.5rem;
+            border: 2px solid #333;
+            box-shadow: #121214;
+            border-radius: 0.5rem;
+            background: #fff;
+            transition: border 50ms;
         }
 
-        .post-image {
-            max-width: 100%;
-            height: 255px;
+
+            .profile-post:hover {
+                border: 4px solid #555;
+            }
+
+        .profile-post-image {
+            height: 240px;
         }
 
-        .description-with-image {
-            font-weight: bold;
-            font-family: cursive;
-            background: #e5e4e4;
-            padding: 10px;
-        }
-
-        .description-single {
-            font-weight: bold;
-            font-family: cursive;
+        .profile-post-description {
+            padding: 0.5;
         }
     </style>
 </head>
@@ -150,67 +151,51 @@
                 var currentId = ViewBag.CurrentId;
 
                 <div class="profileContainer">
-                    <div>
-                        <a href="/perfil" class="profileavatar">
+                    <div class="profileavatar">
+                        <div class="profile-img">
                             <img src="data:image/jpeg;base64,@user.FotoPerfil" alt="ProfilePic" />
-                            <div class="profileDescription">
-                                <p class="profileName">@user.Nome</p>
-                                <p class="profileDate">@user.DataComemorativa.ToString("dd/MM/yyyy")</p>
-                            </div>
-                        </a>
-                        <p class="profileBio">
-                            @user.Bio
-                        </p>
+                        </div>
+                        <div class="profileDescription">
+                            <p class="profileName">@user.Nome</p>
+                            <p class="profileBio">@user.Bio</p>
+                            <p class="profileDate">@user.DataComemorativa.ToString("dd/MM/yyyy")</p>
+                        </div>
                     </div>
                     @if (user.Id.ToString() == currentId)
                     {
-                          <div style="display: flex; gap: 10px; height: 60px;">
-                              <a href="/EditarPerfil">
-                            <button type="button" class="buttonProfile">
-                                Editar perfil
-                            </button>
+                        <div class="profile-button-box">
+                            <a href="/EditarPerfil">
+                                <button type="button" class="buttonProfile">
+                                    Editar perfil
+                                </button>
                             </a>
                             <a href="/CriarPublicacao">
                                 <button type="button" class="buttonProfile">
                                     Criar Publicação
                                 </button>
                             </a>
-                           
-                            
                         </div>
                     }
-                  
                 </div>
             }
         </form>
 
-        <div class="posts-container">
-            <div class="posts-local">
+        <div class="post-container">
             @if (ViewBag.Publicacoes != null)
             {
                 var publicacoes = (List<RedeSocial.Models.PublicacaoModel>)ViewBag.Publicacoes;
-
                 for (int i = 0; i < publicacoes.Count; i++)
                 {
                     var publicacao = publicacoes[i];
-                        <a href="/Post/@publicacao.Id">
-                        <div class="post-local">
-
-                      
-                            @if (publicacao.Midias.Count > 0)
-                            {
-                                <img class="post-image" src="data:@publicacao.Midias[0].ContentType;base64,@publicacao.Midias[0].FileContents" alt="" />
-                            }
-                            else
-                            {
-                                <p class="description-single">@publicacao.Descricao</p>
-                            }
-                     
-                    </div>
-                        </a>
+                    <a href="/Post/@publicacao.Id" class="profile-post">
+                        @if (publicacao.Midias.Count > 0)
+                        {
+                            <img class="profile-post-image" src="data:@publicacao.Midias[0].ContentType;base64,@publicacao.Midias[0].FileContents" alt="" />
+                        }
+                        <p class="profile-post-description">@publicacao.Descricao</p>
+                    </a>
                 }
             }
-            </div>
         </div>
     </div>
 </body>

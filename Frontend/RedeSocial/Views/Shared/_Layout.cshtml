@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="~/css/reset.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/global.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/RedeSocial.styles.css" asp-append-version="true" />
-    
+
 </head>
 <body>
     <header class="header">
@@ -15,9 +15,9 @@
         @if (ViewBag.Usuario != null)
         {
             var user = (RedeSocial.Models.UsuarioModel)ViewBag.Usuario;
-            
+
             <a class="header-avatar avatar" href="/Perfil/@user.Id">
-                <p class="header-avatar-name" >@user.Nome</p>
+                <p class="header-avatar-name">@user.Nome</p>
                 @if (!string.IsNullOrEmpty(@user.FotoPerfil))
                 {
                     <img class="header-avatar-img" src="data:image/jpeg;base64,@user.FotoPerfil" alt="" />
@@ -29,7 +29,7 @@
             </a>
         }
     </header>
-    <div style="display: flex">
+    <div style="display:flex;">
         <div class="sidebar">
             <div style="
             display: flex;
@@ -71,7 +71,7 @@
 
         @RenderBody()
     </div>
-   
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)

@@ -127,8 +127,6 @@
                     <p>@publicacao.NomeUsuario</p>
                 </a>
 
-                <p>@publicacao.NomeUsuario</p>
-
                 <a class="post-conteudo" href="/post/@publicacao.Id">
                     @if (publicacao.Midias.Count > 0)
                     {
@@ -140,6 +138,7 @@
                 <div style="display: flex;justify-content: space-between;align-items: center;">
                     <div style="display: flex; gap: 3px">
                         <button type="button" id="post-button-curtir-@publicacao.Id"
+                                title="@(publicacao.UsuarioLogadoCurtiuPost ? "descurtir" : "curtir")"
                                 class="post-button @(publicacao.UsuarioLogadoCurtiuPost ? "post-button-active" : "")"
                                 onclick="toggleCurtirPost('@publicacao.Id', @publicacao.QuantidadeComentarios)">
                             <img src="~/img/foguete.png" alt="" />
@@ -148,7 +147,7 @@
                             <img src="~/img/comentário.png" alt="" />
                         </a>
                     </div>
-                    <span id="post-curtidas-comentarios-@publicacao.Id" class="post-info">
+                    <span id="post-curtidas-comentarios-@publicacao.Id" class="post-info" title="Abrir comentários">
                         @publicacao.QuantidadeLikes curtidas e @publicacao.QuantidadeComentarios comentários
                     </span>
                 </div>

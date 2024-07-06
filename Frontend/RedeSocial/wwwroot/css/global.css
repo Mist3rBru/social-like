@@ -43,7 +43,6 @@ img {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100%;
     background: #fff;
     padding: 1rem;
     z-index: 50;
@@ -71,6 +70,9 @@ img {
     position: sticky;
     top: 4rem;
     left: 0;
+    height: fit-content;
+    max-height: 80vh;
+    flex-shrink: 0;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
@@ -78,6 +80,7 @@ img {
     width: 12rem;
     min-width: 20vw;
     color: #1C1C39;
+    background: #fff;
 }
 
 .main {
